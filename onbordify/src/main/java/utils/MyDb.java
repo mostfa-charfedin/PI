@@ -26,7 +26,7 @@ public class MyDb {
         return instance;
     }
 
-    public Connection getConnection() {
+    public  Connection getConnection() {
         return conn;
 
     }

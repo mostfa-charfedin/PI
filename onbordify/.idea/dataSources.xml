@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="onboardify" uuid="792d7da3-968e-466e-936a-845374c9a62e">
+    <data-source source="LOCAL" name="onboardify" uuid="5e319a68-a26a-46a0-bd60-4da64ce3afed">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
