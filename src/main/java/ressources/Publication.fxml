@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PublicationConroller" spacing="10" padding="10">
+    <Label text="Gestion des publications" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+
+    <!-- Formulaire pour ajouter une publication -->
+    <Label text="Ajouter une publication" />
+    <TextArea fx:id="bodyField" promptText="Entrez le contenu de la publication..." />
+    <Button text="Ajouter" onAction="#ajouterPublication" />
+
+    <!-- Tableau pour afficher les publications -->
+    <Label text="Liste des publications" />
+    <TableView fx:id="publicationTable">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" />
+            <TableColumn fx:id="bodyColumn" text="Contenu" />
+        </columns>
+    </TableView>
+</VBox>
