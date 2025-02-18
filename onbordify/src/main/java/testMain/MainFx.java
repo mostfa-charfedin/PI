@@ -11,12 +11,12 @@ import java.util.Objects;
 public class MainFx extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/GestionUser.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/AdminDashboard.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/style.css")).toExternalForm());
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Gestion User");
+        primaryStage.setTitle("Quiz management");
         primaryStage.show();
 
 

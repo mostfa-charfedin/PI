@@ -6,34 +6,15 @@ import java.util.Date;
 
 public class Main {
     public static void main(String[] args) {
-        QuizService quizService = new QuizService();
-
-        // Create
-        quizService.create("Quiz 1", new Date());
-        quizService.create("Quiz 2", new Date());
-
-        // Read
-        System.out.println("All quizzes:");
-        for (Quiz quiz : quizService.getAll()) {
-            System.out.println(quiz);
+        QuizService qq = new QuizService();
+        Quiz q = new Quiz("quiz1","15 janvier 2025");
+        try {
+            // ss.create(s);
+            //ss.update(s);
+            //   System.out.println(ss.getAll());
+            qq.delete(1);
+            System.out.println(qq.getAll());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-
-        // Update
-        quizService.updateQuiz(1, "Updated Quiz 1", new Date());
-
-        // Read after update
-        System.out.println("After update:");
-        for (Quiz quiz : quizService.getAllQuizzes()) {
-            System.out.println(quiz);
-        }
-
-        // Delete
-        quizService.deleteQuiz(2);
-
-        // Read after delete
-        System.out.println("After delete:");
-        for (Quiz quiz : quizService.getAllQuizzes()) {
-            System.out.println(quiz);
-        }
-    }
-}
+    }}

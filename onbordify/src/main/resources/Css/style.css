@@ -112,3 +112,15 @@
 .secondary-text {
     -fx-text-fill: #03dac6; /* Teal (unchanged) */
 }
+.panel_l{
+    -fx-background-color: #F5F5F5;
+    -fx-border-radius: 10px;
+    -fx-border-style: solid;
+    -fx-border-color: #141313;
+}
+.pane_lv{
+    -fx-background-color: #ffe3d7;
+    -fx-border-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color:  #ffe3d7;
+}
