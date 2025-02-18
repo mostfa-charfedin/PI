@@ -27,7 +27,13 @@ public class MyDb {
     }
 
     public Connection getConnection() {
-        return conn;
+        try {
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
 
     }
 
