@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Projectcreate">
+   <children>
+      <VBox alignment="CENTER" spacing="10" layoutX="50" layoutY="50" prefWidth="500">
+         <Label text="Create New Project" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+         <TextField fx:id="txtTitle" promptText="Project Title" prefWidth="300" />
+         <TextArea fx:id="txtDescription" promptText="Project Description" prefWidth="300" prefHeight="80" />
+
+         <ComboBox fx:id="cbProjectManager" promptText="Select Project Manager" prefWidth="300" />
+
+         <Button text="Create Project" fx:id="btnCreate" onAction="#handleCreateProject" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 10px;" />
+
+         <Label fx:id="lblStatus" text="" style="-fx-text-fill: red;" />
+      </VBox>
+   </children>
+</AnchorPane>
