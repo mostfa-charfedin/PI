@@ -32,53 +32,20 @@
             <ListView layoutX="14.0" layoutY="62.0" prefHeight="230.0" prefWidth="511.0" />
             <Pane fx:id="pane_lv" layoutX="26.0" layoutY="77.0" prefHeight="62.0" prefWidth="490.0" styleClass="pane_lv" stylesheets="@Css/style.css">
                <children>
-                  <Label fx:id="name_quiz" layoutX="32.0" layoutY="22.0" text="Quiz 1" />
                   <Label layoutX="188.0" layoutY="22.0" prefHeight="7.0" prefWidth="95.0" text="Creation Date :" />
-                  <Label fx:id="date_quiz" layoutX="283.0" layoutY="22.0" text="date" />
-                  <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="411.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+                  <Label fx:id="date_quiz" layoutX="283.0" layoutY="22.0" />
+                  <ImageView fx:id="edit_quiz" fitHeight="18.0" fitWidth="18.0" layoutX="411.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@assets/edit.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="450.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="delete_quiz" fitHeight="18.0" fitWidth="18.0" layoutX="450.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@assets/delete.png" />
                      </image>
                   </ImageView>
-               </children>
-            </Pane>
-            <Pane layoutX="25.0" layoutY="148.0" prefHeight="62.0" prefWidth="490.0" styleClass="pane_lv" stylesheets="@Css/style.css">
-               <children>
-                  <Label layoutX="32.0" layoutY="22.0" text="Quiz 2" />
-                  <Label layoutX="189.0" layoutY="22.0" prefHeight="7.0" prefWidth="95.0" text="Creation Date :" />
-                  <Label layoutX="283.0" layoutY="23.0" text="date" />
-                  <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="413.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@assets/edit.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="453.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@assets/delete.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </Pane>
-            <Pane layoutX="25.0" layoutY="218.0" prefHeight="62.0" prefWidth="490.0" styleClass="pane_lv" stylesheets="@Css/style.css">
-               <children>
-                  <Label layoutX="31.0" layoutY="22.0" text="Quiz 3" />
-                  <Label layoutX="189.0" layoutY="22.0" prefHeight="7.0" prefWidth="95.0" text="Creation Date :" />
-                  <Label layoutX="282.0" layoutY="22.0" text="date" />
-                  <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="412.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@assets/edit.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="451.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@assets/delete.png" />
-                     </image>
-                  </ImageView>
+                  <TextField fx:id="name_quiz" layoutX="28.0" layoutY="19.0" prefHeight="25.0" prefWidth="52.0" text="Quiz 1" />
+                  <TextField fx:id="date_quiz1" layoutX="276.0" layoutY="17.0" prefHeight="25.0" prefWidth="52.0" text="Date" />
                </children>
             </Pane>
             <Button layoutX="420.0" layoutY="14.0" mnemonicParsing="false" onAction="#create_quiz_action" text="Create Quiz" />

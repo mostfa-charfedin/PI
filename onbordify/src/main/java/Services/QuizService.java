@@ -11,6 +11,8 @@ import utils.MyDb;
 
 
 public  class QuizService implements CrudInterface<Quiz> {
+
+
     Connection connection;
 
     public QuizService() {

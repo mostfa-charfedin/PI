@@ -1,7 +1,6 @@
 /* Global Styles */
 .root {
     -fx-font-family: "Arial";
-    -fx-background-color: #1e1e1e; /* Dark background */
     -fx-text-fill: white;
 }
 
@@ -123,4 +122,24 @@
     -fx-border-radius: 5px;
     -fx-border-style: solid;
     -fx-border-color:  #ffe3d7;
+}
+.cancel_button{
+    -fx-background-color: #FF0000; /* LightCoral */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 16px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5;
+
+}
+
+
+.add_button{
+    -fx-background-color: #008000; /* LightCoral */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 16px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5;
+
 }

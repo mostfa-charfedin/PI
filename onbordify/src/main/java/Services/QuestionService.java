@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class QuestionService implements CrudInterface<Question> {
+public class QuestionService implements CrudInterface<Question> {
 
      Connection connection;
 

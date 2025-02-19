@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.EditQuiz">
+    <children>
+        <Label id="title_label" fx:id="title_label" layoutX="59.0" layoutY="4.0" prefHeight="62.0" prefWidth="206.0" text="Edit List" textFill="INDIANRED">
+            <font>
+                <Font name="Candara" size="15.0" />
+            </font></Label>
+        <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="34.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@assets/edit.png" />
+            </image>
+        </ImageView>
+        <Pane fx:id="panel_l" layoutX="26.0" layoutY="67.0" prefHeight="318.0" prefWidth="556.0" styleClass="panel_l" stylesheets="@Css/style.css">
+            <children>
+                <ListView layoutX="14.0" layoutY="62.0" prefHeight="230.0" prefWidth="520.0" />
+                <Pane fx:id="pane_lv" layoutX="26.0" layoutY="77.0" prefHeight="62.0" prefWidth="241.0" styleClass="pane_lv" stylesheets="@Css/style.css">
+                    <children>
+                        <Label fx:id="name_quiz" layoutX="27.0" layoutY="22.0" text="Question 1" />
+                        <ImageView fx:id="edit_question1" fitHeight="18.0" fitWidth="18.0" layoutX="172.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@assets/edit.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView fx:id="delete_question1" fitHeight="18.0" fitWidth="18.0" layoutX="203.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@assets/delete.png" />
+                            </image>
+                        </ImageView>
+                    </children>
+                </Pane>
+                <Pane layoutX="25.0" layoutY="148.0" prefHeight="62.0" prefWidth="241.0" styleClass="pane_lv" stylesheets="@Css/style.css">
+                    <children>
+                        <Label layoutX="26.0" layoutY="23.0" text="Question 2" />
+                        <ImageView fx:id="edit_question2" fitHeight="18.0" fitWidth="18.0" layoutX="175.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@assets/edit.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView fx:id="delete_question2" fitHeight="18.0" fitWidth="18.0" layoutX="203.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@assets/delete.png" />
+                            </image>
+                        </ImageView>
+                    </children>
+                </Pane>
+                <Pane layoutX="25.0" layoutY="218.0" prefHeight="62.0" prefWidth="241.0" styleClass="pane_lv" stylesheets="@Css/style.css">
+                    <children>
+                        <Label layoutX="30.0" layoutY="24.0" text="Question  3" />
+                        <ImageView fx:id="edit_question3" fitHeight="18.0" fitWidth="18.0" layoutX="178.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@assets/edit.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView fx:id="delete_question3" fitHeight="18.0" fitWidth="18.0" layoutX="205.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@assets/delete.png" />
+                            </image>
+                        </ImageView>
+                    </children>
+                </Pane>
+                <Button layoutX="418.0" layoutY="14.0" mnemonicParsing="false" onAction="#add_question" prefHeight="36.0" prefWidth="125.0" text="Add Questions" />
+            <Pane fx:id="pane_lv1" layoutX="278.0" layoutY="77.0" prefHeight="62.0" prefWidth="241.0" styleClass="pane_lv" stylesheets="@Css/style.css">
+               <children>
+                  <Label fx:id="name_quiz1" layoutX="27.0" layoutY="22.0" text="Question 1" />
+                  <ImageView fx:id="edit_question4" fitHeight="18.0" fitWidth="18.0" layoutX="172.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@assets/edit.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="delete_question4" fitHeight="18.0" fitWidth="18.0" layoutX="203.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@assets/delete.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Pane fx:id="pane_lv2" layoutX="278.0" layoutY="146.0" prefHeight="62.0" prefWidth="241.0" styleClass="pane_lv" stylesheets="@Css/style.css">
+               <children>
+                  <Label fx:id="name_quiz2" layoutX="27.0" layoutY="22.0" text="Question 1" />
+                  <ImageView fx:id="edit_question5" fitHeight="18.0" fitWidth="18.0" layoutX="172.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@assets/edit.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="delete_question5" fitHeight="18.0" fitWidth="18.0" layoutX="203.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@assets/delete.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Pane fx:id="pane_lv3" layoutX="278.0" layoutY="218.0" prefHeight="62.0" prefWidth="241.0" styleClass="pane_lv" stylesheets="@Css/style.css">
+               <children>
+                  <Label fx:id="name_quiz3" layoutX="27.0" layoutY="22.0" text="Question 1" />
+                  <ImageView fx:id="edit_question6" fitHeight="18.0" fitWidth="18.0" layoutX="172.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@assets/edit.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="delete_question6" fitHeight="18.0" fitWidth="18.0" layoutX="203.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@assets/delete.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            </children>
+        </Pane>
+      <Button layoutX="499.0" layoutY="17.0" mnemonicParsing="false" onAction="#cancel_button" styleClass="cancel_button" stylesheets="@Css/style.css" text="Cancel" />
+      <Button layoutX="374.0" layoutY="17.0" mnemonicParsing="false" onAction="#save_edit" styleClass="add_button" stylesheets="@Css/style.css" text="Save Changes" />
+    </children>
+</AnchorPane>
