@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.paint.Color?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="450.0" prefWidth="700.0" style="-fx-background-color: #F4F4F4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddResourceController">
+    <!-- Form Title -->
+    <Label text="➕ Ajouter une Ressource" style="-fx-font-size: 20px; -fx-font-weight: bold;" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0"/>
+
+    <!-- Title Input -->
+    <HBox spacing="10" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="50.0">
+        <Label text="📖 Titre:" style="-fx-font-size: 14px;"/>
+        <TextField fx:id="titleField" promptText="Entrez le titre"/>
+    </HBox>
+
+    <!-- Type Selection (Populate in Controller) -->
+    <HBox spacing="10" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="100.0">
+        <Label text="📂 Type:" style="-fx-font-size: 14px;"/>
+        <ComboBox fx:id="typeComboBox"/>
+    </HBox>
+
+    <!-- Description Input -->
+    <HBox spacing="10" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="150.0">
+        <Label text="📝 Description:" style="-fx-font-size: 14px;"/>
+        <TextArea fx:id="descriptionField" promptText="Entrez une description" wrapText="true"/>
+    </HBox>
+
+    <!-- Link Input -->
+    <HBox spacing="10" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="210.0">
+        <Label text="🔗 Lien:" style="-fx-font-size: 14px;"/>
+        <TextField fx:id="linkField" promptText="https://..."/>
+    </HBox>
+
+    <!-- Action Buttons -->
+    <HBox spacing="10" alignment="CENTER" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="300.0">
+        <Button text="✅ Ajouter" fx:id="btnSave" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <Button text="❌ Annuler" fx:id="btnCancel" style="-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    </HBox>
+</AnchorPane>

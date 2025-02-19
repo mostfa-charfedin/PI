@@ -31,24 +31,29 @@ public class RessourceService implements CrudInterface<Ressource> {
     // UPDATE
     @Override
     public void update(Ressource res) throws Exception {
-        String sql = "UPDATE onboardify.ressources SET titre = ?, type = ?, description = ?, lien = ? WHERE idResource = ?";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setString(1, res.getTitre());
-        pstmt.setString(2, res.getType());
-        pstmt.setString(3, res.getDescription());
-        pstmt.setString(4, res.getlien());
-        pstmt.setInt(5, res.getId());
-        pstmt.executeUpdate();
+        String sql = "UPDATE onboardify.ressources SET " +
+                "titre = '" + res.getTitre() + "', " +
+                "type = '" + res.getType() + "', " +
+                "description = '" + res.getDescription() + "', " +
+                "lien = '" + res.getlien() + "' " +
+                "WHERE idResource = " + res.getId();
+
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate(sql);
+        stmt.close();
     }
+
 
     // DELETE
     @Override
     public void delete(int id) throws Exception {
-        String sql = "DELETE FROM onboardify.ressources WHERE idResource = ?";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setInt(1, id);
-        pstmt.executeUpdate();
+        String sql = "DELETE FROM onboardify.ressources WHERE idResource = " + id;
+
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate(sql);
+        stmt.close();
     }
+
 
     // READ
     @Override

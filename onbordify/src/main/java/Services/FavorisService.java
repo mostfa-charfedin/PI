@@ -40,7 +40,7 @@ public class FavorisService implements CrudInterface<Favoris> {
             Favoris fav = new Favoris();
             fav.setIdFavoris(rs.getInt("idFavoris"));
             fav.setIdRessource(rs.getInt("idResource"));
-            fav.setDate(rs.getDate("date"));
+
             fav.setCommentaire(rs.getString("commentaire"));
             fav.setNote(rs.getInt("note"));
             list.add(fav);
