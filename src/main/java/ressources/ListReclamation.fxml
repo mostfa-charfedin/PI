@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ressources.ListReclamation">
+   <children>
+      <AnchorPane layoutY="-1.0" prefHeight="499.0" prefWidth="711.0">
+         <children>
+            <AnchorPane prefHeight="60.0" prefWidth="714.0" style="-fx-background-color: #4770E8;">
+               <children>
+                  <Label layoutX="72.0" layoutY="10.0" prefHeight="18.0" prefWidth="266.0" text="COMPLAINT LIST" textFill="WHITE">
+                     <font>
+                        <Font name="Arial Black" size="22.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="39.0" fitWidth="39.0" layoutX="607.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@assets/mise-a-jour-du-systeme.png" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="UpdateButton" layoutX="649.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleUpdate" text="UPDATE" />
+                  <ImageView fitHeight="52.0" fitWidth="45.0" layoutX="17.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@assets/liste-de-controle.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="226.0" layoutY="60.0" prefHeight="438.0" prefWidth="487.0" style="-fx-background-color: #d7dae3;">
+               <children>
+                  <TableView layoutY="64.0" prefHeight="196.0" prefWidth="487.0">
+                    <columns>
+                      <TableColumn prefWidth="84.0" text="USER_ID" />
+                      <TableColumn prefWidth="81.5999755859375" text="First Name" />
+                        <TableColumn prefWidth="83.199951171875" text="Last Name" />
+                        <TableColumn prefWidth="76.79995727539062" text="Date" />
+                        <TableColumn prefWidth="81.59991455078125" text="Claim" />
+                        <TableColumn prefWidth="84.0001220703125" text="state" />
+                    </columns>
+                  </TableView>
+                  <TextField layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="214.0" promptText="Search" />
+                  <ImageView fitHeight="39.0" fitWidth="29.0" layoutX="191.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@assets/search-engine-optimization.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <Label layoutX="18.0" layoutY="85.0" text="USER_ID:" />
+            <TextField layoutX="17.0" layoutY="104.0" />
+            <Label layoutX="18.0" layoutY="135.0" text="First Name:" />
+            <TextField layoutX="18.0" layoutY="200.0" />
+            <TextField layoutX="18.0" layoutY="151.0" />
+            <Label layoutX="18.0" layoutY="183.0" text="Last Name:" />
+            <TextField layoutX="20.0" layoutY="249.0" />
+            <TextField layoutX="20.0" layoutY="300.0" />
+            <Label layoutX="21.0" layoutY="282.0" text="Claim" />
+            <Button layoutX="36.0" layoutY="348.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="106.0" style="-fx-background-color: f00020;" text="DELETE" textFill="WHITE" />
+            <Button layoutX="37.0" layoutY="390.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="106.0" style="-fx-background-color: #568203;" text="UPDATE" textFill="WHITE" />
+         </children>
+      </AnchorPane>
+      <Label layoutX="19.0" layoutY="229.0" text="Date" />
+   </children>
+</AnchorPane>
