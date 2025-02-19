@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CommentaireController" spacing="10" padding="10">
-    <Label text="Gestion des commentaires" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ressources.css.Commentaire"
+            prefHeight="400.0" prefWidth="600.0">
 
-    <!-- Formulaire pour ajouter un commentaire -->
-    <Label text="Ajouter un commentaire" />
-    <TextArea fx:id="messageField" promptText="Entrez votre commentaire..." />
-    <Button text="Ajouter" onAction="#ajouterCommentaire" />
-
-    <!-- Tableau pour afficher les commentaires -->
-    <Label text="Liste des commentaires" />
-    <TableView fx:id="commentaireTable">
-        <columns>
-            <TableColumn fx:id="idColumn" text="ID" />
-            <TableColumn fx:id="messageColumn" text="Message" />
-        </columns>
-    </TableView>
-</VBox>
+</AnchorPane>
