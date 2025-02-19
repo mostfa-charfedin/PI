@@ -1,28 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="anchorPane" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="Controller.Recompense">
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<AnchorPane fx:id="anchorPane" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #f4f4f4;"
+            xmlns="http://javafx.com/javafx/21.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Recompense">
 
-    <!-- Type de Récompense -->
-    <Label layoutX="21.0" layoutY="45.0" text="Type de Récompense:" />
-    <ComboBox fx:id="cmbTypeRecompense" layoutX="164.0" layoutY="41.0" prefWidth="200" />
+    <!-- Section Formulaire -->
+    <Pane layoutX="20.0" layoutY="20.0" prefWidth="340.0" prefHeight="300.0" style="-fx-background-color: white; -fx-border-color: #ccc; -fx-border-radius: 10; -fx-padding: 10;">
+        <!-- Type de Récompense -->
+        <Label layoutX="20.0" layoutY="20.0" text="Type de Récompense:" />
+        <TextField fx:id="txtType" layoutX="20.0" layoutY="40.0" prefWidth="280.0" />
 
-    <!-- Date d'Attribution -->
-    <Label layoutX="28.0" layoutY="94.0" text="Date d'Attribution:" />
-    <DatePicker fx:id="dateAttribution" layoutX="176.0" layoutY="90.0" />
+        <!-- Date d'Attribution -->
+        <Label layoutX="20.0" layoutY="80.0" text="Date d'Attribution:" />
+        <DatePicker fx:id="dateAttribution" layoutX="20.0" layoutY="100.0" prefWidth="280.0" />
 
-    <!-- Statut de la Récompense -->
-    <Label layoutX="21.0" layoutY="144.0" text="Statut de la Récompense:" />
-    <ComboBox fx:id="cmbStatut" layoutX="164.0" layoutY="140.0" prefWidth="200" />
+        <!-- Statut de la Récompense -->
+        <Label layoutX="20.0" layoutY="140.0" text="Statut de la Récompense:" />
+        <ComboBox fx:id="cmbStatut" layoutX="20.0" layoutY="160.0" prefWidth="280.0" >
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Expired" />
+                    <String fx:value="Received" />
+                    <String fx:value="Waiting" />
+                </FXCollections>
+            </items>
+        </ComboBox>
 
-    <!-- Boutons CRUD -->
-    <Button fx:id="btnAjouter" layoutX="148.0" layoutY="182.0" onAction="#ajouterRecompense" text="Ajouter" />
-   <ListView layoutX="82.0" layoutY="221.0" prefHeight="200.0" prefWidth="200.0" />
+        <!-- Boutons -->
+        <Button fx:id="btnAjouter" layoutX="20.0" layoutY="210.0" onAction="#ajouterRecompense" text="Ajouter"
+                style="-fx-background-color: #2865a7; -fx-text-fill: white; -fx-font-weight: bold;" />
+        <Button fx:id="btnSupprimer" layoutX="140.0" layoutY="210.0" onAction="#supprimerRecompense" text="Supprimer"
+                style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-weight: bold;" />
+    </Pane>
+
+    <!-- Liste des Récompenses -->
+    <Pane layoutX="380.0" layoutY="20.0" prefWidth="280.0" prefHeight="450.0" style="-fx-background-color: white; -fx-border-color: #ccc; -fx-border-radius: 10; -fx-padding: 10;">
+        <Label layoutX="20.0" layoutY="10.0" text="Liste des Récompenses" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+        <ListView fx:id="listViewRecompenses" layoutX="20.0" layoutY="40.0" prefHeight="380.0" prefWidth="240.0" />
+    </Pane>
 
 </AnchorPane>

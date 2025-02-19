@@ -1,9 +1,4 @@
 /* Global Styles */
-.root {
-    -fx-font-family: "Arial";
-    -fx-background-color: #1e1e1e; /* Dark background */
-    -fx-text-fill: white;
-}
 
 /* Title Label */
 #titleLabel {
