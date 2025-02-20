@@ -117,6 +117,16 @@ public class User {
                 "firstName='" + nom + '\'' +
                 ", lastName='" + prenom + '\'' +
                 ", email='" + email + '\'' +
+                ", cin='" + cin + '\'' +
+                ", dateNaissance='" + dateNaissance + '\'' +
+                ", role='" + role + '\'' +
+                ", password='" + password + '\'' +
                 '}';
+    }
+
+
+    public String generatePassword() {
+       String hash ="Onbordify" ;
+      return hash+=cin;
     }
 }

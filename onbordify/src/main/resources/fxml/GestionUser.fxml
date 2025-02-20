@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GestionUser">
+    <children>
+        <TabPane prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab closable="false" text="Ajouet user">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <VBox layoutX="80.0" layoutY="48.0" prefHeight="140.0" prefWidth="166.0">
+                                    <children>
+                                        <Label text="Nom" />
+                                        <TextField fx:id="nom" />
+                                        <Label text="Prenom" />
+                                        <TextField fx:id="prenom" />
+                                        <Label text="Email" />
+                                        <TextField fx:id="email" />
+                                    </children>
+                                </VBox>
+                                <VBox layoutX="325.0" layoutY="48.0" prefHeight="210.0" prefWidth="166.0">
+                                    <children>
+                                        <Label text="CIn" />
+                                        <TextField fx:id="cin" />
+                                        <Label text="Date de naissance" />
+                                        <DatePicker fx:id="date" />
+                                        <Label text="Role" />
+                                        <ComboBox fx:id="role" prefHeight="26.0" prefWidth="166.0"/>
+
+                                    </children>
+                                </VBox>
+                                <Button layoutX="223.0" layoutY="218.0" mnemonicParsing="false" onAction="#addUser" prefHeight="26.0" prefWidth="153.0" text="Enregister" />
+                        <Label fx:id="message" layoutX="286.0" layoutY="269.0" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab closable="false" text="List users">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <TextField fx:id="rechercheFildMod" layoutX="26.0" layoutY="24.0" prefHeight="26.0" prefWidth="432.0" />
+                                <Button layoutX="475.0" layoutY="24.0" mnemonicParsing="false" onAction="#chercherUser" text="rechercher" />
+                                <ListView fx:id="listview" layoutX="26.0" layoutY="86.0" prefHeight="252.0" prefWidth="431.0" />
+                                <Button layoutX="475.0" layoutY="78.0" mnemonicParsing="false" onAction="#updateUser" prefHeight="26.0" prefWidth="73.0" text="modifier" />
+                                <Button layoutX="475.0" layoutY="114.0" mnemonicParsing="false" onAction="#deleteUser" prefHeight="26.0" prefWidth="73.0" text="Supprimer" />
+                        <Label fx:id="messagelist" layoutX="26.0" layoutY="61.0" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </children>
+</AnchorPane>

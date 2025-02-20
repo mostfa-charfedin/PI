@@ -17,9 +17,12 @@ public class UserService implements CrudInterface<User> {
 
     @Override
     public void create(User obj) throws SQLException {
-        String sql = "insert into user (firstName,lastName,email, password) values('" + obj.getNom() + "','" + obj.getPrenom() + "','" + obj.getEmail()+ "','" + obj.getPassword() + "')";
+        String sql = "insert into user (nom, prenom, email, cin, dateNaissance, role, password) values(" +
+                "'" + obj.getNom() + "','" + obj.getPrenom() + "','" + obj.getEmail()+ "','" + obj.getCin() +
+                "','" + obj.getDateNaissance() +  "','" + Role.valueOf(obj.getRole().toString()) +  "','" + obj.generatePassword()  +"')";
         Statement stmt = con.createStatement();
         stmt.executeUpdate(sql);
+        System.out.println(sql);
     }
 
 
@@ -50,7 +53,7 @@ public class UserService implements CrudInterface<User> {
 
     @Override
     public void delete(int id) throws Exception {
-        String sql = "DELETE FROM users WHERE id = ?";
+        String sql = "DELETE FROM user WHERE id = ?";
         PreparedStatement stmt = con.prepareStatement(sql);
         stmt.setInt(1, id);
         stmt.executeUpdate();
@@ -70,7 +73,7 @@ public class UserService implements CrudInterface<User> {
             user.setEmail(rs.getString("email"));
             user.setCin(rs.getInt("cin"));
             user.setDateNaissance(rs.getDate("dateNaissance"));
-            user.setRole((Role) rs.getObject("role"));
+            user.setRole(Role.valueOf(rs.getObject("role").toString()));
             users.add(user);
         }
         return users;

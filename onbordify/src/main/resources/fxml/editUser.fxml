@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.EditUser">
+
+         <children>
+            <VBox layoutX="80.0" layoutY="48.0" prefHeight="140.0" prefWidth="166.0">
+               <children>
+                  <Label text="Nom" />
+                  <TextField fx:id="nomMod" />
+                  <Label text="Prenom" />
+                  <TextField fx:id="prenomMod" />
+                  <Label text="Email" />
+                  <TextField fx:id="emailMod" />
+               </children>
+            </VBox>
+            <VBox layoutX="325.0" layoutY="48.0" prefHeight="210.0" prefWidth="166.0">
+               <children>
+                  <Label text="Cin" />
+                  <TextField fx:id="cinMod" />
+                  <Label text="Date de naissance" />
+                  <DatePicker fx:id="dateMod" />
+                  <Label text="Role" />
+                  <ComboBox fx:id="roleMod" prefHeight="26.0" prefWidth="166.0" />
+               </children>
+            </VBox>
+            <Button layoutX="223.0" layoutY="218.0" mnemonicParsing="false" onAction="#updateUser" prefHeight="26.0" prefWidth="153.0" text="Update" />
+            <Label fx:id="messageMod" layoutX="286.0" layoutY="269.0" />
+         </children>
+
+</AnchorPane>
