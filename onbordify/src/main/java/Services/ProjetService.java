@@ -19,27 +19,48 @@ public class ProjetService implements CrudInterface<Projet> {
      */
     @Override
     public void create(Projet obj) throws Exception {
-        // Step 1: Get the idUser from the user table using nom, prenom, and role
-        String getUserIdSQL = "SELECT id FROM user WHERE nom = ? AND prenom = ? AND role = 'chefprojet'";
-        PreparedStatement getUserStmt = con.prepareStatement(getUserIdSQL);
-        //getUserStmt.setString(1, obj.getNom());
-        //getUserStmt.setString(2, obj.getPrenom());
-        ResultSet rs = getUserStmt.executeQuery();
+        String getUserIdSQL = "SELECT id FROM user WHERE nom = ? AND prenom = ? ";
+        String insertSQL = "INSERT INTO projet (titre, Description, idUser) VALUES (?, ?, ?)";
 
-        if (rs.next()) {
-            int idUser = rs.getInt("id");  // Get the user ID
+        PreparedStatement getUserStmt = null;
+        PreparedStatement insertStmt = null;
+        ResultSet rs = null;
 
-            // Step 2: Insert project with retrieved idUser
-            String insertSQL = "INSERT INTO projet (titre, Description, idUser) VALUES (?, ?, ?)";
-            PreparedStatement stmt = con.prepareStatement(insertSQL);
-            stmt.setString(1, obj.getTitre());
-            stmt.setString(2, obj.getDescription());
-            stmt.setInt(3, idUser);
-            stmt.executeUpdate();
-        } else {
-            throw new Exception("Chef de projet not found or does not have the required role.");
+        try {
+            // Step 1: Get the idUser from the user table
+            getUserStmt = con.prepareStatement(getUserIdSQL);
+            getUserStmt.setString(1, obj.getNom());
+            getUserStmt.setString(2, obj.getPrenom());
+            rs = getUserStmt.executeQuery();
+
+            if (rs.next()) {
+                int idUser = rs.getInt("id");  // Get the user ID
+
+                // Step 2: Insert project with retrieved idUser
+                insertStmt = con.prepareStatement(insertSQL);
+                insertStmt.setString(1, obj.getTitre());
+                insertStmt.setString(2, obj.getDescription());
+                insertStmt.setInt(3, idUser);
+
+                int rowsInserted = insertStmt.executeUpdate();
+                if (rowsInserted == 0) {
+                    throw new Exception("Project insertion failed. No rows affected.");
+                }
+
+                System.out.println("Project created successfully!");
+            } else {
+                throw new Exception("Error: Chef de projet not found or does not have the required role.");
+            }
+        } catch (SQLException e) {
+            throw new Exception("Database error: " + e.getMessage(), e);
+        } finally {
+            // Close resources properly
+            if (rs != null) try { rs.close(); } catch (SQLException ignored) {}
+            if (getUserStmt != null) try { getUserStmt.close(); } catch (SQLException ignored) {}
+            if (insertStmt != null) try { insertStmt.close(); } catch (SQLException ignored) {}
         }
     }
+
 
     /**
      * Update an existing project.
@@ -47,28 +68,53 @@ public class ProjetService implements CrudInterface<Projet> {
      */
     @Override
     public void update(Projet obj) throws Exception {
-        // Convert nom and prenom to idUser
-        String getUserIdSQL = "SELECT id FROM user WHERE nom = ? AND prenom = ? AND role = 'chefprojet'";
-        PreparedStatement getUserStmt = con.prepareStatement(getUserIdSQL);
-        //getUserStmt.setString(1, obj.getNom());
-        //getUserStmt.setString(2, obj.getPrenom());
-        ResultSet rs = getUserStmt.executeQuery();
+        String getUserIdSQL = "SELECT id FROM user WHERE nom = ? AND prenom = ?";
+        String checkProjectSQL = "SELECT COUNT(*) FROM projet WHERE idProjet = ?";
+        String updateSQL = "UPDATE projet SET titre = ?, Description = ?, idUser = ? WHERE idProjet = ?";
 
-        if (rs.next()) {
-            int idUser = rs.getInt("id");
+        try (
+                PreparedStatement getUserStmt = con.prepareStatement(getUserIdSQL);
+                PreparedStatement checkStmt = con.prepareStatement(checkProjectSQL);
+                PreparedStatement updateStmt = con.prepareStatement(updateSQL)
+        ) {
+            // Get User ID
+            getUserStmt.setString(1, obj.getNom());
+            getUserStmt.setString(2, obj.getPrenom());
 
-            // Update project with new idUser
-            String sql = "UPDATE projet SET titre = ?, Description = ?, idUser = ? WHERE idProjet = ?";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, obj.getTitre());
-            stmt.setString(2, obj.getDescription());
-            stmt.setInt(3, idUser);
-            stmt.setInt(4, obj.getIdProjet());
-            stmt.executeUpdate();
-        } else {
-            throw new Exception("Chef de projet not found or does not have the required role.");
+            try (ResultSet rs = getUserStmt.executeQuery()) {
+                if (rs.next()) {
+                    int idUser = rs.getInt("id"); // Fetch user ID
+
+                    // Check if the project exists
+                    checkStmt.setInt(1, obj.getIdProjet());
+                    try (ResultSet checkRs = checkStmt.executeQuery()) {
+                        if (checkRs.next() && checkRs.getInt(1) == 0) {
+                            throw new Exception("Project with ID " + obj.getIdProjet() + " does not exist.");
+                        }
+                    }
+
+                    // Update the project
+                    updateStmt.setString(1, obj.getTitre());
+                    updateStmt.setString(2, obj.getDescription());
+                    updateStmt.setInt(3, idUser);
+                    updateStmt.setInt(4, obj.getIdProjet());
+
+                    int rowsAffected = updateStmt.executeUpdate();
+                    if (rowsAffected == 0) {
+                        throw new Exception("No project updated. Ensure the project ID is correct.");
+                    } else {
+                        System.out.println("Project updated successfully!");
+                    }
+                } else {
+                    throw new Exception("Chef de projet not found.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Database error occurred: " + e.getMessage(), e);
         }
     }
+
+
 
     /**
      * Delete a project by its ID.
@@ -99,8 +145,8 @@ public class ProjetService implements CrudInterface<Projet> {
             projet.setTitre(rs.getString("titre"));
             projet.setDescription(rs.getString("Description"));
             projet.setidUser(rs.getInt("idUser"));
-            //projet.setNom(rs.getString("nom"));
-            //projet.setPrenom(rs.getString("prenom"));
+            projet.setNom(rs.getString("nom"));
+            projet.setPrenom(rs.getString("prenom"));
 
             projets.add(projet);
         }
@@ -125,8 +171,8 @@ public class ProjetService implements CrudInterface<Projet> {
             projet.setTitre(rs.getString("titre"));
             projet.setDescription(rs.getString("Description"));
             projet.setidUser(rs.getInt("idUser"));
-            //projet.Nom(rs.getString("nom"));
-            //projet.Prenom(rs.getString("prenom"));
+            projet.setNom(rs.getString("nom"));
+            projet.setPrenom(rs.getString("prenom"));
             return projet;
         }
         return null; // Return null if no project found
@@ -147,4 +193,5 @@ public class ProjetService implements CrudInterface<Projet> {
         }
         return chefNames;
     }
+
 }

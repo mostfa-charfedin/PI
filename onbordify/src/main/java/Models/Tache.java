@@ -6,14 +6,41 @@ public class Tache {
     private String Description;
     private int idProjet;
     private int idUser;
+    private String nom;
+    private String prenom;
+    private String TitreProjet;
     public Tache() {
     }
 
-    public Tache(String titre, String description, int idProjet, int idUser) {
+    public Tache(String titre, String description, int idProjet, String nom, String prenom) {
         this.titre = titre;
         Description = description;
         this.idProjet = idProjet;
+    }
+
+    public Tache(String titre, String nom, String prenom, String description) {
+        this.titre = titre;
+        this.nom = nom;
+        this.prenom = prenom;
+        Description = description;
+    }
+
+    public Tache(String titre, String description, int idProjet, int idUser, String nom, String prenom, String TitreProjet ) {
+        this.titre = titre;
+        this.Description = description;
+        this.idProjet = idProjet;
         this.idUser = idUser;
+        this.nom=nom;
+        this.prenom=prenom;
+        this.TitreProjet=TitreProjet;
+    }
+
+    public String getTitreProjet() {
+        return TitreProjet;
+    }
+
+    public void setTitreProjet(String titreProjet) {
+        TitreProjet = titreProjet;
     }
 
     public Tache(int idTache, String titre, String description, int idProjet, int idUser) {
@@ -63,6 +90,23 @@ public class Tache {
     public void setDescription(String description) {
         Description = description;
     }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
     @Override
     public String toString() {
         return "User{" +

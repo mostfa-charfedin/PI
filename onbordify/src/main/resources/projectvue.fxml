@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ffe6f0;" xmlns="http://javafx.com/javafx/21.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Projectview">
+
+    <children>
+        <VBox alignment="CENTER" spacing="12" style="-fx-background-color: white; -fx-padding: 20px; -fx-border-radius: 10px; -fx-background-radius: 10px;                      -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5);" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+
+            <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #d63384;" text="View Projects" />
+
+            <!-- ListView to display projects -->
+            <ListView fx:id="projectListView" maxWidth="600" style="-fx-background-color: #ffffff; -fx-border-color: #d63384; -fx-border-radius: 8px; -fx-padding: 8px;" VBox.vgrow="ALWAYS" />
+
+            <!-- Button Container (Left: Create, Edit, Delete | Right: Add Task) -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <!-- Left-aligned buttons -->
+                <HBox spacing="10">
+                    <Button fx:id="btnCreateProject" onAction="#handleCreateProject" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-weight: bold;                                    -fx-padding: 10px 20px; -fx-border-radius: 8px;" text="Ajouter un projet" />
+                </HBox>
+
+                <!-- Right-aligned Add Task button -->
+                <Pane HBox.hgrow="ALWAYS">
+               <children>
+   
+                       <Button fx:id="btnDeleteProject" layoutX="293.0" onAction="#handleDeleteProject" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;                                    -fx-padding: 10px 20px; -fx-border-radius: 8px;" text="Delete" />
+   
+                       <Button fx:id="btnEditProject" layoutX="98.0" onAction="#handleEditProject" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;                                    -fx-padding: 10px 20px; -fx-border-radius: 8px;" text="Edit" />
+               </children></Pane>
+            </HBox>
+
+            <!-- Status Label -->
+            <Label fx:id="lblStatus" style="-fx-text-fill: red; -fx-font-weight: bold;" text="" />
+        </VBox>
+    </children>
+</AnchorPane>
