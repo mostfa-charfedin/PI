@@ -15,18 +15,21 @@ public class FavorisService implements CrudInterface<Favoris> {
         connection = MyDb.getInstance().getConnection();
     }
 
-    public void create(Favoris fav) throws Exception {
-        String dateAjoutStr = (fav.getDateAjout() != null)
-                ? "'" + new Date(fav.getDateAjout().getTime()) + "'"
-                : "NULL";
+    public void create(Favoris fav) throws SQLException {
+        // SQL query to insert a new record into Favoris without idResource
+        String sql = "INSERT INTO Favoris (TitreRessource, note) VALUES (?, ?)";
 
-        String sql = "INSERT INTO Favoris (idResource, date, commentaire, note) VALUES ('"
-                + fav.getIdRessource() + "', " + dateAjoutStr
-                + ", '" + fav.getCommentaire() + "', '" + fav.getNote() + "')";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            // Set the values for TitreRessource and note
+            stmt.setString(1, fav.getTitreRessource());
+            stmt.setInt(2, fav.getNote());
 
-        Statement stmt = connection.createStatement();
-        stmt.executeUpdate(sql);
+            // Execute the query
+            stmt.executeUpdate();
+        }
     }
+
+
 
 
     // READ
@@ -41,7 +44,7 @@ public class FavorisService implements CrudInterface<Favoris> {
             fav.setIdFavoris(rs.getInt("idFavoris"));
             fav.setIdRessource(rs.getInt("idResource"));
 
-            fav.setCommentaire(rs.getString("commentaire"));
+            fav.setTitreRessource(rs.getString("TitreRessource"));
             fav.setNote(rs.getInt("note"));
             list.add(fav);
         }
@@ -51,20 +54,21 @@ public class FavorisService implements CrudInterface<Favoris> {
     // UPDATE
     @Override
     public void update(Favoris fav) throws Exception {
-        String sql = "UPDATE Favoris SET commentaire = ?, note = ? WHERE idFavoris = ?";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setString(1, fav.getCommentaire());
-        pstmt.setInt(2, fav.getNote());
-        pstmt.setInt(3, fav.getIdFavoris());
-        pstmt.executeUpdate();
+        String sql = "UPDATE Favoris SET TitreRessource = '" + fav.getTitreRessource() +
+                "', note = '" + fav.getNote() +
+                "' WHERE idFavoris = " + fav.getIdFavoris();
+
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate(sql);
     }
 
     // DELETE
     @Override
     public void delete(int idFavoris) throws Exception {
-        String sql = "DELETE FROM Favoris WHERE idFavoris = ?";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setInt(1, idFavoris);
-        pstmt.executeUpdate();
+        String sql = "DELETE FROM Favoris WHERE idFavoris = " + idFavoris;
+
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate(sql);
     }
 }
+

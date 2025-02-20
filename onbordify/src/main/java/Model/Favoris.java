@@ -5,8 +5,7 @@ import java.util.Date;
 public class Favoris {
     private int idFavoris;
     private int idRessource;
-    private Date dateAjout;
-    private String commentaire;
+    private String TitreRessource;
     private int note;
 
     public Favoris() {}
@@ -14,8 +13,7 @@ public class Favoris {
     public Favoris(int idFavoris, int idRessource, Date dateAjout, String commentaire, int note) {
         this.idFavoris = idFavoris;
         this.idRessource = idRessource;
-        this.dateAjout = dateAjout;
-        this.commentaire = commentaire;
+        this.TitreRessource = TitreRessource;
         this.note = note;
     }
 
@@ -36,20 +34,14 @@ public class Favoris {
         this.idRessource = idRessource;
     }
 
-    public Date getDateAjout() {
-        return dateAjout;
+
+
+    public String getTitreRessource() {
+        return TitreRessource;
     }
 
-    public void setDateAjout(Date dateAjout) {
-        this.dateAjout = dateAjout;
-    }
-
-    public String getCommentaire() {
-        return commentaire;
-    }
-
-    public void setCommentaire(String commentaire) {
-        this.commentaire = commentaire;
+    public void setTitreRessource(String TitreRessource) {
+        this.TitreRessource = TitreRessource;
     }
 
     public int getNote() {
@@ -65,8 +57,7 @@ public class Favoris {
         return "Favoris{" +
                 "idFavoris=" + idFavoris +
                 ", idRessource=" + idRessource +
-                ", dateAjout=" + dateAjout +
-                ", commentaire='" + commentaire + '\'' +
+                ", TitreRessource ='" + TitreRessource + '\'' +
                 ", note=" + note +
                 '}';
     }
