@@ -17,7 +17,7 @@ import java.io.IOException;
 
 
 public class CreateQuiz {
-
+private ListQuiz ListQuiz;
     @FXML
     private Button add_button;
 
@@ -32,20 +32,26 @@ public class CreateQuiz {
 
     @FXML
     private Label lblstatus;
+    private void resetFields() {
+        quiz_name.clear();
+        quiz_date.setValue(null);
+    }
+
     @FXML
     void add_button(ActionEvent event) {
 
         String name = quiz_name.getText();
         String date = quiz_date.getValue().toString();
-
-        if (date.isEmpty() || name.isEmpty() ) {
-            lblstatus.setText("All fields are required!");
-            return;
-        }
-
-QuizService quizService = new QuizService();
+        QuizService quizService = new QuizService();
         Quiz q = new Quiz(name, date);
+
+        //if (date.isEmpty() || name.isEmpty() ) {
+            //lblstatus.setText("All fields are required!");
+            //return;
+       // }
+
         try {
+
             quizService.create(q);
             resetFields();
 
@@ -58,6 +64,7 @@ QuizService quizService = new QuizService();
             // Close the current window
             Stage stage = (Stage) add_button.getScene().getWindow();
             stage.close();
+
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -65,12 +72,7 @@ QuizService quizService = new QuizService();
             alert.showAndWait();
         }
     }
-    private void resetFields() {
-        // Réinitialiser les champs du formulaire de création de question
 
-        quiz_date.setValue(null);  // Réinitialiser le DatePicker pour la date de création
-        quiz_name.clear();  // Effacer le champ du nom du quiz
-    }
     @FXML
     void cancel_button (ActionEvent event) {
         try {
@@ -87,6 +89,7 @@ QuizService quizService = new QuizService();
             e.printStackTrace();
             System.out.println("Erreur lors du chargement de l'interface de création de quiz.");
         }
+
 
     }}
 

@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -40,30 +39,15 @@
                 </Text>
             </children>
         </Pane>
-        <Pane layoutX="28.0" layoutY="191.0" prefHeight="186.0" prefWidth="543.0" styleClass="pane_lv" stylesheets="@Css/style.css">
-            <children>
-                <ListView layoutX="14.0" layoutY="15.0" prefHeight="104.0" prefWidth="521.0" styleClass="pane_lv" stylesheets="@Css/style.css" />
-                <TextField fx:id="answer_filed" layoutX="161.0" layoutY="15.0" prefHeight="26.0" prefWidth="274.0" />
-                <ToggleButton fx:id="correct_button" layoutX="446.0" layoutY="14.0" mnemonicParsing="false" onAction="#correct_button" prefHeight="29.0" prefWidth="56.0" stylesheets="@Css/style.css" text="Correct" textFill="INDIANRED" />
-                <ImageView fx:id="delete_question" fitHeight="18.0" fitWidth="18.0" layoutX="513.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@assets/delete.png" />
-                    </image>
-                </ImageView>
-                <Label layoutX="41.0" layoutY="16.0" text="Answer">
-                    <font>
-                        <Font size="14.0" />
-                    </font>
-                </Label>
-                <Label fx:id="add_question" layoutX="240.0" layoutY="96.0" text="Others  Answers ..." />
-                <ImageView fitHeight="17.0" fitWidth="12.0" layoutX="216.0" layoutY="97.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@assets/plus.png" />
-                    </image>
-                </ImageView>
-            </children>
-        </Pane>
         <Button fx:id="add_button" layoutX="416.0" layoutY="12.0" mnemonicParsing="false" onAction="#add_button" styleClass="add_button" stylesheets="@Css/style.css" text="Add" />
         <Button fx:id="cancel_button" layoutX="483.0" layoutY="11.0" mnemonicParsing="false" onAction="#cancel_button" prefHeight="36.0" prefWidth="78.0" styleClass="cancel_button" stylesheets="@Css/style.css" text="Cancel" textFill="WHITE" />
+          <Label layoutX="44.0" layoutY="196.0" text="Answer">
+              <font>
+                  <Font size="14.0" />
+              </font>
+          </Label>
+          <ToggleButton fx:id="correct_button" layoutX="494.0" layoutY="248.0" mnemonicParsing="false" onAction="#correct_button" prefHeight="29.0" prefWidth="56.0" stylesheets="@Css/style.css" text="Correct" textFill="INDIANRED" />
+          <ListView fx:id="listViewQuiz" layoutX="44.0" layoutY="233.0" prefHeight="144.0" prefWidth="528.0" styleClass="pane_lv" stylesheets="@Css/style.css" />
+      <Button fx:id="Remove_ques" layoutX="439.0" layoutY="188.0" mnemonicParsing="false" onAction="#Remove_ques" prefHeight="20.0" prefWidth="99.0" styleClass="cancel_button" stylesheets="@Css/style.css" text="Remove" />
     </children>
 </AnchorPane>
