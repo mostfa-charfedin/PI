@@ -33,6 +33,8 @@ public class Recompense implements Initializable {
 
     @FXML
     private Button btnAjouter;
+    @FXML
+    private Button btnModifier;
 
     @FXML
     private Button btnSupprimer;
@@ -142,6 +144,7 @@ public class Recompense implements Initializable {
             }
         }
     }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
