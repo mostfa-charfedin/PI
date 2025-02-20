@@ -30,14 +30,14 @@ public class UserService implements CrudInterface<User> {
     @Override
     public void update(User obj) throws SQLException {
         String sql = "update user set nom = ?, prenom = ?, email = ?," +
-                " cin = ?, dateNaissance = ?, role = ?,  where id = ? ";
+                " cin = ?, dateNaissance = ?, role = ?  where id = ? ";
         PreparedStatement stmt = con.prepareStatement(sql);
         stmt.setString(1, obj.getNom());
         stmt.setString(2, obj.getPrenom());
         stmt.setString(3, obj.getEmail());
         stmt.setInt(4, obj.getCin());
-        stmt.setDate(5, (Date) obj.getDateNaissance());
-        stmt.setString(6, obj.getRole().name());
+        stmt.setDate(5, java.sql.Date.valueOf(obj.getDateNaissance().toString()));
+        stmt.setString(6, obj.getRole().toString());
         stmt.setInt(7, obj.getId());
         stmt.executeUpdate();
     }

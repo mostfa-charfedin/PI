@@ -2,13 +2,11 @@ package Controllers;
 
 import Models.Role;
 import Models.User;
+import Services.UserService;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -37,20 +35,33 @@ public class EditUser {
     @FXML
     private ComboBox<Role> roleMod;
 
+    private User selectedUser;
+
+    UserService userservice = new UserService();
+
     @FXML
     void updateUser(ActionEvent event) {
+        try {
+            System.out.println(selectedUser);
+            this.userservice.update(this.selectedUser);
+            reset();
+            messageMod.setText("User updated successfuly");
+        } catch (Exception e) {
+            System.out.println(e.fillInStackTrace());
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     public void setUserData(User user) {
         System.out.println(user);
-
+this.selectedUser = user;
         nomMod.setText(user.getNom());
         prenomMod.setText(user.getPrenom());
         emailMod.setText(user.getEmail());
         cinMod.setText(String.valueOf(user.getCin()));
-
-
-
 
         if (roleMod.getItems().isEmpty()) {
             roleMod.setItems(FXCollections.observableArrayList(Role.values()));
@@ -62,5 +73,12 @@ public class EditUser {
         Instant instant = sqlDate.toInstant();
         return instant.atZone(ZoneId.systemDefault()).toLocalDate();
     }
-
+    void reset() {
+        this.nomMod.clear();
+        this.prenomMod.clear();
+        this.emailMod.clear();
+        this.cinMod.clear();
+        this.dateMod.setValue(null);
+        this.roleMod.setItems(null);
+    }
 }

@@ -19,7 +19,7 @@ import java.util.List;
 
 
 public class GestionUser {
-    UserService userservice = new UserService();;
+    UserService userservice = new UserService();
 
     @FXML
     private TextField cin;
@@ -114,6 +114,7 @@ private User selectedUser ;
             initialize();
             message.setText("User created successfuly");
         } catch (Exception e) {
+
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setContentText(e.getMessage());
