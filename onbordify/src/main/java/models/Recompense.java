@@ -1,17 +1,19 @@
 package models;
 
+import java.time.LocalDate;
+
 public class Recompense {
     private int idRecompense;
     private String type_Recompense;
-    private String dateAttribution;
-    private String statutdeRecompense;
+    private LocalDate dateAttribution;
+    private String statusRecompence;
     private int idProgramme;  // Association avec ProgrammeBienEtre
 
-    public Recompense(int idRecompense, String type_Recompense, String dateAttribution, String statutdeRecompense, int idProgramme) {
+    public Recompense(int idRecompense, String type_Recompense, LocalDate dateAttribution, String statusRecompence, int idProgramme) {
         this.idRecompense = idRecompense;
         this.type_Recompense = type_Recompense;
         this.dateAttribution = dateAttribution;
-        this.statutdeRecompense = statutdeRecompense;
+        this.statusRecompence = statusRecompence;
         this.idProgramme = idProgramme;
     }
 
@@ -21,11 +23,11 @@ public class Recompense {
     public String getType_Recompense() {
         return type_Recompense;
     }
-    public String getDateAttribution() {
+    public LocalDate getDateAttribution() {
         return dateAttribution;
     }
-    public String getStatutdeRecompense() {
-        return statutdeRecompense;
+    public String getStatusRecompence() {
+        return statusRecompence;
     }
     public int getIdProgramme() {
         return idProgramme;
@@ -37,11 +39,11 @@ public class Recompense {
     public void setType_Recompense(String type_Recompense) {
         this.type_Recompense = type_Recompense;
     }
-    public void setDateAttribution(String dateAttribution) {
+    public void setDateAttribution(LocalDate dateAttribution) {
         this.dateAttribution = dateAttribution;
     }
-    public void setStatutdeRecompense(String statutdeRecompense) {
-        this.statutdeRecompense = statutdeRecompense;
+    public void setStatusRecompence(String statusRecompence) {
+        this.statusRecompence = statusRecompence;
     }
     public void setIdProgramme(int idProgramme) {
         this.idProgramme = idProgramme;

@@ -4,8 +4,12 @@ import Services.programmebienetreService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.List;
@@ -28,6 +32,12 @@ public class programmebienetre implements Initializable {
 
     @FXML
     private Button btnAjouter;
+    @FXML
+    private Button btnModifier;
+
+
+    @FXML
+    private Button btnCreateRecompense; // Nouveau bouton
 
     private programmebienetreService service = new programmebienetreService();
     private ObservableList<models.programmebienetre> programmeList = FXCollections.observableArrayList();
@@ -42,6 +52,10 @@ public class programmebienetre implements Initializable {
 
         // Ajouter un événement au bouton Ajouter
         btnAjouter.setOnAction(event -> ajouterProgramme());
+
+        // Ajouter un événement au bouton CreateRecompense
+        btnCreateRecompense.setOnAction(event -> createRecompense());
+        btnModifier.setOnAction(event -> modifierProgramme());
 
         // Ajouter un événement de suppression sur double-clic
         listViewProgrammes.setOnMouseClicked(event -> {
@@ -78,24 +92,85 @@ public class programmebienetre implements Initializable {
             return;
         }
 
-        // Création et ajout du programme
-        models.programmebienetre programme = new models.programmebienetre(0, titre, type, description);
-        try {
-            service.create(programme);
+        // Si le bouton "Ajouter" est en mode "Mettre à jour"
+        if (btnAjouter.getText().equals("Mettre à jour")) {
+            int selectedIndex = listViewProgrammes.getSelectionModel().getSelectedIndex();
+            if (selectedIndex == -1) {
+                showAlert("Attention", "Veuillez sélectionner un programme à modifier !");
+                return;
+            }
 
-            // Recharger les programmes après ajout
-            loadProgrammes();
+            // Récupérer le programme sélectionné
+            models.programmebienetre selectedProgramme = programmeList.get(selectedIndex);
 
-            // Réinitialiser les champs après l'ajout
-            txtTitre.clear();
-            cmbType.getSelectionModel().clearSelection();
-            txtDescription.clear();
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Erreur", "Erreur lors de l'ajout du programme !");
+            // Mettre à jour les données du programme
+            selectedProgramme.setTitre(titre);
+            selectedProgramme.setType(type);
+            selectedProgramme.setDescription(description);
+
+            try {
+                service.update(selectedProgramme);
+                showAlert("Succès", "Le programme a été mis à jour avec succès !");
+
+                // Recharger les programmes après la mise à jour
+                loadProgrammes();
+
+                // Réinitialiser les champs après la mise à jour
+                txtTitre.clear();
+                cmbType.getSelectionModel().clearSelection();
+                txtDescription.clear();
+                btnModifier.setDisable(false);
+                // Revenir au mode "Ajouter"
+                btnAjouter.setText("Ajouter Programme");
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Erreur", "Erreur lors de la mise à jour du programme !");
+            }
+        } else {
+            // Création et ajout du programme
+            models.programmebienetre programme = new models.programmebienetre(0, titre, type, description);
+            try {
+                service.create(programme);
+
+                // Recharger les programmes après ajout
+                loadProgrammes();
+
+                // Réinitialiser les champs après l'ajout
+                txtTitre.clear();
+                cmbType.getSelectionModel().clearSelection();
+                txtDescription.clear();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Erreur", "Erreur lors de l'ajout du programme !");
+            }
         }
     }
+    @FXML
+    private void modifierProgramme() {
+        int selectedIndex = listViewProgrammes.getSelectionModel().getSelectedIndex();
 
+        if (selectedIndex == -1) {
+            showAlert("Attention", "Veuillez sélectionner un programme à modifier !");
+            return;
+        }
+
+        // Récupérer le programme sélectionné
+        models.programmebienetre selectedProgramme = programmeList.get(selectedIndex);
+
+        // Remplir les champs avec les données du programme sélectionné
+        txtTitre.setText(selectedProgramme.getTitre());
+        cmbType.setValue(selectedProgramme.getType());
+        txtDescription.setText(selectedProgramme.getDescription());
+
+        // Changer le texte du bouton "Ajouter" en "Mettre à jour"
+        btnAjouter.setText("Mettre à jour");
+
+        // Désactiver uniquement le bouton "Modifier" pour éviter les conflits
+        btnModifier.setDisable(true);
+    }
     @FXML
     private void supprimerProgramme() {
         int selectedIndex = listViewProgrammes.getSelectionModel().getSelectedIndex();
@@ -124,6 +199,28 @@ public class programmebienetre implements Initializable {
                 e.printStackTrace();
                 showAlert("Erreur", "Erreur lors de la suppression du programme !");
             }
+        }
+    }
+
+    @FXML
+    private void createRecompense() {
+        try {
+            // Charger la nouvelle vue (recompense.fxml)
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/recompense.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène
+            Scene scene = new Scene(root);
+
+            // Récupérer la fenêtre actuelle (stage)
+            Stage stage = (Stage) btnCreateRecompense.getScene().getWindow();
+
+            // Changer la scène de la fenêtre
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible de charger la page de récompense !");
         }
     }
 

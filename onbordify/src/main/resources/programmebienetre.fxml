@@ -20,8 +20,8 @@
 
       <!-- Titre Principal -->
       <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Gestion des Programmes de Bien-Être" />
-   
-         <!-- Liste des Programmes -->
+
+      <!-- Liste des Programmes -->
       <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 20; -fx-border-radius: 10; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
          <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Liste des Programmes" />
       </VBox>
@@ -57,8 +57,17 @@
          <TextArea fx:id="txtDescription" prefHeight="100" prefWidth="400" style="-fx-font-size: 14px; -fx-background-radius: 5px; -fx-border-radius: 5px; -fx-border-color: #CCCCCC; -fx-padding: 5;" wrapText="true" />
       </VBox>
 
-      <!-- Bouton Ajouter -->
-      <Button fx:id="btnAjouter" onAction="#ajouterProgramme" style="-fx-background-color: #CD5C5C; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-radius: 5px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);" text="Ajouter Programme" />
+      <!-- Boutons -->
+      <HBox spacing="10">
+         <!-- Bouton Ajouter Programme -->
+         <Button fx:id="btnAjouter" onAction="#ajouterProgramme" style="-fx-background-color: #CD5C5C; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-radius: 5px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);" text="Ajouter Programme" />
+
+         <!-- Bouton Créer Récompense -->
+         <Button fx:id="btnCreateRecompense" onAction="#createRecompense" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-radius: 5px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);" text="Créer Récompense" />
+         <Button fx:id="btnModifier" onAction="#modifierProgramme" style="-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-radius: 5px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);" text="Modifier Programme" />
+      </HBox>
+
+      <!-- Liste des Programmes -->
       <ListView fx:id="listViewProgrammes" prefHeight="350.0" prefWidth="250.0" style="-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-radius: 5px;" />
 
    </VBox>

@@ -14,7 +14,7 @@ public class MainFx extends Application {
         Parent root = loader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("Programme Bien-être");
+        stage.setTitle("Recompense");
         stage.show();
     }
 

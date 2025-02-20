@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
-<AnchorPane fx:id="anchorPane" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #f4f4f4;"
-            xmlns="http://javafx.com/javafx/21.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Recompense">
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #F4F4F4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Recompense">
 
     <!-- Section Formulaire -->
-    <Pane layoutX="20.0" layoutY="20.0" prefWidth="340.0" prefHeight="300.0" style="-fx-background-color: white; -fx-border-color: #ccc; -fx-border-radius: 10; -fx-padding: 10;">
+    <Pane layoutX="20.0" layoutY="20.0" prefHeight="300.0" prefWidth="340.0" style="-fx-background-color: white; -fx-border-color: #ccc; -fx-border-radius: 10; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
         <!-- Type de Récompense -->
         <Label layoutX="20.0" layoutY="20.0" text="Type de Récompense:" />
-        <TextField fx:id="txtType" layoutX="20.0" layoutY="40.0" prefWidth="280.0" />
+        <TextField fx:id="txtType" layoutX="20.0" layoutY="40.0" prefWidth="280.0" style="-fx-font-size: 14px; -fx-background-radius: 5px; -fx-border-radius: 5px; -fx-border-color: #CCCCCC; -fx-padding: 5;"/>
 
         <!-- Date d'Attribution -->
         <Label layoutX="20.0" layoutY="80.0" text="Date d'Attribution:" />
-        <DatePicker fx:id="dateAttribution" layoutX="20.0" layoutY="100.0" prefWidth="280.0" />
+        <DatePicker fx:id="dateAttribution" layoutX="20.0" layoutY="100.0" prefWidth="280.0" style="-fx-font-size: 14px; -fx-background-radius: 5px; -fx-border-radius: 5px; -fx-border-color: #CCCCCC; -fx-padding: 5;"/>
 
         <!-- Statut de la Récompense -->
         <Label layoutX="20.0" layoutY="140.0" text="Statut de la Récompense:" />
-        <ComboBox fx:id="cmbStatut" layoutX="20.0" layoutY="160.0" prefWidth="280.0" >
+        <ComboBox fx:id="cmbStatut" layoutX="20.0" layoutY="160.0" prefWidth="280.0" style="-fx-font-size: 14px; -fx-background-radius: 5px; -fx-border-radius: 5px; -fx-border-color: #CCCCCC;">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Expired" />
@@ -30,16 +35,18 @@
             </items>
         </ComboBox>
 
+        <!-- Programme associé -->
+        <Label layoutX="20.0" layoutY="200.0" text="Programme associé:" />
+        <ComboBox fx:id="cmbProgrammes" layoutX="20.0" layoutY="220.0" prefWidth="280.0" style="-fx-font-size: 14px; -fx-background-radius: 5px; -fx-border-radius: 5px; -fx-border-color: #CCCCCC;"/>
+
         <!-- Boutons -->
-        <Button fx:id="btnAjouter" layoutX="20.0" layoutY="210.0" onAction="#ajouterRecompense" text="Ajouter"
-                style="-fx-background-color: #2865a7; -fx-text-fill: white; -fx-font-weight: bold;" />
-        <Button fx:id="btnSupprimer" layoutX="140.0" layoutY="210.0" onAction="#supprimerRecompense" text="Supprimer"
-                style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-weight: bold;" />
+        <Button fx:id="btnAjouter" layoutX="20.0" layoutY="260.0" onAction="#SaveRecompense" prefHeight="25.0" prefWidth="114.0" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-radius: 5px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);" text="Save Recompense" />
+        <Button fx:id="btnSupprimer" layoutX="193.0" layoutY="260.0" onAction="#supprimerRecompense" style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-radius: 5px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);" text="Supprimer" />
     </Pane>
 
     <!-- Liste des Récompenses -->
-    <Pane layoutX="380.0" layoutY="20.0" prefWidth="280.0" prefHeight="450.0" style="-fx-background-color: white; -fx-border-color: #ccc; -fx-border-radius: 10; -fx-padding: 10;">
-        <Label layoutX="20.0" layoutY="10.0" text="Liste des Récompenses" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+    <Pane layoutX="380.0" layoutY="20.0" prefHeight="450.0" prefWidth="280.0" style="-fx-background-color: white; -fx-border-color: #ccc; -fx-border-radius: 10; -fx-padding: 10; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+        <Label layoutX="20.0" layoutY="10.0" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Liste des Récompenses" />
         <ListView fx:id="listViewRecompenses" layoutX="20.0" layoutY="40.0" prefHeight="380.0" prefWidth="240.0" />
     </Pane>
 
