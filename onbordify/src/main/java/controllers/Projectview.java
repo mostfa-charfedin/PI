@@ -22,6 +22,25 @@ public class Projectview {
 
     @FXML
     private Button btnCreateProject, btnEditProject, btnDeleteProject, btnAddTask;
+    @FXML
+    private Button btnViewTasks; // Declare the new button
+
+    @FXML
+    private void handleViewTasks() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/tacheview.fxml"));
+            Parent root = loader.load();
+
+            // Open new window
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Task View");
+            stage.show();
+        } catch (IOException e) {
+            lblStatus.setText("Error opening Task View: " + e.getMessage());
+        }
+    }
+
 
     private ProjetService projetService;
     private Projet selectedProject;

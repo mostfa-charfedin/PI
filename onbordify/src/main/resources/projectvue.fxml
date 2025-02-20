@@ -22,18 +22,23 @@
             <HBox alignment="CENTER_LEFT" spacing="10">
                 <!-- Left-aligned buttons -->
                 <HBox spacing="10">
-                    <Button fx:id="btnCreateProject" onAction="#handleCreateProject" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-weight: bold;                                    -fx-padding: 10px 20px; -fx-border-radius: 8px;" text="Ajouter un projet" />
+                    <Button fx:id="btnCreateProject" onAction="#handleCreateProject" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-weight: bold;                        -fx-padding: 10px 20px; -fx-border-radius: 8px;" text="Ajouter un projet" />
                 </HBox>
 
-                <!-- Right-aligned Add Task button -->
+                <!-- Right-aligned buttons -->
                 <Pane HBox.hgrow="ALWAYS">
-               <children>
-   
-                       <Button fx:id="btnDeleteProject" layoutX="293.0" onAction="#handleDeleteProject" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;                                    -fx-padding: 10px 20px; -fx-border-radius: 8px;" text="Delete" />
-   
-                       <Button fx:id="btnEditProject" layoutX="98.0" onAction="#handleEditProject" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;                                    -fx-padding: 10px 20px; -fx-border-radius: 8px;" text="Edit" />
-               </children></Pane>
+                    <children>
+                        <Button fx:id="btnDeleteProject" onAction="#handleDeleteProject" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;                            -fx-padding: 10px 20px; -fx-border-radius: 8px;" text="Delete" />
+
+                        <Button fx:id="btnEditProject" layoutX="98.0" onAction="#handleEditProject" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;                            -fx-padding: 10px 20px; -fx-border-radius: 8px;" text="Edit" />
+
+                        <!-- New Button to Navigate to tacheview.fxml -->
+                        <Button fx:id="btnViewTasks" layoutX="273.0" onAction="#handleViewTasks" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;                            -fx-padding: 10px 20px; -fx-border-radius: 8px;" text="View Tasks" />
+                    </children>
+                </Pane>
             </HBox>
+
+
 
             <!-- Status Label -->
             <Label fx:id="lblStatus" style="-fx-text-fill: red; -fx-font-weight: bold;" text="" />
