@@ -22,13 +22,13 @@
                   </Label>
                   <ImageView fitHeight="39.0" fitWidth="39.0" layoutX="607.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@assets/mise-a-jour-du-systeme.png" />
+                        <Image url="@../assets/mise-a-jour-du-systeme.png" />
                      </image>
                   </ImageView>
                   <Button fx:id="UpdateButton" layoutX="649.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleUpdate" text="UPDATE" />
                   <ImageView fitHeight="52.0" fitWidth="45.0" layoutX="17.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@assets/liste-de-controle.png" />
+                        <Image url="@../assets/liste-de-controle.png" />
                      </image>
                   </ImageView>
                </children>
@@ -43,7 +43,7 @@
                   </Label>
                   <ImageView fitHeight="32.0" fitWidth="39.0" layoutX="126.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@assets/liste-de-souhaits.png" />
+                        <Image url="@../assets/liste-de-souhaits.png" />
                      </image>
                   </ImageView>
                </children>

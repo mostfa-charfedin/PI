@@ -27,7 +27,7 @@
                      <children>
                         <ImageView fitHeight="61.0" fitWidth="88.0" layoutX="41.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@assets/reclamer.png" />
+                              <Image url="@../assets/reclamer.png" />
                            </image>
                         </ImageView>
                         <Text fill="WHITE" layoutX="110.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CLAIM FORM !">
