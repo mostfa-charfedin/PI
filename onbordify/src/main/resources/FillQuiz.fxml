@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.FillQuiz">
     <children>
-        <Label id="title_label" fx:id="title_label" layoutX="59.0" layoutY="4.0" prefHeight="62.0" prefWidth="206.0" text="Fill the quiz" textFill="INDIANRED">
+        <Label id="title_label" fx:id="title_label" layoutX="59.0" layoutY="4.0" prefHeight="62.0" prefWidth="206.0" text="Edit Quiz" textFill="INDIANRED">
             <font>
                 <Font name="Candara" size="15.0" />
             </font></Label>

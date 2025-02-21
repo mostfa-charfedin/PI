@@ -1,5 +1,6 @@
 package Services;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import modles.Quiz;
@@ -33,7 +34,7 @@ public  class QuizService implements CrudInterface<Quiz> {
 
             // Step 2: Insert the new quiz
             insertStmt.setString(1, quiz.getNom());
-            insertStmt.setString(2, quiz.getDateCreation());
+            insertStmt.setDate(2, quiz.getDateCreation());
 
             int rowsInserted = insertStmt.executeUpdate();
             if (rowsInserted == 0) {
@@ -50,7 +51,7 @@ public  class QuizService implements CrudInterface<Quiz> {
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, quiz.getNom());
-            pstmt.setString(2, quiz.getDateCreation());
+            pstmt.setDate(2, quiz.getDateCreation());
             pstmt.setInt(3, quiz.getIdQuiz());
 
             int rowsUpdated = pstmt.executeUpdate();
@@ -94,19 +95,22 @@ public  class QuizService implements CrudInterface<Quiz> {
     @Override
     public List<Quiz> getAll() throws SQLException {
         List<Quiz> quizList = new ArrayList<>();
-        String query = "SELECT * FROM Quiz";
+        String query = "SELECT idQuiz, nom, dateCreation FROM Quiz";
 
-        try (
-                Statement stmt = connection.createStatement();
-                ResultSet rs = stmt.executeQuery(query)
-        ) {
+        try (PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
             while (rs.next()) {
                 quizList.add(new Quiz(
                         rs.getInt("idQuiz"),
                         rs.getString("nom"),
-                        rs.getString("dateCreation")
-                ));
+                        rs.getDate("dateCreation") )// دعم التواريخ بشكل صحيح
+                );
             }
+        } catch (SQLException e) {
+            System.err.println("Error fetching quizzes: " + e.getMessage());
+            e.printStackTrace();
+            throw e; // إعادة رمي الاستثناء حتى يتم التعامل معه عند الاستدعاء
         }
 
         return quizList;
@@ -123,13 +127,23 @@ public  class QuizService implements CrudInterface<Quiz> {
                     return new Quiz(
                             rs.getInt("idQuiz"),
                             rs.getString("nom"),
-                            rs.getString("dateCreation")
+                            rs.getDate("dateCreation")
                     );
                 }
             }
         }
 
         return null; // If no quiz is found with the given ID
+    }
+    public List<String> getAllByName() throws SQLException {
+        String sql = "SELECT nom,dateCreation FROM Quiz WHERE idQuiz = ?";
+                Statement stmt= connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            List<String> quizList = new ArrayList<>();
+            while (rs.next()) {
+                quizList.add(rs.getString("nom")+" "+rs.getString("dateCreation"));
+            }
+            return quizList;
     }
 }
 

@@ -49,5 +49,7 @@
           <ToggleButton fx:id="correct_button" layoutX="494.0" layoutY="248.0" mnemonicParsing="false" onAction="#correct_button" prefHeight="29.0" prefWidth="56.0" stylesheets="@Css/style.css" text="Correct" textFill="INDIANRED" />
           <ListView fx:id="listViewQuiz" layoutX="44.0" layoutY="233.0" prefHeight="144.0" prefWidth="528.0" styleClass="pane_lv" stylesheets="@Css/style.css" />
       <Button fx:id="Remove_ques" layoutX="439.0" layoutY="188.0" mnemonicParsing="false" onAction="#Remove_ques" prefHeight="20.0" prefWidth="99.0" styleClass="cancel_button" stylesheets="@Css/style.css" text="Remove" />
+      <Button fx:id="add_Answer" layoutX="308.0" layoutY="188.0" mnemonicParsing="false" onAction="#add_Answer" styleClass="add_button" stylesheets="@Css/style.css" text=" Add Answer" />
+      <Label fx:id="status" layoutX="77.0" layoutY="48.0" />
     </children>
 </AnchorPane>

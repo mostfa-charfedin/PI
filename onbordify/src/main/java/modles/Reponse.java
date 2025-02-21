@@ -3,34 +3,26 @@ package modles;
 public class Reponse {
     private int idReponse;
     private String reponse;
-    private boolean statut=false;
-    private int idQuestion; // ref lel question
+    private String statut;
+    private int idQuestion; // Reference to the question
 
-    public Reponse() {};
+    public Reponse() {}
 
-    public Reponse(int idReponse, String reponse,boolean statut, int idQuestion) {
+    public Reponse(int idReponse, String reponse, String statut, int idQuestion) {
         this.idReponse = idReponse;
         this.reponse = reponse;
         this.statut = statut;
         this.idQuestion = idQuestion;
     }
 
-    public Reponse(String reponse ,boolean statut , int idQuestion ) {
+    public Reponse(String reponse, String statut) {
         this.reponse = reponse;
         this.statut = statut;
-        this.idQuestion = idQuestion;
     }
 
+    // Getters and Setters
     public int getIdReponse() {
         return idReponse;
-    }
-
-    public boolean isStatut() {
-        return statut;
-    }
-
-    public void setStatut(boolean statut) {
-        this.statut = statut;
     }
 
     public void setIdReponse(int idReponse) {
@@ -43,6 +35,14 @@ public class Reponse {
 
     public void setReponse(String reponse) {
         this.reponse = reponse;
+    }
+
+    public String getStatut() {
+        return statut;
+    }
+
+    public void setStatut(String statut) {
+        this.statut = statut;
     }
 
     public int getIdQuestion() {
@@ -58,7 +58,7 @@ public class Reponse {
         return "Reponse{" +
                 "idReponse=" + idReponse +
                 ", reponse='" + reponse + '\'' +
-                ", statut=" + statut +
+                ", statut='" + statut + '\'' +
                 ", idQuestion=" + idQuestion +
                 '}';
     }

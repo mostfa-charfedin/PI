@@ -1,30 +1,41 @@
 package modles;
 
-import java.util.ArrayList;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Date;
+
 
 public class Quiz {
 
     private int idQuiz;
-    private static String nom;
-    private static String dateCreation;
+    private  String nom;
+    private Date dateCreation;
     private List<Question> questions;
 
     public Quiz() {};
 
-    //les questions de quiz
-    public Quiz(int idQuiz, String nom, String dateCreation) {
+    public Quiz(int idQuiz, List<Question> questions, Date dateCreation, String nom) {
+        this.idQuiz = idQuiz;
+        this.questions = questions;
+        this.dateCreation = dateCreation;
+        this.nom = nom;
+    }
+
+    public Quiz(int idQuiz, String nom, Date dateCreation) {
         this.idQuiz = idQuiz;
         this.nom = nom;
         this.dateCreation = dateCreation;
-        this.questions = new ArrayList<>();
     }
 
-    public Quiz(String nom, String dateCreation) {
+    public Quiz(String nom, Date dateCreation) {
         this.nom = nom;
         this.dateCreation = dateCreation;
-        this.questions = new ArrayList<>();
+    }
+
+    public Quiz(String nom, Date dateCreation, List<Question> questions) {
+        this.nom = nom;
+        this.dateCreation = dateCreation;
+        this.questions = questions;
     }
 
     public int getIdQuiz() {
@@ -43,11 +54,11 @@ public class Quiz {
         this.nom = nom;
     }
 
-    public  String getDateCreation() {
+    public Date getDateCreation() {
         return dateCreation;
     }
 
-    public void setDateCreation(String dateCreation) {
+    public void setDateCreation(Date dateCreation) {
         this.dateCreation = dateCreation;
     }
 

@@ -29,9 +29,11 @@
       </ImageView>
       <Pane fx:id="panel_l" layoutX="26.0" layoutY="67.0" prefHeight="318.0" prefWidth="556.0" styleClass="panel_l" stylesheets="@Css/style.css">
          <children>
-            <ListView fx:id="listViewQuiz" layoutX="14.0" layoutY="62.0" prefHeight="230.0" prefWidth="511.0" />
-            <Button layoutX="243.0" layoutY="14.0" mnemonicParsing="false" onAction="#edit_quiz_action" prefHeight="36.0" prefWidth="131.0" text="Edit" />
+            <ListView fx:id="listViewQuiz" layoutX="14.0" layoutY="64.0" prefHeight="207.0" prefWidth="511.0" />
+            <Button layoutX="243.0" layoutY="14.0" mnemonicParsing="false" onAction="#add_questions" prefHeight="36.0" prefWidth="131.0" text="add question" />
             <Button layoutX="394.0" layoutY="14.0" mnemonicParsing="false" onAction="#remove_quiz_action" prefHeight="36.0" prefWidth="124.0" text="Remove" />
+            <Label fx:id="lblstatus" layoutX="57.0" layoutY="287.0" />
+            <Button layoutX="103.0" layoutY="14.0" mnemonicParsing="false" onAction="#edit_questions" prefHeight="36.0" prefWidth="131.0" text="Edit Quiz" />
          </children>
       </Pane>
       <Button layoutX="293.0" layoutY="20.0" mnemonicParsing="false" onAction="#create_quiz_action" stylesheets="@Css/style.css" text="Create Quiz" />
