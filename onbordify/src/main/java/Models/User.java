@@ -125,8 +125,9 @@ public class User {
     }
 
 
-    public String generatePassword() {
-       String hash ="Onbordify" ;
-      return hash+=cin;
+    @Override
+    public int hashCode() {
+
+        return super.hashCode();
     }
 }

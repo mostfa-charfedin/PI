@@ -3,7 +3,6 @@ package Services;
 import Models.Role;
 import Models.User;
 import utils.MyDb;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,31 +16,54 @@ public class UserService implements CrudInterface<User> {
 
     @Override
     public void create(User obj) throws SQLException {
-        String sql = "insert into user (nom, prenom, email, cin, dateNaissance, role, password) values(" +
-                "'" + obj.getNom() + "','" + obj.getPrenom() + "','" + obj.getEmail()+ "','" + obj.getCin() +
-                "','" + obj.getDateNaissance() +  "','" + Role.valueOf(obj.getRole().toString()) +  "','" + obj.generatePassword()  +"')";
-        Statement stmt = con.createStatement();
-        stmt.executeUpdate(sql);
-        System.out.println(sql);
-    }
+        String sql = "INSERT INTO user (nom, prenom, email, cin, dateNaissance, role) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, obj.getNom());
+            stmt.setString(2, obj.getPrenom());
+            stmt.setString(3, obj.getEmail());
+            stmt.setInt(4, obj.getCin());
+            if (obj.getDateNaissance() != null) {
+                stmt.setDate(5, java.sql.Date.valueOf(obj.getDateNaissance().toString()));
+            } else {
+                stmt.setNull(5, java.sql.Types.DATE);
+            }
+            stmt.setString(6, obj.getRole().toString());
 
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();  // Affiche l'erreur complète dans la console
+            throw new SQLException("Erreur lors de l'ajout de l'utilisateur : " + e.getMessage());
+        }
+    }
 
 
     @Override
     public void update(User obj) throws SQLException {
-        String sql = "update user set nom = ?, prenom = ?, email = ?," +
-                " cin = ?, dateNaissance = ?, role = ?  where id = ? ";
-        PreparedStatement stmt = con.prepareStatement(sql);
-        stmt.setString(1, obj.getNom());
-        stmt.setString(2, obj.getPrenom());
-        stmt.setString(3, obj.getEmail());
-        stmt.setInt(4, obj.getCin());
-        stmt.setDate(5, java.sql.Date.valueOf(obj.getDateNaissance().toString()));
-        stmt.setString(6, obj.getRole().toString());
-        stmt.setInt(7, obj.getId());
-        stmt.executeUpdate();
-    }
+        String sql = "UPDATE user SET nom = ?, prenom = ?, email = ?, cin = ?, dateNaissance = ?, role = ? WHERE id = ?";
+        System.out.println(obj);
 
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, obj.getNom());
+            stmt.setString(2, obj.getPrenom());
+            stmt.setString(3, obj.getEmail());
+            stmt.setInt(4, obj.getCin());
+
+            // Convertir LocalDate en java.sql.Date pour la base de données
+            if (obj.getDateNaissance() != null) {
+                stmt.setDate(5, java.sql.Date.valueOf(obj.getDateNaissance().toString()));
+            } else {
+                stmt.setNull(5, java.sql.Types.DATE);
+            }
+            stmt.setString(6, obj.getRole().toString());
+            stmt.setInt(7, obj.getId());
+
+            int rowsUpdated = stmt.executeUpdate();
+            System.out.println(rowsUpdated + " user updated.");
+        } catch (SQLException e) {
+            System.err.println("Error updating user: " + e.getMessage());
+            throw e; // Propager l'exception pour la gestion des erreurs
+        }
+    }
 
     public void updatePassword(int id, String newPassword) throws SQLException {
         String sql = "update user set password = ? where id = ?";

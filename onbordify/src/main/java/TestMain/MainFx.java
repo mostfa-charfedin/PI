@@ -14,7 +14,7 @@ public class MainFx extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GestionUser.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css")).toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/Style.css")).toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.setTitle("User management");
         primaryStage.show();
