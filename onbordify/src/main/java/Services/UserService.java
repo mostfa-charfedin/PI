@@ -2,10 +2,13 @@ package Services;
 
 import Models.Role;
 import Models.User;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import utils.MyDb;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 public class UserService implements CrudInterface<User> {
     Connection con;
@@ -13,10 +16,41 @@ public class UserService implements CrudInterface<User> {
     public UserService() {
         this.con = MyDb.getMydb().getConnection();
     }
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    public String generateRandomPassword(int length) {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%";
+        StringBuilder password = new StringBuilder();
+        Random random = new Random();
+
+        for (int i = 0; i < length; i++) {
+            password.append(chars.charAt(random.nextInt(chars.length())));
+        }
+
+        return passwordEncoder.encode(password.toString());
+    }
+    public boolean login(String email, String password) {
+        String sql = "SELECT password FROM user WHERE email = ?";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String hashedPassword = rs.getString("password");
+                return BCrypt.checkpw(password, hashedPassword); // Comparaison avec le hash
+            } else {
+                System.out.println("Utilisateur non trouvé.");
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     @Override
     public void create(User obj) throws SQLException {
-        String sql = "INSERT INTO user (nom, prenom, email, cin, dateNaissance, role) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO user (nom, prenom, email, cin, dateNaissance, role, password) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, obj.getNom());
             stmt.setString(2, obj.getPrenom());
@@ -28,6 +62,7 @@ public class UserService implements CrudInterface<User> {
                 stmt.setNull(5, java.sql.Types.DATE);
             }
             stmt.setString(6, obj.getRole().toString());
+            stmt.setString(7, generateRandomPassword(10).toString());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -100,6 +135,17 @@ public class UserService implements CrudInterface<User> {
         }
         return users;
     }
+
+   /* public boolean authenticateUser(String email, String rawPassword) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            return passwordEncoder.matches(rawPassword, user.getPassword());
+        }
+
+        return false; // Utilisateur non trouvé ou mot de passe incorrect
+    }*/
 
 
 }

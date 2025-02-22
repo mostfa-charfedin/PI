@@ -60,6 +60,9 @@ public class GestionUser {
     private VBox cinErrorBox;
 
 
+   // private final RestTemplate restTemplate = new RestTemplate();
+    private final String LOGIN_URL = "http://localhost:8080/users/login";
+
 private User selectedUser ;
 private ObservableList<String> userList;
 private FilteredList<String> filteredList;
@@ -68,7 +71,7 @@ private FilteredList<String> filteredList;
     public void initialize() {
         role.setItems(FXCollections.observableArrayList(Role.values()));
         loadUsers();
-        // Ajouter un Listener pour la recherche en temps réel
+        // Listener pour la recherche en temps réel
         rechercheFildMod.textProperty().addListener((observable, oldValue, newValue) -> {
             chercherUser();
         });
@@ -172,6 +175,8 @@ private FilteredList<String> filteredList;
             e.printStackTrace();
         }
     }
+
+
 
 
     @FXML

@@ -15,7 +15,7 @@
     <children>
         <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
             <tabs>
-                <!-- Tab 1: Add User -->
+
                 <Tab closable="false" text="Ajouter user">
                     <content>
                         <AnchorPane>
