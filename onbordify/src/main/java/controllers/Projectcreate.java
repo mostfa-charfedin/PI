@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 
 public class Projectcreate implements Initializable {
     private ProjetService projetService;
+    private Projectview projectViewController; // Reference to Projectview
 
     @FXML
     private TextField txtTitle;
@@ -29,10 +30,7 @@ public class Projectcreate implements Initializable {
     private ComboBox<String> cbProjectManager;
 
     @FXML
-    private Button btnCreate;
-
-    @FXML
-    private Button btnViewProjects;
+    private Button btnCreate, btnViewProjects;
 
     @FXML
     private Label lblStatus;
@@ -46,12 +44,16 @@ public class Projectcreate implements Initializable {
         loadProjectManagers();
     }
 
+    public void setProjectViewController(Projectview projectViewController) {
+        this.projectViewController = projectViewController;
+    }
+
     private void loadProjectManagers() {
         try {
             List<String> managers = projetService.getAllChefProjetNames();
             cbProjectManager.getItems().addAll(managers);
         } catch (Exception e) {
-            lblStatus.setText("Error loading project managers");
+            lblStatus.setText("Error loading project managers.");
         }
     }
 
@@ -79,9 +81,13 @@ public class Projectcreate implements Initializable {
         try {
             projetService.create(projet);
 
+            // Refresh project list in Projectview
+            if (projectViewController != null) {
+                projectViewController.refreshProjects();
+            }
+
             resetFields();
 
-            // Show success alert
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success");
             alert.setContentText("Project created successfully!");

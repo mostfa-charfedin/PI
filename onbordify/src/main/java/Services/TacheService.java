@@ -18,36 +18,33 @@ public class TacheService implements CrudInterface<Tache> {
      * Create a new task by selecting the user (nom, prenom) and project (titre).
      */
     @Override
+
     public void create(Tache obj) throws Exception {
-        String getUserIdSQL = "SELECT id FROM user WHERE nom = ? AND prenom = ?";
-        String getProjectIdSQL = "SELECT idProjet FROM projet WHERE titre = ?";
+        String getUserIdSQL = "SELECT id FROM user WHERE LOWER(nom) = LOWER(?) AND LOWER(prenom) = LOWER(?)";
         String insertSQL = "INSERT INTO tache (titre, description, idProjet, idUser) VALUES (?, ?, ?, ?)";
 
         try (
                 PreparedStatement getUserStmt = con.prepareStatement(getUserIdSQL);
-                PreparedStatement getProjectStmt = con.prepareStatement(getProjectIdSQL);
                 PreparedStatement insertStmt = con.prepareStatement(insertSQL)
         ) {
             // Step 1: Get User ID
+            System.out.println("Fetching user with nom: " + obj.getNom() + ", prenom: " + obj.getPrenom());
             getUserStmt.setString(1, obj.getNom());
             getUserStmt.setString(2, obj.getPrenom());
             ResultSet userRs = getUserStmt.executeQuery();
 
             if (!userRs.next()) {
-                throw new Exception("User not found.");
+                throw new Exception("User not found. Ensure nom and prenom match exactly.");
             }
             int idUser = userRs.getInt("id");
 
-            // Step 2: Get Project ID
-            getProjectStmt.setString(1, obj.getTitreProjet());
-            ResultSet projectRs = getProjectStmt.executeQuery();
-
-            if (!projectRs.next()) {
-                throw new Exception("Project not found.");
+            // Step 2: Use the provided project id directly
+            int idProjet = obj.getIdProjet();
+            if (idProjet == 0) {
+                throw new Exception("Project id is not set.");
             }
-            int idProjet = projectRs.getInt("idProjet");
 
-            // Step 3: Insert task
+            // Step 3: Insert Task
             insertStmt.setString(1, obj.getTitre());
             insertStmt.setString(2, obj.getDescription());
             insertStmt.setInt(3, idProjet);
@@ -63,6 +60,8 @@ public class TacheService implements CrudInterface<Tache> {
             throw new Exception("Database error: " + e.getMessage(), e);
         }
     }
+
+
 
     /**
      * Update an existing task.
@@ -241,4 +240,56 @@ public class TacheService implements CrudInterface<Tache> {
 
         return tasks;
     }
+
+    public List<Tache> getAllByProject(int idProjet) throws Exception {
+        String sql = "SELECT t.idTache, t.titre, t.description, t.idUser, " +
+                "p.titre AS titreProjet, u.nom AS nom, u.prenom AS prenom " +
+                "FROM tache t " +
+                "JOIN projet p ON t.idProjet = p.idProjet " +
+                "JOIN user u ON t.idUser = u.id " +
+                "WHERE t.idProjet = ?";
+
+        List<Tache> tasks = new ArrayList<>();
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, idProjet);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Tache task = new Tache();
+                    task.setIdTache(rs.getInt("idTache"));
+                    task.setTitre(rs.getString("titre"));
+                    task.setDescription(rs.getString("description"));
+                    task.setIdUser(rs.getInt("idUser"));
+                    task.setTitreProjet(rs.getString("titreProjet")); // Only storing the project title
+                    task.setNom(rs.getString("nom"));
+                    task.setPrenom(rs.getString("prenom"));
+
+                    tasks.add(task);
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Database error: " + e.getMessage(), e);
+        }
+        return tasks;
+    }
+
+    public List<String> getAllUserNames() throws Exception {
+        String sql = "SELECT nom, prenom FROM user";  // Remove role filtering
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+
+        List<String> userNames = new ArrayList<>();
+        while (rs.next()) {
+            // Trim the values in case there are extra spaces
+            String nom = rs.getString("nom").trim();
+            String prenom = rs.getString("prenom").trim() ;
+            // Only add if both are non-empty (adjust as needed)
+            if (!nom.isEmpty() && !prenom.isEmpty()) {
+                userNames.add(nom + " " + prenom);
+            }
+        }
+        return userNames;
+    }
+
+
+
 }

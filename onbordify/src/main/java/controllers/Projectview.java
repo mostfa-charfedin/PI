@@ -21,26 +21,7 @@ public class Projectview {
     private Label lblStatus;
 
     @FXML
-    private Button btnCreateProject, btnEditProject, btnDeleteProject, btnAddTask;
-    @FXML
-    private Button btnViewTasks; // Declare the new button
-
-    @FXML
-    private void handleViewTasks() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/tacheview.fxml"));
-            Parent root = loader.load();
-
-            // Open new window
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Task View");
-            stage.show();
-        } catch (IOException e) {
-            lblStatus.setText("Error opening Task View: " + e.getMessage());
-        }
-    }
-
+    private Button btnCreateProject, btnEditProject, btnDeleteProject, btnViewTasks;
 
     private ProjetService projetService;
     private Projet selectedProject;
@@ -50,14 +31,14 @@ public class Projectview {
         projetService = new ProjetService();
         loadProjects();
 
-        // Handle single selection in ListView
+        // Handle project selection
         projectListView.setOnMouseClicked(event -> {
             int selectedIndex = projectListView.getSelectionModel().getSelectedIndex();
             if (selectedIndex >= 0) {
                 try {
                     selectedProject = projetService.getAll().get(selectedIndex);
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    lblStatus.setText("Error selecting project: " + e.getMessage());
                 }
             }
         });
@@ -91,11 +72,9 @@ public class Projectview {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectedit.fxml"));
             Parent root = loader.load();
 
-            // Pass project data to the edit controller
             ProjectEdit editController = loader.getController();
             editController.setProjectData(selectedProject, this);
 
-            // Show edit window
             Stage popupStage = new Stage();
             popupStage.setScene(new Scene(root));
             popupStage.setTitle("Edit Project");
@@ -117,12 +96,27 @@ public class Projectview {
     }
 
     @FXML
-    private void handleAddTask() {
+    private void handleViewTasks() {
         if (selectedProject == null) {
-            lblStatus.setText("Select a project to add a task.");
+            lblStatus.setText("Please select a project first.");
             return;
         }
-        openPopup("/taskcreate.fxml", "Add Task");
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/tacheview.fxml"));
+            Parent root = loader.load();
+
+            // Pass project ID to Tacheview controller
+            Tacheview tacheController = loader.getController();
+            tacheController.setProjectId(selectedProject.getIdProjet());
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Task View");
+            stage.show();
+        } catch (IOException e) {
+            lblStatus.setText("Error opening Task View: " + e.getMessage());
+        }
     }
 
     private void openPopup(String fxmlPath, String title) {

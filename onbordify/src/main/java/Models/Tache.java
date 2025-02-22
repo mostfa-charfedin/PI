@@ -12,10 +12,23 @@ public class Tache {
     public Tache() {
     }
 
+    public Tache(int idTache,String titre ,String description,int idProjet,int idUser,String nom, String prenom, String titreProjet) {
+        this.idTache = idTache;
+        TitreProjet = titreProjet;
+        this.prenom = prenom;
+        this.nom = nom;
+        this.idUser = idUser;
+        this.idProjet = idProjet;
+        Description = description;
+        this.titre = titre;
+    }
+
     public Tache(String titre, String description, int idProjet, String nom, String prenom) {
         this.titre = titre;
-        Description = description;
+        this.Description = description;
         this.idProjet = idProjet;
+        this.nom = nom;
+        this.prenom = prenom;
     }
 
     public Tache(String titre, String nom, String prenom, String description) {

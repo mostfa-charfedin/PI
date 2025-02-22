@@ -25,31 +25,36 @@ public class Tacheview {
 
     private TacheService tacheService;
     private Tache selectedTask;
+    private int projectId; // Stores the selected project ID
 
     @FXML
     public void initialize() {
         tacheService = new TacheService();
-        loadTasks();
 
-        // Handle single selection in ListView
+        // Handle task selection
         taskListView.setOnMouseClicked(event -> {
             int selectedIndex = taskListView.getSelectionModel().getSelectedIndex();
             if (selectedIndex >= 0) {
                 try {
-                    selectedTask = tacheService.getAll().get(selectedIndex);
+                    selectedTask = tacheService.getAllByProject(projectId).get(selectedIndex);
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    lblStatus.setText("Error selecting task: " + e.getMessage());
                 }
             }
         });
     }
 
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+        loadTasks();
+    }
+
     private void loadTasks() {
         taskListView.getItems().clear();
         try {
-            List<Tache> tasks = tacheService.getAll();
+            List<Tache> tasks = tacheService.getAllByProject(projectId);
             for (Tache task : tasks) {
-                taskListView.getItems().add(task.getTitre() + " - Assigned to: " + task.getNom() + " " + task.getPrenom());
+                taskListView.getItems().add(task.getTitre());
             }
         } catch (Exception e) {
             lblStatus.setText("Error loading tasks: " + e.getMessage());
@@ -57,9 +62,25 @@ public class Tacheview {
     }
 
     @FXML
+
     private void handleCreateTask() {
-        openPopup("/taskcreate.fxml", "Create Task");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/taskcreate.fxml"));
+            Parent root = loader.load();
+
+            // Get the Taskcreate controller and set the project id
+            Taskcreate taskCreateController = loader.getController();
+            taskCreateController.setProjectId(projectId);
+
+            Stage popupStage = new Stage();
+            popupStage.setScene(new Scene(root));
+            popupStage.setTitle("Create Task");
+            popupStage.show();
+        } catch (IOException e) {
+            lblStatus.setText("Error opening Task Create window: " + e.getMessage());
+        }
     }
+
 
     @FXML
     private void handleDeleteTask() throws Exception {
@@ -88,4 +109,5 @@ public class Tacheview {
     public void refreshTasks() {
         loadTasks();
     }
+
 }

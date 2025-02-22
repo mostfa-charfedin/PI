@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-
-<AnchorPane prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: #f9f9f9;"
+<AnchorPane prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: #f9f9f9;"
             xmlns="http://javafx.com/javafx/21.0.2"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controllers.Taskcreate">
@@ -20,7 +16,7 @@
               AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"
               AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
 
-            <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #007acc;" text="Create Task" />
+            <Label text="Create Task" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #007acc;" />
 
             <TextField fx:id="txtTitle" promptText="Task Title"
                        style="-fx-padding: 8px; -fx-border-radius: 5px; -fx-border-color: #007acc;" />
@@ -28,22 +24,33 @@
             <TextArea fx:id="txtDescription" promptText="Task Description" wrapText="true"
                       style="-fx-padding: 8px; -fx-border-radius: 5px; -fx-border-color: #007acc;" />
 
-            <TextField fx:id="txtNom" promptText="User First Name"
-                       style="-fx-padding: 8px; -fx-border-radius: 5px; -fx-border-color: #007acc;" />
+            <!-- Search and Sort in the same row -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchUser" promptText="Search User"
+                           style="-fx-padding: 8px; -fx-border-radius: 5px; -fx-border-color: #007acc;" />
 
-            <TextField fx:id="txtPrenom" promptText="User Last Name"
-                       style="-fx-padding: 8px; -fx-border-radius: 5px; -fx-border-color: #007acc;" />
+                <ComboBox fx:id="cmbSort" promptText="Sort by"
+                          style="-fx-padding: 8px; -fx-border-radius: 5px; -fx-border-color: #007acc;">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Nom"/>
+                            <String fx:value="Role"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+            </HBox>
 
-            <ComboBox fx:id="cmbProjects" promptText="Select Project"
-                      style="-fx-padding: 8px; -fx-border-radius: 5px; -fx-border-color: #007acc;" />
+            <ListView fx:id="listUsers" prefHeight="150.0" style="-fx-border-color: #007acc;">
+                <VBox.margin>
+                    <Insets top="5.0" bottom="5.0"/>
+                </VBox.margin>
+            </ListView>
 
             <HBox alignment="CENTER" spacing="10">
                 <Button fx:id="btnSubmit" text="Create" onAction="#handleCreateTask"
-                        style="-fx-background-color: #28a745; -fx-text-fill: white;
-                               -fx-padding: 10px 20px; -fx-border-radius: 5px;" />
+                        style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-border-radius: 5px;" />
                 <Button fx:id="btnCancel" text="Cancel" onAction="#handleCancel"
-                        style="-fx-background-color: #dc3545; -fx-text-fill: white;
-                               -fx-padding: 10px 20px; -fx-border-radius: 5px;" />
+                        style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-border-radius: 5px;" />
             </HBox>
 
             <Label fx:id="lblStatus" style="-fx-text-fill: red; -fx-font-weight: bold;" text="" />
