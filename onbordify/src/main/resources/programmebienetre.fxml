@@ -13,10 +13,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="450.0" prefWidth="700.0" style="-fx-background-color: #F4F4F4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.programmebienetre">
+<AnchorPane fx:id="anchorPane" prefHeight="700.0" prefWidth="1210.0" style="-fx-background-color: #F4F4F4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.programmebienetre">
 
    <!-- Conteneur Principal -->
-   <VBox alignment="TOP_LEFT" layoutX="30.0" layoutY="20.0" spacing="20" style="-fx-background-color: white; -fx-padding: 20; -fx-border-radius: 10; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+   <VBox alignment="TOP_LEFT" layoutX="30.0" layoutY="20.0" prefHeight="670.0" prefWidth="642.0" spacing="20" style="-fx-background-color: white; -fx-padding: 20; -fx-border-radius: 10; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
 
       <!-- Titre Principal -->
       <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Gestion des Programmes de Bien-Être" />
@@ -67,9 +67,9 @@
          <Button fx:id="btnModifier" onAction="#modifierProgramme" style="-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-radius: 5px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);" text="Modifier Programme" />
       </HBox>
 
-      <!-- Liste des Programmes -->
-      <ListView fx:id="listViewProgrammes" prefHeight="350.0" prefWidth="250.0" style="-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-radius: 5px;" />
-
    </VBox>
+
+      <!-- Liste des Programmes -->
+   <ListView fx:id="listViewProgrammes" layoutX="709.0" layoutY="23.0" prefHeight="682.0" prefWidth="443.0" style="-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-radius: 5px;" />
 
 </AnchorPane>

@@ -40,6 +40,7 @@ public class programmebienetre implements Initializable {
     private Button btnCreateRecompense; // Nouveau bouton
 
     private programmebienetreService service = new programmebienetreService();
+    //conversion taa liste observation liste bch tkhali listeview dima dynamique
     private ObservableList<models.programmebienetre> programmeList = FXCollections.observableArrayList();
 
     @Override
@@ -91,7 +92,10 @@ public class programmebienetre implements Initializable {
             showAlert("Attention", "Veuillez remplir tous les champs !");
             return;
         }
-
+        if (!titre.matches("^[a-zA-Z]+$")) {
+            showAlert("Erreur de saisie", "Le titre ne doit contenir que des lettres (pas de nombres ni d'espaces).");
+            return;
+        }
         // Si le bouton "Ajouter" est en mode "Mettre à jour"
         if (btnAjouter.getText().equals("Mettre à jour")) {
             int selectedIndex = listViewProgrammes.getSelectionModel().getSelectedIndex();

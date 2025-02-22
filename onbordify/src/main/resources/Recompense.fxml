@@ -14,7 +14,7 @@
 <AnchorPane fx:id="anchorPane" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #F4F4F4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Recompense">
 
     <!-- Section Formulaire -->
-    <Pane layoutX="14.0" layoutY="20.0" prefHeight="328.0" prefWidth="340.0" style="-fx-background-color: white; -fx-border-color: #ccc; -fx-border-radius: 10; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+    <Pane layoutX="14.0" layoutY="37.0" prefHeight="416.0" prefWidth="340.0" style="-fx-background-color: white; -fx-border-color: #ccc; -fx-border-radius: 10; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
         <!-- Type de Récompense -->
         <Label layoutX="20.0" layoutY="20.0" text="Type de Récompense:" />
         <TextField fx:id="txtType" layoutX="20.0" layoutY="40.0" prefWidth="280.0" style="-fx-font-size: 14px; -fx-background-radius: 5px; -fx-border-radius: 5px; -fx-border-color: #CCCCCC; -fx-padding: 5;" />
@@ -40,8 +40,11 @@
         <ComboBox fx:id="cmbProgrammes" layoutX="20.0" layoutY="220.0" prefWidth="280.0" style="-fx-font-size: 14px; -fx-background-radius: 5px; -fx-border-radius: 5px; -fx-border-color: #CCCCCC;" />
 
         <!-- Boutons -->
-        <Button fx:id="btnAjouter" layoutX="20.0" layoutY="260.0" onAction="#SaveRecompense" prefHeight="25.0" prefWidth="114.0" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-radius: 5px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);" text="Save Recompense" />
-        <Button fx:id="btnSupprimer" layoutX="193.0" layoutY="260.0" onAction="#supprimerRecompense" style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-radius: 5px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);" text="Supprimer" />
+        <!-- Boutons -->
+        <Button fx:id="btnAjouter" layoutX="30.0" layoutY="260.0" onAction="#creer" prefHeight="25.0" prefWidth="114.0" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-radius: 5px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);" text="Créer Récompense" />
+        <Button fx:id="btnSupprimer" layoutX="150.0" layoutY="260.0" onAction="#supprimerRecompense" prefHeight="25.0" prefWidth="114.0" style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-radius: 5px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);" text="Supprimer Récompense" />
+      <Button fx:id="btnModifier" layoutX="102.0" layoutY="327.0" onAction="#ModifierRecompense" prefHeight="25.0" prefWidth="114.0" style="-fx-background-color: #3556dc; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-radius: 5px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);" text="Modifier Recompense" />
+
 
     </Pane>
 

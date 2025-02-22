@@ -33,20 +33,20 @@ public class Recompense implements Initializable {
 
     @FXML
     private Button btnAjouter;
-    @FXML
-    private Button btnModifier;
 
     @FXML
     private Button btnSupprimer;
+    @FXML
+    private Button btnModifier;
 
     private RecompenseService service = new RecompenseService();
     private ObservableList<models.Recompense> recompenseList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        programmebienetreService programmeService = new programmebienetreService(); // Service for wellness programs
+        programmebienetreService programmeService = new programmebienetreService();
         try {
-            List<models.programmebienetre> programmes = programmeService.getAll();  // Use instance to call `getAll`
+            List<models.programmebienetre> programmes = programmeService.getAll();
             cmbProgrammes.setItems(FXCollections.observableList(programmes));
 
             cmbProgrammes.setCellFactory(param -> new ListCell<models.programmebienetre>() {
@@ -65,9 +65,26 @@ public class Recompense implements Initializable {
                 }
             });
 
+            listViewRecompenses.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+                if (newSelection != null) {
+                    loadSelectedRecompense(newSelection);
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Erreur", "Impossible de charger les programmes !");
+        }
+
+        loadRecompenses();
+    }
+
+    private void loadSelectedRecompense(String selection) {
+        String[] details = selection.split(" - ");
+        if (details.length == 3) {
+            txtType.setText(details[0]);
+            dateAttribution.setValue(LocalDate.parse(details[1]));
+            cmbStatut.setValue(details[2]);
         }
     }
 
@@ -85,14 +102,20 @@ public class Recompense implements Initializable {
         }
     }
 
+
     @FXML
-    private void SaveRecompense() {
+    private void creer() {
         String type = txtType.getText();
         LocalDate date = dateAttribution.getValue();
         String statusRecompence = cmbStatut.getValue();
 
+        // Validation des champs
         if (type.isEmpty() || date == null || statusRecompence == null) {
             showAlert("Attention", "Veuillez remplir tous les champs !");
+            return;
+        }
+        if (!type.matches("^[a-zA-Z]+$")) {
+            showAlert("Erreur de saisie", "Le type ne doit contenir que des lettres (pas de nombres ni d'espaces).");
             return;
         }
 
@@ -102,14 +125,12 @@ public class Recompense implements Initializable {
             return;
         }
 
+        // Création de la récompense
         models.Recompense recompense = new models.Recompense(0, type, date, statusRecompence, programmeSelectionne.getIdProgramme());
         try {
             service.create(recompense);
-            loadRecompenses();
-            txtType.clear();
-            dateAttribution.setValue(null);
-            cmbStatut.getSelectionModel().clearSelection();
-            cmbProgrammes.getSelectionModel().clearSelection();
+            loadRecompenses(); // Recharger la liste des récompenses
+            clearForm(); // Effacer les champs du formulaire
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Erreur SQL", "Problème lors de l'insertion en base de données : " + e.getMessage());
@@ -119,6 +140,13 @@ public class Recompense implements Initializable {
         }
     }
 
+    // Méthode pour effacer les champs du formulaire
+    private void clearForm() {
+        txtType.clear();
+        dateAttribution.setValue(null);
+        cmbStatut.getSelectionModel().clearSelection();
+        cmbProgrammes.getSelectionModel().clearSelection();
+    }
     @FXML
     private void supprimerRecompense() {
         int selectedIndex = listViewRecompenses.getSelectionModel().getSelectedIndex();
@@ -142,6 +170,49 @@ public class Recompense implements Initializable {
                 e.printStackTrace();
                 showAlert("Erreur", "Erreur lors de la suppression de la récompense !");
             }
+        }
+    }
+    @FXML
+    private void ModifierRecompense() {
+        int selectedIndex = listViewRecompenses.getSelectionModel().getSelectedIndex();
+        if (selectedIndex == -1) {
+            showAlert("Attention", "Veuillez sélectionner une récompense à modifier !");
+            return;
+        }
+
+        models.Recompense selectedRecompense = recompenseList.get(selectedIndex);
+
+        String type = txtType.getText();
+        LocalDate date = dateAttribution.getValue();
+        String statusRecompence = cmbStatut.getValue();
+
+        if (type.isEmpty() || date == null || statusRecompence == null) {
+            showAlert("Attention", "Veuillez remplir tous les champs !");
+            return;
+        }
+
+        models.programmebienetre programmeSelectionne = cmbProgrammes.getSelectionModel().getSelectedItem();
+        if (programmeSelectionne == null) {
+            showAlert("Attention", "Veuillez sélectionner un programme !");
+            return;
+        }
+
+        selectedRecompense.setType_Recompense(type);
+        selectedRecompense.setDateAttribution(date);
+        selectedRecompense.setStatusRecompence(statusRecompence);
+        selectedRecompense.setIdProgramme(programmeSelectionne.getIdProgramme());
+
+        try {
+            service.update(selectedRecompense);
+            loadRecompenses(); // Reload the rewards list
+            showAlert("Succès", "La récompense a été modifiée avec succès !");
+            clearForm(); // Clear the form fields
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Erreur SQL", "Problème lors de la mise à jour en base de données : " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Une erreur inattendue s'est produite : " + e.getMessage());
         }
     }
 
