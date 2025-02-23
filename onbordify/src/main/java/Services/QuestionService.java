@@ -16,28 +16,38 @@ public class QuestionService implements CrudInterface<Question> {
 
     @Override
     public void create(Question obj) throws Exception {
-        String checkIfExistsSQL = "SELECT idQuestion FROM Question WHERE question = ? AND idQuiz = ?";
+        String getQuizIdSQL = "SELECT idQuiz FROM Quiz WHERE nom = ?";
         String insertSQL = "INSERT INTO Question (question, idQuiz) VALUES (?, ?)";
 
         try (
-                PreparedStatement checkStmt = connection.prepareStatement(checkIfExistsSQL);
-                PreparedStatement insertStmt = connection.prepareStatement(insertSQL)
+                PreparedStatement getQuizIdStmt = connection.prepareStatement(getQuizIdSQL);
+                PreparedStatement insertStmt = connection.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS)
         ) {
-            checkStmt.setString(1, obj.getQuestion());
-            checkStmt.setInt(2, obj.getIdQuiz());
-            try (ResultSet rs = checkStmt.executeQuery()) {
-                if (rs.next()) {
-                    throw new SQLException("A question with this name already exists for the given quiz.");
-                }
-            }
+            // Get the quiz ID based on the quiz name
+            getQuizIdStmt.setString(1, obj.getnom());
 
-            insertStmt.setString(1, obj.getQuestion());
-            insertStmt.setInt(2, obj.getIdQuiz());
-            int rowsInserted = insertStmt.executeUpdate();
-            if (rowsInserted > 0) {
-                System.out.println("Question created successfully!");
-            } else {
-                throw new SQLException("Question insertion failed.");
+            try (ResultSet rs = getQuizIdStmt.executeQuery()) {
+                if (rs.next()) {
+                    int idQuiz = rs.getInt("idQuiz");
+
+                    // Insert new question
+                    insertStmt.setString(1, obj.getQuestion());
+                    insertStmt.setInt(2, idQuiz);
+                    int rowsInserted = insertStmt.executeUpdate();
+
+                    if (rowsInserted > 0) {
+                        try (ResultSet generatedKeys = insertStmt.getGeneratedKeys()) {
+                            if (generatedKeys.next()) {
+                                obj.setIdQuestion(generatedKeys.getInt(1)); // Set the generated ID
+                            }
+                        }
+                        System.out.println("Question created successfully!");
+                    } else {
+                        throw new SQLException("Question insertion failed.");
+                    }
+                } else {
+                    throw new SQLException("Quiz with the specified name does not exist.");
+                }
             }
         }
     }
@@ -94,14 +104,15 @@ public class QuestionService implements CrudInterface<Question> {
     @Override
     public List<Question> getAll() throws Exception {
         List<Question> questionList = new ArrayList<>();
-        String query = "SELECT * FROM Question";
+        String query = "SELECT q.idQuestion, q.question, q.idQuiz, quiz.nom FROM Question q JOIN Quiz quiz ON q.idQuiz = quiz.idQuiz";
 
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
                 questionList.add(new Question(
                         rs.getInt("idQuestion"),
                         rs.getString("question"),
-                        rs.getInt("idQuiz")
+                        rs.getInt("idQuiz"),
+                        rs.getString("nom")  // Quiz name
                 ));
             }
         }
@@ -110,7 +121,7 @@ public class QuestionService implements CrudInterface<Question> {
 
     public List<Question> getQuestionsByQuizId(int idQuiz) throws Exception {
         List<Question> questionList = new ArrayList<>();
-        String query = "SELECT * FROM Question WHERE idQuiz = ?";
+        String query = "SELECT q.idQuestion, q.question, q.idQuiz, quiz.nom FROM Question q JOIN Quiz quiz ON q.idQuiz = quiz.idQuiz WHERE q.idQuiz = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, idQuiz);
@@ -119,7 +130,8 @@ public class QuestionService implements CrudInterface<Question> {
                     questionList.add(new Question(
                             rs.getInt("idQuestion"),
                             rs.getString("question"),
-                            rs.getInt("idQuiz")
+                            rs.getInt("idQuiz"),
+                            rs.getString("nom")  // Quiz name
                     ));
                 }
             }
@@ -128,9 +140,30 @@ public class QuestionService implements CrudInterface<Question> {
     }
 
     public Question getById(int id) throws SQLException {
-        String sql = "SELECT * FROM Question WHERE idQuestion = ?";
+        String sql = "SELECT q.idQuestion, q.question, q.idQuiz, quiz.nom FROM Question q JOIN Quiz quiz ON q.idQuiz = quiz.idQuiz WHERE q.idQuestion = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Question(
+                            rs.getInt("idQuestion"),
+                            rs.getString("question"),
+                            rs.getInt("idQuiz"),
+                            rs.getString("nom")  // Quiz name
+                    );
+                }
+            }
+        }
+        return null;
+    }
+
+    public Question getQuestionByText(String selectedQuestionText, int selectedQuizId) throws SQLException {
+        String sql = "SELECT * FROM Question WHERE question = ? AND idQuiz = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, selectedQuestionText);
+            stmt.setInt(2, selectedQuizId);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new Question(
@@ -141,6 +174,7 @@ public class QuestionService implements CrudInterface<Question> {
                 }
             }
         }
-        return null;
+        return null; // Return null if no matching question is found
     }
+
 }

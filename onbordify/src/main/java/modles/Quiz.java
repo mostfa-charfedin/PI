@@ -21,6 +21,7 @@ public class Quiz {
         this.nom = nom;
     }
 
+
     public Quiz(int idQuiz, String nom, Date dateCreation) {
         this.idQuiz = idQuiz;
         this.nom = nom;

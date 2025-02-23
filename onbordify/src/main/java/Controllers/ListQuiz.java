@@ -1,5 +1,6 @@
 package Controllers;
 
+import Services.QuestionService;
 import Services.QuizService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,13 +35,13 @@ public class ListQuiz {
 
     private QuizService quizService;
     private Quiz selectedQuiz;
+    private ObservableList<String> quizItems = FXCollections.observableArrayList();
 
     @FXML
     private void initialize() {
-        quizService = new QuizService(); // تهيئة خدمة الـ Quiz
+        quizService = new QuizService();
         loadQuiz();
 
-        // تحديث `selectedQuiz` عند النقر على عنصر من القائمة
         listViewQuiz.setOnMouseClicked(event -> {
             int selectedIndex = listViewQuiz.getSelectionModel().getSelectedIndex();
             if (selectedIndex >= 0) {
@@ -51,20 +52,18 @@ public class ListQuiz {
                 }
             }
         });
+
+        search_field.textProperty().addListener((observable, oldValue, newValue) -> filterRessources(newValue));
     }
 
-    // تحميل الـ Quizzes وعرضها في ListView
     void loadQuiz() {
         try {
             List<Quiz> quizzes = quizService.getAll();
-            ObservableList<String> quizItems = FXCollections.observableArrayList();
-
+            quizItems.clear();
             for (Quiz q : quizzes) {
                 quizItems.add(q.getNom() + " -- " + q.getDateCreation());
             }
-
             listViewQuiz.setItems(quizItems);
-
         } catch (Exception e) {
             lblstatus.setText("Something went wrong while loading quizzes.");
             e.printStackTrace();
@@ -83,10 +82,9 @@ public class ListQuiz {
             Stage popupStage = new Stage();
             popupStage.setTitle("Créer un Quiz");
             popupStage.setScene(new Scene(root));
-            popupStage.showAndWait(); // انتظار إغلاق النافذة
+            popupStage.showAndWait();
 
-            loadQuiz(); // إعادة تحميل قائمة الاختبارات بعد الإنشاء
-
+            loadQuiz();
         } catch (IOException e) {
             lblstatus.setText("Something went wrong");
             e.printStackTrace();
@@ -104,25 +102,21 @@ public class ListQuiz {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/EditQuiz.fxml"));
             Parent root = loader.load();
 
-            // Get the controller and pass the selected quiz
             EditQuiz editController = loader.getController();
             editController.setQuiz(selectedQuiz);
             editController.setListQuizController(this);
 
-            // Open the popup window
             Stage popupStage = new Stage();
             popupStage.setTitle("Edit Quiz");
             popupStage.setScene(new Scene(root));
-            popupStage.showAndWait(); // Wait until the window is closed
+            popupStage.showAndWait();
 
-            loadQuiz(); // Refresh the list after editing
-
+            loadQuiz();
         } catch (IOException e) {
             lblstatus.setText("Something went wrong");
             e.printStackTrace();
         }
     }
-
 
     @FXML
     private void remove_quiz_action(ActionEvent event) {
@@ -144,16 +138,44 @@ public class ListQuiz {
     public void refreshQuiz() {
         loadQuiz();
     }
+
     @FXML
     void add_questions(ActionEvent event) {
+        if (selectedQuiz == null) {
+            lblstatus.setText("Select a quiz to add questions.");
+            return;
+        }
 
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/addquestions.fxml"));
+            Parent root = loader.load();
+
+            Addquestions addQuestionsController = loader.getController();
+            addQuestionsController.setQuizName(selectedQuiz.getNom());
+
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Ajouter des Questions");
+            popupStage.setScene(new Scene(root));
+            popupStage.showAndWait();
+
+            loadQuiz();
+        } catch (IOException e) {
+            lblstatus.setText("Something went wrong while opening the add questions window.");
+            e.printStackTrace();
+        }
     }
 
-
-
-
-
-
-
-
+    private void filterRessources(String searchField) {
+        ObservableList<String> filteredRessources = FXCollections.observableArrayList();
+        if (searchField == null || searchField.trim().isEmpty()) {
+            filteredRessources.addAll(quizItems);
+        } else {
+            for (String titre : quizItems) {
+                if (titre.toLowerCase().contains(searchField.toLowerCase())) {
+                    filteredRessources.add(titre);
+                }
+            }
+        }
+        listViewQuiz.setItems(filteredRessources);
+    }
 }

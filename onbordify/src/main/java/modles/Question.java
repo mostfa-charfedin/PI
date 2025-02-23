@@ -8,20 +8,35 @@ public class Question {
     private String question;
     private int idQuiz; //ref au quiz a laquelle la question appartient
     private List<Reponse> reponses; //les reponses possibles
-
+    private String nom ;
     public Question(){};
 
-    public Question(int idQuestion, String question,  int idQuiz) {
+    public String getnom() {
+        return nom;
+    }
+
+    public void setnom(String nom) {
+        this.nom = nom;
+    }
+
+    public Question(int idQuestion, String question, int idQuiz) {
         this.idQuestion = idQuestion;
         this.question = question;
         this.idQuiz = idQuiz;
         this.reponses = new ArrayList<>();
     }
 
-    public Question(String question,  int idQuiz) {
+    public Question(int idQuestion, String question, int idQuiz, String nom) {
+        this.idQuestion = idQuestion;
         this.question = question;
         this.idQuiz = idQuiz;
-        this.reponses = new ArrayList<>();
+        this.nom = nom;
+    }
+
+    public Question(String question, String nom) {
+        this.question = question;
+        this.nom = nom;
+        ;
     }
     public Question(String question) {
         this.question = question;

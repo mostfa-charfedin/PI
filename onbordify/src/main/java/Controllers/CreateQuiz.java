@@ -7,7 +7,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import modles.Quiz;
 
-import java.sql.Date; // استخدم java.sql.Date بدلاً من LocalDate
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class CreateQuiz {
     @FXML
     void add_button(ActionEvent event) {
         String name = quiz_name.getText();
-        LocalDate localDate = quiz_date.getValue(); // أخذ التاريخ من DatePicker
+        LocalDate localDate = quiz_date.getValue();
 
         if (name.isEmpty() || localDate == null) {
             status.setText("All fields are required!");
@@ -55,17 +55,17 @@ public class CreateQuiz {
             return;
         }
 
-        // تحويل LocalDate إلى java.sql.Date
-        Date date = Date.valueOf(localDate); // هنا يتم التحويل
 
-        Quiz quiz = new Quiz(name, date); // استخدام java.sql.Date هنا
+        Date date = Date.valueOf(localDate);
+
+        Quiz quiz = new Quiz(name, date);
         QuizService quizService = new QuizService();
 
         try {
-            quizService.create(quiz); // تمرير التاريخ المحول إلى قاعدة البيانات
+            quizService.create(quiz);
 
             if (ListQuizController != null) {
-                ListQuizController.loadQuiz(); // تحديث قائمة الاختبارات بعد الإضافة
+                ListQuizController.loadQuiz();
             }
             resetFields();
 

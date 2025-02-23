@@ -10,40 +10,40 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AddAnswers">
 
 
-<children>
-    <Label layoutX="91.0" layoutY="19.0" stylesheets="@Css/style.css" text="Create Answer" textFill="INDIANRED">
-        <font>
-            <Font name="Candara" size="16.0" />
-        </font>
-    </Label>
-    <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="69.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
-        <image>
-            <Image url="@assets/magic.png" />
-        </image>
-    </ImageView>
-    <Pane layoutX="98.0" layoutY="70.0" prefHeight="296.0" prefWidth="387.0" styleClass="pane_lv" stylesheets="@Css/style.css">
-        <children>
-            <Label layoutX="75.0" layoutY="35.0" text="Enter Answer">
-                <font>
-                    <Font size="14.0" />
-                </font>
-            </Label>
-            <TextField fx:id="answer" layoutX="38.0" layoutY="62.0" prefHeight="89.0" prefWidth="311.0" />
-            <Label layoutX="84.0" layoutY="106.0">
-                <font>
-                    <Font size="14.0" />
-                </font>
-            </Label>
-            <Button fx:id="add_button" layoutX="96.0" layoutY="204.0" mnemonicParsing="false" onAction="#add_button" styleClass="add_button" stylesheets="@Css/style.css" text="Add" />
-            <Button fx:id="cancel_button" layoutX="207.0" layoutY="204.0" mnemonicParsing="false" onAction="#cancel_button" prefHeight="36.0" prefWidth="78.0" styleClass="cancel_button" stylesheets="@Css/style.css" text="Cancel" textFill="WHITE" />
-            <Label fx:id="lblstatus" layoutX="43.0" layoutY="170.0" prefHeight="36.0" prefWidth="311.0" />
-            <ToggleButton fx:id="statut" layoutX="180.0" layoutY="158.0" mnemonicParsing="false" onAction="#correct" text="Correct" />
-            <Label layoutX="109.0" layoutY="162.0" text="Correct?">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-        </children>
-    </Pane>
-</children>
+    <children>
+        <Label layoutX="91.0" layoutY="19.0" stylesheets="@Css/style.css" text="Create Answer" textFill="INDIANRED">
+            <font>
+                <Font name="Candara" size="16.0" />
+            </font>
+        </Label>
+        <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="69.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@assets/magic.png" />
+            </image>
+        </ImageView>
+        <Pane layoutX="98.0" layoutY="70.0" prefHeight="296.0" prefWidth="387.0" styleClass="pane_lv" stylesheets="@Css/style.css">
+            <children>
+                <Label layoutX="75.0" layoutY="35.0" text="Enter Answer">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="answer" layoutX="38.0" layoutY="62.0" prefHeight="89.0" prefWidth="311.0" />
+                <Label layoutX="84.0" layoutY="106.0">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+                <Button fx:id="add_button" layoutX="96.0" layoutY="204.0" mnemonicParsing="false" onAction="#add_button" styleClass="add_button" stylesheets="@Css/style.css" text="Add" />
+                <Button fx:id="cancel_button" layoutX="207.0" layoutY="204.0" mnemonicParsing="false" onAction="#cancel_button" prefHeight="36.0" prefWidth="78.0" styleClass="cancel_button" stylesheets="@Css/style.css" text="Cancel" textFill="WHITE" />
+                <Label fx:id="lblstatus" layoutX="43.0" layoutY="170.0" prefHeight="36.0" prefWidth="311.0" />
+                <ToggleButton fx:id="statut" layoutX="180.0" layoutY="158.0" mnemonicParsing="false" onAction="#correct" text="Correct" />
+                <Label layoutX="109.0" layoutY="162.0" text="Correct?">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+            </children>
+        </Pane>
+    </children>
 </AnchorPane>

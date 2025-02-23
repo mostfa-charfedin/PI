@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import modles.Reponse;
-import modles.Question;
 
 import java.io.IOException;
 
@@ -81,7 +80,7 @@ public class AddAnswers {
     void cancel_button(ActionEvent event) {
         try {
             // Charger la vue précédente (par exemple, la gestion des questions)
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CreateQuestions.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/addquestions.fxml"));
             Parent root = loader.load();
 
             // Créer une nouvelle fenêtre (Stage)
