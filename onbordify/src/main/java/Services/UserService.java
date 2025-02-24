@@ -12,7 +12,8 @@ import java.util.*;
 
 public class UserService implements CrudInterface<User> {
     Connection con;
-
+EmailService emailService = new EmailService();
+String nonHashedPassword;
     public UserService() {
         this.con = MyDb.getMydb().getConnection();
     }
@@ -26,9 +27,10 @@ public class UserService implements CrudInterface<User> {
         for (int i = 0; i < length; i++) {
             password.append(chars.charAt(random.nextInt(chars.length())));
         }
-
+this.nonHashedPassword = password.toString();
         return passwordEncoder.encode(password.toString());
     }
+
     public boolean login(String email, String password) {
         String sql = "SELECT password FROM user WHERE email = ?";
 
@@ -62,9 +64,14 @@ public class UserService implements CrudInterface<User> {
                 stmt.setNull(5, java.sql.Types.DATE);
             }
             stmt.setString(6, obj.getRole().toString());
-            stmt.setString(7, generateRandomPassword(10).toString());
-
+            String password = generateRandomPassword(10).toString();
+            stmt.setString(7, password);
             stmt.executeUpdate();
+            String emailBody ="Hello "+ obj.getNom() +"."+ " "+" <br> "+ " "+ " Account created succeffuly."
+                    + " "+" <br> "+ " "+ "Email : "+obj.getEmail()+ " "+" <br> "+ " "+
+                    " "+" <br> "+ " "+ "Paswword : "+nonHashedPassword+" "+" <br> "+ " ";
+            String subject ="Welcome email";
+            emailService.sendEmail(obj.getEmail(), emailBody ,subject);
         } catch (SQLException e) {
             e.printStackTrace();  // Affiche l'erreur complète dans la console
             throw new SQLException("Erreur lors de l'ajout de l'utilisateur : " + e.getMessage());

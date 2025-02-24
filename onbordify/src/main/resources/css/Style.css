@@ -146,9 +146,14 @@
 }
 
 /* Ou si vous utilisez un identifiant */
-#welcomeLabel {
+.welcome-label_Password {
     -fx-text-fill: #4770e8; /* Couleur du texte */
-    -fx-font-size: 36px; /* Taille de la police */
+    -fx-font-size: 30px; /* Taille de la police */
     -fx-font-weight: bold; /* Gras */
     -fx-alignment: center; /* Centrer le texte */
+}
+
+.success-message {
+    -fx-font-size: 12px;
+    -fx-text-fill: #4CAF50; /* Vert pour les succès */
 }

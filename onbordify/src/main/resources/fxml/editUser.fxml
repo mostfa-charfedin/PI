@@ -28,7 +28,7 @@
          <children>
             <Label text="Cin" />
             <TextField fx:id="cinMod" />
-            <VBox fx:id="cinErrorBox" /> <!-- Pour afficher les erreurs du CIn -->
+            <VBox fx:id="cinErrorBox" /> <!-- Pour afficher les erreurs du Cin -->
             <Label text="Date de naissance" />
             <DatePicker fx:id="dateMod" />
             <Label text="Role" />

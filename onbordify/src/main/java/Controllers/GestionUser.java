@@ -60,7 +60,7 @@ public class GestionUser {
     private VBox cinErrorBox;
 
 
-   // private final RestTemplate restTemplate = new RestTemplate();
+
     private final String LOGIN_URL = "http://localhost:8080/users/login";
 
 private User selectedUser ;
