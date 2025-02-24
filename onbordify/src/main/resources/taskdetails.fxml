@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="500.0"
+            xmlns="http://javafx.com/javafx/21.0.2"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.TaskDetails">
+
+    <VBox alignment="CENTER" spacing="10" style="-fx-padding: 20px;">
+        <Label text="Task Details" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+        <Label text="Title:" />
+        <TextField fx:id="txtTitle" editable="false" />
+
+        <Label text="Description:" />
+        <TextArea fx:id="txtDescription" editable="false" wrapText="true" />
+
+        <Label text="Assigned User:" />
+        <TextField fx:id="txtUser" editable="false" />
+
+        <Button text="Close" onAction="#handleClose"/>
+    </VBox>
+</AnchorPane>

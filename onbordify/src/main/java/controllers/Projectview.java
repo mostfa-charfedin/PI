@@ -21,7 +21,7 @@ public class Projectview {
     private Label lblStatus;
 
     @FXML
-    private Button btnCreateProject, btnEditProject, btnDeleteProject, btnViewTasks;
+    private Button btnCreateProject, btnEditProject, btnDeleteProject;
 
     private ProjetService projetService;
     private Projet selectedProject;
@@ -31,15 +31,10 @@ public class Projectview {
         projetService = new ProjetService();
         loadProjects();
 
-        // Handle project selection
+        // Handle double-click event for opening task view
         projectListView.setOnMouseClicked(event -> {
-            int selectedIndex = projectListView.getSelectionModel().getSelectedIndex();
-            if (selectedIndex >= 0) {
-                try {
-                    selectedProject = projetService.getAll().get(selectedIndex);
-                } catch (Exception e) {
-                    lblStatus.setText("Error selecting project: " + e.getMessage());
-                }
+            if (event.getClickCount() == 2) { // Detect double-click
+                handleViewTasks();
             }
         });
     }
@@ -85,19 +80,31 @@ public class Projectview {
     }
 
     @FXML
-    private void handleDeleteProject() throws Exception {
+    private void handleDeleteProject() {
         if (selectedProject == null) {
             lblStatus.setText("Select a project to delete.");
             return;
         }
-        projetService.delete(selectedProject.getIdProjet());
-        loadProjects();
-        lblStatus.setText("Project deleted.");
+        try {
+            projetService.delete(selectedProject.getIdProjet());
+            loadProjects();
+            lblStatus.setText("Project deleted.");
+        } catch (Exception e) {
+            lblStatus.setText("Error deleting project: " + e.getMessage());
+        }
     }
 
     @FXML
     private void handleViewTasks() {
-        if (selectedProject == null) {
+        int selectedIndex = projectListView.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            try {
+                selectedProject = projetService.getAll().get(selectedIndex);
+            } catch (Exception e) {
+                lblStatus.setText("Error selecting project: " + e.getMessage());
+                return;
+            }
+        } else {
             lblStatus.setText("Please select a project first.");
             return;
         }

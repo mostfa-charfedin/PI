@@ -33,6 +33,10 @@
                         style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-weight: bold;
                                -fx-padding: 10px 20px; -fx-border-radius: 8px;" text="Add Task" />
 
+                <Button fx:id="btnEditTask" onAction="#handleEditTask"
+                        style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;
+                               -fx-padding: 10px 20px; -fx-border-radius: 8px;" text="Edit Task" />
+
                 <Button fx:id="btnDeleteTask" onAction="#handleDeleteTask"
                         style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;
                                -fx-padding: 10px 20px; -fx-border-radius: 8px;" text="Delete Task" />

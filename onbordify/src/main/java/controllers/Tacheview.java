@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,11 +22,11 @@ public class Tacheview {
     private Label lblStatus;
 
     @FXML
-    private Button btnCreateTask, btnDeleteTask;
+    private Button btnCreateTask, btnEditTask, btnDeleteTask;
 
     private TacheService tacheService;
     private Tache selectedTask;
-    private int projectId; // Stores the selected project ID
+    private int projectId; // Stores the project ID
 
     @FXML
     public void initialize() {
@@ -42,6 +43,9 @@ public class Tacheview {
                 }
             }
         });
+
+        // Handle double-click to open task details
+        taskListView.setOnMouseClicked(this::handleTaskDoubleClick);
     }
 
     public void setProjectId(int projectId) {
@@ -62,35 +66,85 @@ public class Tacheview {
     }
 
     @FXML
-
     private void handleCreateTask() {
+        openPopup("/views/taskcreate.fxml", "Create Task");
+    }
+
+    @FXML
+    private void handleEditTask() {
+        if (selectedTask == null) {
+            lblStatus.setText("Select a task to edit.");
+            return;
+        }
+
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/taskcreate.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/taskupdate.fxml"));
             Parent root = loader.load();
 
-            // Get the Taskcreate controller and set the project id
-            Taskcreate taskCreateController = loader.getController();
-            taskCreateController.setProjectId(projectId);
+            Taskupdate taskUpdateController = loader.getController();
+            taskUpdateController.setTaskData(selectedTask, this);
 
             Stage popupStage = new Stage();
             popupStage.setScene(new Scene(root));
-            popupStage.setTitle("Create Task");
+            popupStage.setTitle("Edit Task");
             popupStage.show();
         } catch (IOException e) {
-            lblStatus.setText("Error opening Task Create window: " + e.getMessage());
+            lblStatus.setText("Error opening Task Edit window: " + e.getMessage());
         }
     }
 
-
     @FXML
-    private void handleDeleteTask() throws Exception {
+    private void handleDeleteTask() {
         if (selectedTask == null) {
             lblStatus.setText("Select a task to delete.");
             return;
         }
-        tacheService.delete(selectedTask.getIdTache());
+        try {
+            tacheService.delete(selectedTask.getIdTache());
+            refreshTasks();
+            lblStatus.setText("Task deleted.");
+        } catch (Exception e) {
+            lblStatus.setText("Error deleting task: " + e.getMessage());
+        }
+    }
+
+    public void refreshTasks() {
         loadTasks();
-        lblStatus.setText("Task deleted.");
+    }
+
+    // Handle double-click to open task details
+    @FXML
+    private void handleTaskDoubleClick(MouseEvent event) {
+        if (event.getClickCount() == 2) { // Detect double-click
+            int selectedIndex = taskListView.getSelectionModel().getSelectedIndex();
+            if (selectedIndex >= 0) {
+                try {
+                    selectedTask = tacheService.getAllByProject(projectId).get(selectedIndex);
+                    openTaskDetailsPage(selectedTask);
+                } catch (Exception e) {
+                    lblStatus.setText("Error opening task details: " + e.getMessage());
+                }
+            }
+        }
+    }
+
+    // Open task details page
+    private void openTaskDetailsPage(Tache task) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/taskdetails.fxml"));
+            Parent root = loader.load();
+
+            // Pass task data to the details controller
+            TaskDetails controller = loader.getController();
+            controller.setTaskData(task);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Task Details");
+            stage.show();
+        } catch (IOException e) {
+            lblStatus.setText("Error opening task details window.");
+        }
     }
 
     private void openPopup(String fxmlPath, String title) {
@@ -105,9 +159,4 @@ public class Tacheview {
             lblStatus.setText("Error opening window.");
         }
     }
-
-    public void refreshTasks() {
-        loadTasks();
-    }
-
 }

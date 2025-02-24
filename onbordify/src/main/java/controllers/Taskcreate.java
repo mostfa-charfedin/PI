@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,8 +36,9 @@ public class Taskcreate {
     private TacheService tacheService;
     private ObservableList<String> userList;
 
-    // Field to store the current project id
-    private int projectId;
+    private int projectId; // Stores the project ID
+
+    private Tacheview tacheviewController; // Reference to Tacheview controller
 
     public void initialize() {
         tacheService = new TacheService();
@@ -50,7 +52,6 @@ public class Taskcreate {
             List<String> users = tacheService.getAllUserNames();
             userList = FXCollections.observableArrayList(users);
             listUsers.setItems(userList);
-            System.out.println("Loaded Users: " + users);
         } catch (Exception e) {
             lblStatus.setText("Error loading users: " + e.getMessage());
             e.printStackTrace();
@@ -73,14 +74,11 @@ public class Taskcreate {
             String description = txtDescription.getText().trim();
             String selectedUser = listUsers.getSelectionModel().getSelectedItem();
 
-            System.out.println("Selected User: " + selectedUser);
-
             if (title.isEmpty() || description.isEmpty() || selectedUser == null || selectedUser.trim().isEmpty()) {
                 lblStatus.setText("Please fill all fields and select a user.");
                 return;
             }
 
-            // Split selected user into nom and prenom
             String[] userParts = selectedUser.trim().split("\\s+", 2);
             if (userParts.length < 2) {
                 lblStatus.setText("Please select a user with both first and last name.");
@@ -90,22 +88,22 @@ public class Taskcreate {
             String nom = userParts[0].trim();
             String prenom = userParts[1].trim();
 
-            System.out.println("Extracted Nom: " + nom);
-            System.out.println("Extracted Prenom: " + prenom);
-
-            // Use the actual projectId set from the calling controller instead of 0
             Tache task = new Tache(title, description, projectId, nom, prenom);
-
             tacheService.create(task);
+
             lblStatus.setText("Task created successfully!");
 
-            // Reset fields after creation
+            // Reset fields
             txtTitle.clear();
             txtDescription.clear();
             searchUser.clear();
             listUsers.getSelectionModel().clearSelection();
-            // Optionally, reset the list view to show the full user list
             listUsers.setItems(userList);
+
+            // Refresh task list in Tacheview
+            if (tacheviewController != null) {
+                tacheviewController.refreshTasks();
+            }
         } catch (Exception e) {
             lblStatus.setText("Error: " + e.getMessage());
             e.printStackTrace();
@@ -114,13 +112,22 @@ public class Taskcreate {
 
     @FXML
     private void handleCancel(ActionEvent event) {
+        // Close the popup
+        ((Stage) btnCancel.getScene().getWindow()).close();
 
-        // Reset the ListView to its original full list
-        listUsers.setItems(userList);
+        // Refresh task list in Tacheview
+        if (tacheviewController != null) {
+            tacheviewController.refreshTasks();
+        }
     }
 
-    // Setter to allow passing the project id from the calling controller
+    // Setter to pass project ID from Tacheview
     public void setProjectId(int projectId) {
         this.projectId = projectId;
+    }
+
+    // Setter to receive the Tacheview controller reference
+    public void setTacheviewController(Tacheview tacheviewController) {
+        this.tacheviewController = tacheviewController;
     }
 }
