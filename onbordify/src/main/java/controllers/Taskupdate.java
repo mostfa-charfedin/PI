@@ -51,7 +51,7 @@ public class Taskupdate implements Initializable {
 
     private void loadUsers() {
         try {
-            List<String> users = tacheService.getAllUserNames();
+            List<String> users = tacheService.getAllUserNamesWithRoles();
             userList = FXCollections.observableArrayList(users);
             listUsers.setItems(userList);
         } catch (Exception e) {
@@ -104,14 +104,25 @@ public class Taskupdate implements Initializable {
             return;
         }
 
-        String[] userParts = selectedUser.trim().split("\\s+", 2);
-        if (userParts.length < 2) {
-            lblStatus.setText("Please select a user with both first and last name.");
-            return;
-        }
+        // Extracting nom and prenom (ignores role)
+        String userPattern = "^(.+?)\\s+(.+?)\\s*\\(.*\\)$"; // Matches "John Doe (Admin)"
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(userPattern);
+        java.util.regex.Matcher matcher = pattern.matcher(selectedUser.trim());
 
-        String nom = userParts[0].trim();
-        String prenom = userParts[1].trim();
+        String nom, prenom;
+        if (matcher.matches()) {
+            nom = matcher.group(1).trim(); // Get 'nom' part (first name)
+            prenom = matcher.group(2).trim(); // Get 'prenom' part (last name)
+        } else {
+            // Fallback: user string without role (e.g., "John Doe")
+            String[] nameParts = selectedUser.split("\\s+", 2); // Splits on the first space
+            if (nameParts.length < 2) {
+                lblStatus.setText("Invalid user format. Please select a valid user.");
+                return;
+            }
+            nom = nameParts[0].trim(); // First part is 'nom'
+            prenom = nameParts[1].trim(); // Second part is 'prenom'
+        }
 
         try {
             taskToUpdate.setTitre(newTitle);
@@ -122,11 +133,12 @@ public class Taskupdate implements Initializable {
             tacheService.update(taskToUpdate);
             lblStatus.setText("Task updated successfully!");
 
+            // Refresh the task list in the Tacheview
             if (tacheviewController != null) {
                 tacheviewController.refreshTasks();
             }
 
-            // Close window after successful update
+            // Close the window after successful update
             Stage stage = (Stage) btnSubmit.getScene().getWindow();
             stage.close();
         } catch (Exception e) {
@@ -134,6 +146,7 @@ public class Taskupdate implements Initializable {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     private void handleCancel(ActionEvent event) {

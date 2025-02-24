@@ -67,7 +67,23 @@ public class Tacheview {
 
     @FXML
     private void handleCreateTask() {
-        openPopup("/views/taskcreate.fxml", "Create Task");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/taskcreate.fxml"));
+            Parent root = loader.load();
+
+            // Get Taskcreate controller and set project ID
+            Taskcreate taskCreateController = loader.getController();
+            taskCreateController.setProjectId(this.projectId); // Pass the project ID ✅
+            taskCreateController.setTacheviewController(this); // Pass Tacheview reference ✅
+
+            Stage popupStage = new Stage();
+            popupStage.setScene(new Scene(root));
+            popupStage.setTitle("Create Task");
+            popupStage.show();
+        } catch (IOException e) {
+            lblStatus.setText("Error opening Create Task window: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -78,7 +94,7 @@ public class Tacheview {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/taskupdate.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/taskupdate.fxml"));
             Parent root = loader.load();
 
             Taskupdate taskUpdateController = loader.getController();

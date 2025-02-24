@@ -272,23 +272,24 @@ public class TacheService implements CrudInterface<Tache> {
         return tasks;
     }
 
-    public List<String> getAllUserNames() throws Exception {
-        String sql = "SELECT nom, prenom FROM user";  // Remove role filtering
+    public List<String> getAllUserNamesWithRoles() throws Exception {
+        String sql = "SELECT nom, prenom, role FROM user";
         Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
 
         List<String> userNames = new ArrayList<>();
         while (rs.next()) {
-            // Trim the values in case there are extra spaces
             String nom = rs.getString("nom").trim();
-            String prenom = rs.getString("prenom").trim() ;
-            // Only add if both are non-empty (adjust as needed)
-            if (!nom.isEmpty() && !prenom.isEmpty()) {
-                userNames.add(nom + " " + prenom);
+            String prenom = rs.getString("prenom").trim();
+            String role = rs.getString("role").trim();
+
+            if (!nom.isEmpty() && !prenom.isEmpty() && !role.isEmpty()) {
+                userNames.add(nom + " " + prenom + " (" + role + ")");
             }
         }
         return userNames;
     }
+
 
 
 
