@@ -40,6 +40,10 @@
                 <Button fx:id="btnDeleteTask" onAction="#handleDeleteTask"
                         style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;
                                -fx-padding: 10px 20px; -fx-border-radius: 8px;" text="Delete Task" />
+
+                <Button fx:id="btnGeneratePdf" onAction="#handleExportToPDF"
+                        style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;
+                               -fx-padding: 10px 20px; -fx-border-radius: 8px;" text="Generate PDF" />
             </HBox>
 
             <!-- Status Label -->

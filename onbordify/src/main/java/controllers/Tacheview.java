@@ -1,6 +1,7 @@
 package controllers;
 
 import Services.TacheService;
+import Services.PDFGenerator;
 import Models.Tache;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -175,4 +176,16 @@ public class Tacheview {
             lblStatus.setText("Error opening window.");
         }
     }
+    @FXML
+    private void handleExportToPDF() {
+        try {
+            String filePath = "Tasks_Report.pdf";
+            List<Tache> tasks = tacheService.getAllByProject(projectId);
+            PDFGenerator.generateTaskPdf(tasks, filePath);
+            lblStatus.setText("PDF Exported Successfully!");
+        } catch (Exception e) {
+            lblStatus.setText("Error exporting PDF: " + e.getMessage());
+        }
+    }
 }
+
