@@ -3,12 +3,19 @@ package Controllers;
 import Services.QuestionService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import modles.Question;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -58,16 +65,29 @@ public class Addquestions {
     @FXML
     private void loadQuestionsForQuiz() {
         try {
-            List<Question> questions = questionService.getQuestionsByQuizId(selectedQuizId);
-            questionItems.clear(); // Clear old data
+            // Clear the list first
+            listViewQuestion.getItems().clear();
 
-            for (Question q : questions) {
-                questionItems.add(q.getQuestion() + " -- Quiz ID: " + q.getIdQuiz()); // Display question text
+            // Fetch the selected quiz name
+            String quizName = quiz_name_label.getText().replace("Quiz: ", "");
+
+            // Get the quiz ID based on the name
+            int quizId = questionService.getQuizIdByName(quizName);
+            if (quizId == -1) {
+                status.setText("Error: Quiz not found.");
+                return;
             }
 
-            listViewQuestion.setItems(questionItems); // Update ListView
+            // Fetch all questions for the quiz
+            List<Question> questions = questionService.getQuestionsByQuizId(quizId);
+
+            // Add them to the ListView
+            for (Question q : questions) {
+                listViewQuestion.getItems().add(q.getQuestion() + " -- ID: " + q.getIdQuestion());
+            }
+
         } catch (Exception e) {
-            status.setText("Something went wrong while loading questions.");
+            status.setText("Error loading questions.");
             e.printStackTrace();
         }
     }
@@ -86,9 +106,16 @@ public class Addquestions {
         Question question = new Question(questionText, quizName);
 
         try {
+            // Add the question to the database
             questionService.create(question);
+
+            // Show success message
             status.setText("Question added successfully.");
-            loadQuestionsForQuiz(); // Refresh list
+
+            // Refresh the ListView immediately
+            loadQuestionsForQuiz();
+
+            // Clear input field
             question_field.clear();
         } catch (SQLException e) {
             status.setText("Error adding question to the database.");
@@ -109,29 +136,112 @@ public class Addquestions {
         int selectedIndex = listViewQuestion.getSelectionModel().getSelectedIndex();
 
         if (selectedIndex == -1) {
-            status.setText("No question selected to remove.");
+            status.setText("Select a question to delete.");
             return;
         }
 
-        String selectedQuestionText = listViewQuestion.getItems().get(selectedIndex).split(" -- ")[0]; // Extract question text
-
         try {
-            Question selectedQuestion = questionService.getQuestionByText(selectedQuestionText, selectedQuizId);
-            if (selectedQuestion != null) {
-                questionService.delete(selectedQuestion.getIdQuestion());
-                status.setText("Question removed successfully.");
-                loadQuestionsForQuiz();
-            } else {
-                status.setText("Error finding selected question.");
+            String selectedItem = listViewQuestion.getItems().get(selectedIndex);
+            String[] parts = selectedItem.split(" -- ID: ");
+            if (parts.length < 2) {
+                status.setText("Error: Invalid question format.");
+                return;
             }
+
+            int questionId = Integer.parseInt(parts[1]);
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Confirmation");
+            alert.setHeaderText("Are you sure you want to delete this question?");
+            alert.setContentText("This action cannot be undone.");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                questionService.delete(questionId);
+                status.setText("Question deleted successfully!");
+                loadQuestionsForQuiz();
+            }
+        } catch (NumberFormatException e) {
+            status.setText("Error: Invalid question ID.");
+            e.printStackTrace();
         } catch (Exception e) {
-            status.setText("Error removing question.");
+            status.setText("Error deleting question.");
             e.printStackTrace();
         }
     }
 
     @FXML
     void add_answer(ActionEvent event) {
+        int selectedIndex = listViewQuestion.getSelectionModel().getSelectedIndex();
 
+        if (selectedIndex == -1) {
+            status.setText("Select a question to add an answer.");
+            return;
+        }
+
+        try {
+            // Extraire l'ID de la question à partir du format "Question Text -- ID: X"
+            String selectedItem = listViewQuestion.getItems().get(selectedIndex);
+            String[] parts = selectedItem.split(" -- ID: ");
+
+            if (parts.length < 2) {
+                status.setText("Error: Invalid question format.");
+                return;
+            }
+
+            int questionId = Integer.parseInt(parts[1]);
+
+            // Récupérer l'objet Question
+            Question selectedQuestion = questionService.getById(questionId);
+            if (selectedQuestion == null) {
+                status.setText("Error: Question not found.");
+                return;
+            }
+
+            // Charger l'interface AddAnswers.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddAnswers.fxml"));
+            Parent root = loader.load();
+
+            // Passer la question sélectionnée au contrôleur AddAnswers
+            AddAnswers addAnswerController = loader.getController();
+            addAnswerController.setQuestion(selectedQuestion);
+
+            // Afficher une fenêtre modale
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Add Answer");
+            popupStage.setScene(new Scene(root));
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.showAndWait();
+
+            // Rafraîchir la liste après ajout d'une réponse
+            loadQuestionsForQuiz();
+
+        } catch (IOException e) {
+            status.setText("Something went wrong while opening the answer popup.");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            status.setText("Database error while retrieving the question.");
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            status.setText("Invalid question ID format.");
+            e.printStackTrace();
+        }
+    }
+
+    public void setQuizId(int selectedQuizId) {
+        this.selectedQuizId = selectedQuizId;
+        try {
+            loadQuestionsForQuiz(); // Load the questions associated with this quiz
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to load questions for the selected quiz.");
+        }
+    }
+
+    private void showAlert(String error, String s) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("error");
+        alert.setHeaderText(null);
+        alert.showAndWait();
     }
 }

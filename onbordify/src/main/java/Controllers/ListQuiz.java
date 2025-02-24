@@ -47,13 +47,37 @@ public class ListQuiz {
             if (selectedIndex >= 0) {
                 try {
                     selectedQuiz = quizService.getAll().get(selectedIndex);
+                    // Detect double-click
+                    if (event.getClickCount() == 2) {
+                        openQuestionsDetails(selectedQuiz.getIdQuiz());
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
-        });
+                }
+            });
 
         search_field.textProperty().addListener((observable, oldValue, newValue) -> filterRessources(newValue));
+    }
+    private void openQuestionsDetails(int quizId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Questionsdetails.fxml"));
+            Parent root = loader.load();
+
+            Questionsdetails controller = loader.getController();
+            controller.setQuizId(quizId);
+
+            Stage stage = new Stage();
+            stage.setTitle("Quiz Questions");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            lblstatus.setText("Error opening questions details.");
+            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     void loadQuiz() {

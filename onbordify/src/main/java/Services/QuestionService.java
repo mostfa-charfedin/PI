@@ -2,6 +2,7 @@ package Services;
 
 import modles.Question;
 import utils.MyDb;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,15 +86,29 @@ public class QuestionService implements CrudInterface<Question> {
 
     @Override
     public void delete(int id) throws Exception {
-        String sql = "DELETE FROM Question WHERE idQuestion = ?";
+        String checkSQL = "SELECT idQuestion FROM Question WHERE idQuestion = ?";
+        String deleteSQL = "DELETE FROM Question WHERE idQuestion = ?";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            int rowsDeleted = stmt.executeUpdate();
+        try (
+                PreparedStatement checkStmt = connection.prepareStatement(checkSQL);
+                PreparedStatement deleteStmt = connection.prepareStatement(deleteSQL)
+        ) {
+            // Check if the question exists before attempting deletion
+            checkStmt.setInt(1, id);
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (!rs.next()) {
+                    throw new SQLException("No question found with the given ID.");
+                }
+            }
+
+            // Proceed with deletion
+            deleteStmt.setInt(1, id);
+            int rowsDeleted = deleteStmt.executeUpdate();
+
             if (rowsDeleted > 0) {
                 System.out.println("Question deleted successfully!");
             } else {
-                throw new SQLException("No question found with the given ID.");
+                throw new SQLException("Failed to delete question.");
             }
         } catch (SQLException e) {
             System.err.println("Error deleting question: " + e.getMessage());
@@ -176,5 +191,40 @@ public class QuestionService implements CrudInterface<Question> {
         }
         return null; // Return null if no matching question is found
     }
+    public int getQuizIdByName(String quizName) throws SQLException {
+        String sql = "SELECT idQuiz FROM Quiz WHERE nom = ?";
 
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, quizName);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("idQuiz");
+                }
+            }
+        }
+        return -1; // Return -1 if quiz not found
+    }
+
+
+    public void deleteQuestionByText(String selectedQuestion, int selectedQuizId) {
+        String query = "DELETE FROM question WHERE Question = ? AND id_Quiz = ?";
+
+        try (
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setString(1, selectedQuestion);
+            pstmt.setInt(2, selectedQuizId);
+
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Question deleted successfully.");
+            } else {
+                System.out.println("No question found to delete.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error deleting question: " + e.getMessage());
+        }
+    }
 }
