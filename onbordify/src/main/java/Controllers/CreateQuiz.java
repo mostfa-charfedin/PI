@@ -33,9 +33,6 @@ public class CreateQuiz {
 
 
 
-
-
-
     private void resetFields() {
         quiz_name.clear();
         quiz_date.setValue(null);

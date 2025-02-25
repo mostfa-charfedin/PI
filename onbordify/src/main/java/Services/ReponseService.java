@@ -17,7 +17,7 @@ public class ReponseService implements CrudInterface<Reponse> {
 
     // CREATE
     public void create(Reponse reponse) throws SQLException {
-        String sql = "INSERT INTO reponse (reponse, statut, idQuestion) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO reponse (Response, status, idQuestion) VALUES (?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, reponse.getReponse());
