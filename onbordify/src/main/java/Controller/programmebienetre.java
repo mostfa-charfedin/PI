@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -216,15 +217,23 @@ public class programmebienetre implements Initializable {
             // Créer une nouvelle scène
             Scene scene = new Scene(root);
 
-            // Récupérer la fenêtre actuelle (stage)
-            Stage stage = (Stage) btnCreateRecompense.getScene().getWindow();
+            // Créer une nouvelle fenêtre (Stage) pour le popup
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Créer une Récompense"); // Titre de la fenêtre
+            popupStage.setScene(scene);
 
-            // Changer la scène de la fenêtre
-            stage.setScene(scene);
-            stage.show();
+            // Configurer la fenêtre comme modale (bloque l'interaction avec la fenêtre principale)
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+
+            // Récupérer la fenêtre actuelle (stage) pour définir le propriétaire du popup
+            Stage mainStage = (Stage) btnCreateRecompense.getScene().getWindow();
+            popupStage.initOwner(mainStage);
+
+            // Afficher la fenêtre popup
+            popupStage.showAndWait(); // showAndWait() bloque l'exécution jusqu'à ce que la fenêtre soit fermée
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible de charger la page de récompense !");
+            showAlert("Erreur", "Impossible d'ouvrir la fenêtre de récompense !");
         }
     }
 
