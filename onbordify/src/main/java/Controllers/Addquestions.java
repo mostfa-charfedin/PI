@@ -180,7 +180,7 @@ public class Addquestions {
         }
 
         try {
-            // Extraire l'ID de la question à partir du format "Question Text -- ID: X"
+            // Extract question ID from selected item in ListView
             String selectedItem = listViewQuestion.getItems().get(selectedIndex);
             String[] parts = selectedItem.split(" -- ID: ");
 
@@ -191,39 +191,26 @@ public class Addquestions {
 
             int questionId = Integer.parseInt(parts[1]);
 
-            // Récupérer l'objet Question
-            Question selectedQuestion = questionService.getById(questionId);
-            if (selectedQuestion == null) {
-                status.setText("Error: Question not found.");
-                return;
-            }
-
-            // Charger l'interface AddAnswers.fxml
+            // Load AddAnswers.fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddAnswers.fxml"));
             Parent root = loader.load();
 
-            // Passer la question sélectionnée au contrôleur AddAnswers
+            // Pass question ID to AddAnswers controller
             AddAnswers addAnswerController = loader.getController();
-            addAnswerController.setQuestion(selectedQuestion);
+            addAnswerController.setQuestionId(questionId);  // Ensure method exists in AddAnswers
 
-            // Afficher une fenêtre modale
+            // Show modal
             Stage popupStage = new Stage();
             popupStage.setTitle("Add Answer");
             popupStage.setScene(new Scene(root));
             popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.showAndWait();
 
-            // Rafraîchir la liste après ajout d'une réponse
+            // Refresh after adding an answer
             loadQuestionsForQuiz();
 
         } catch (IOException e) {
-            status.setText("Something went wrong while opening the answer popup.");
-            e.printStackTrace();
-        } catch (SQLException e) {
-            status.setText("Database error while retrieving the question.");
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
-            status.setText("Invalid question ID format.");
+            status.setText("Error loading the answer popup.");
             e.printStackTrace();
         }
     }

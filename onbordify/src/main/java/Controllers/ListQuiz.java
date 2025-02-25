@@ -54,8 +54,8 @@ public class ListQuiz {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                }
-            });
+            }
+        });
 
         search_field.textProperty().addListener((observable, oldValue, newValue) -> filterRessources(newValue));
     }
@@ -176,6 +176,7 @@ public class ListQuiz {
 
             Addquestions addQuestionsController = loader.getController();
             addQuestionsController.setQuizName(selectedQuiz.getNom());
+            addQuestionsController.setSelectedQuizId(selectedQuiz.getIdQuiz()); // Passer l'ID du quiz
 
             Stage popupStage = new Stage();
             popupStage.setTitle("Ajouter des Questions");
@@ -188,6 +189,7 @@ public class ListQuiz {
             e.printStackTrace();
         }
     }
+
 
     private void filterRessources(String searchField) {
         ObservableList<String> filteredRessources = FXCollections.observableArrayList();

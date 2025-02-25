@@ -1,5 +1,6 @@
 package Controllers;
 
+import Services.QuizService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,7 +14,9 @@ import modles.Question;
 import Services.QuestionService;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class Questionsdetails {
 
@@ -32,12 +35,56 @@ public class Questionsdetails {
     @FXML
     private Label title_label;
 
+    private Question selectedquestion;
     private int selectedQuizId;
     private final QuestionService questionService = new QuestionService();
 
     public void setQuizId(int quizId) {
         this.selectedQuizId = quizId;
         loadQuestions();
+    }
+
+    @FXML
+    private void initialize() {
+        listViewQuiz.setOnMouseClicked(event -> {
+            int selectedIndex = listViewQuiz.getSelectionModel().getSelectedIndex();
+            if (selectedIndex >= 0) {
+                try {
+                    selectedquestion = questionService.getQuestionsByQuizId(selectedQuizId).get(selectedIndex);
+
+                    // Double-click to open answers
+                    if (event.getClickCount() == 2) {
+                        openAnswersDetails(selectedquestion.getIdQuestion(), selectedquestion.getQuestion());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void openAnswersDetails(int questionId, String questionText) {
+        if (questionId == -1) {
+            showAlert("Error", "Invalid question ID.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Answersdetails.fxml"));
+            Parent root = loader.load();
+
+            Answersdetails answersDetailsController = loader.getController();
+            answersDetailsController.setQuestionDetails(questionId, questionText);
+
+            Stage stage = new Stage();
+            stage.setTitle("Answers Details");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            showAlert("Error", "Failed to open the Answers Details window.");
+            e.printStackTrace();
+        }
     }
 
     private void loadQuestions() {
@@ -76,34 +123,6 @@ public class Questionsdetails {
         }
     }
 
-   @FXML
-    void editQuestion(ActionEvent event) {
-       /* String selectedQuestion = listViewQuiz.getSelectionModel().getSelectedItem();
-        if (selectedQuestion != null) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/editquestion.fxml"));
-                Parent root = loader.load();
-
-                EditQuestion editQuestionController = loader.getController();
-                editQuestionController.setQuestionDetails(selectedQuizId, selectedQuestion);
-
-                Stage popupStage = new Stage();
-                popupStage.setTitle("Edit Question");
-                popupStage.setScene(new Scene(root));
-                popupStage.showAndWait();
-
-                loadQuestions(); // Refresh after editing
-            } catch (IOException e) {
-                showAlert("Error", "Failed to open the Edit Question window.");
-                e.printStackTrace();
-            }
-        } else {
-            showAlert("No Selection", "Please select a question to edit.");
-        }*/
-    }
-
-
-
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -112,19 +131,45 @@ public class Questionsdetails {
         alert.showAndWait();
     }
 
-    public void Remove_question(ActionEvent actionEvent) {
-        String selectedQuestion = listViewQuiz.getSelectionModel().getSelectedItem();
-        if (selectedQuestion != null) {
-            try {
-                questionService.deleteQuestionByText(selectedQuestion, selectedQuizId);
-                listViewQuiz.getItems().remove(selectedQuestion);
-                showAlert("Success", "Question deleted successfully.");
-            } catch (Exception e) {
-                showAlert("Error", "Failed to delete the question.");
-                e.printStackTrace();
+    @FXML
+    private void Remove_question(ActionEvent event) {
+        int selectedIndex = listViewQuiz.getSelectionModel().getSelectedIndex();
+        if (selectedIndex < 0) {
+            showAlert("No Selection", "Please select a question to delete.");
+            return;
+        }
+
+        try {
+            List<Question> questions = questionService.getQuestionsByQuizId(selectedQuizId);
+            Question selectedQuestion = questions.get(selectedIndex);
+            int questionId = selectedQuestion.getIdQuestion();
+
+            if (questionId == -1) {
+                showAlert("Error", "Could not find the question in the database.");
+                return;
             }
-        } else {
-            showAlert("No Selection", "Please select a question to remove.");
+
+            // Confirm before deleting
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Confirmation");
+            alert.setHeaderText("Are you sure you want to delete this question?");
+            alert.setContentText("This action cannot be undone.");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                // Delete from database
+                questionService.delete(questionId);
+
+                // Refresh list after deletion
+                loadQuestions();
+
+                // Show success message
+                showAlert("Success", "Question deleted successfully.");
+            }
+
+        } catch (Exception e) {
+            showAlert("Error", "Failed to delete the question.");
+            e.printStackTrace();
         }
     }
 

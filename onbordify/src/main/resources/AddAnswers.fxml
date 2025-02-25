@@ -47,10 +47,10 @@
                 <TextField fx:id="answer4" layoutX="25.0" layoutY="165.0" prefHeight="25.0" prefWidth="218.0" />
 
                 <!-- Correct Answer Toggle Buttons -->
-                <ToggleButton fx:id="toggle1" layoutX="261.0" layoutY="45.0" mnemonicParsing="false" onAction="#correct" text="Correct" />
-                <ToggleButton fx:id="toggle2" layoutX="261.0" layoutY="85.0" mnemonicParsing="false" onAction="#correct" text="Correct" />
-                <ToggleButton fx:id="toggle3" layoutX="261.0" layoutY="125.0" mnemonicParsing="false" onAction="#correct" text="Correct" />
-                <ToggleButton fx:id="toggle4" layoutX="261.0" layoutY="165.0" mnemonicParsing="false" onAction="#correct" text="Correct" />
+                <ToggleButton fx:id="toggle1" layoutX="261.0" layoutY="45.0" mnemonicParsing="false"  text="Correct" />
+                <ToggleButton fx:id="toggle2" layoutX="261.0" layoutY="85.0" mnemonicParsing="false" text="Correct" />
+                <ToggleButton fx:id="toggle3" layoutX="261.0" layoutY="125.0" mnemonicParsing="false"  text="Correct" />
+                <ToggleButton fx:id="toggle4" layoutX="261.0" layoutY="165.0" mnemonicParsing="false"  text="Correct" />
 
                 <Label layoutX="277.0" layoutY="17.0" text="Correct?">
                     <font>
@@ -59,9 +59,9 @@
                 </Label>
 
                 <!-- Buttons -->
-                <Button fx:id="add_button" layoutX="55.0" layoutY="220.0" mnemonicParsing="false" onAction="#add_button" styleClass="add_button" stylesheets="@Css/style.css" text="Add" />
+                <Button fx:id="add_button" layoutX="55.0" layoutY="220.0" mnemonicParsing="false" onAction="#addAnswers" styleClass="add_button" stylesheets="@Css/style.css" text="Add" />
                 <Button fx:id="clear" layoutX="150.0" layoutY="220.0" mnemonicParsing="false" onAction="#clear" prefHeight="36.0" prefWidth="78.0" stylesheets="@Css/style.css" text="Clear" textFill="WHITE" />
-                <Button fx:id="cancel_button" layoutX="254.0" layoutY="220.0" mnemonicParsing="false" onAction="#cancel_button" prefHeight="36.0" prefWidth="78.0" styleClass="cancel_button" stylesheets="@Css/style.css" text="Cancel" textFill="WHITE" />
+                <Button fx:id="cancel_button" layoutX="254.0" layoutY="220.0" mnemonicParsing="false" onAction="#cancel" prefHeight="36.0" prefWidth="78.0" styleClass="cancel_button" stylesheets="@Css/style.css" text="Cancel" textFill="WHITE" />
 
                 <Label fx:id="lblstatus" layoutX="43.0" layoutY="270.0" prefHeight="36.0" prefWidth="311.0" />
             </children>

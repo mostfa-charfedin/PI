@@ -227,4 +227,29 @@ public class QuestionService implements CrudInterface<Question> {
             System.out.println("Error deleting question: " + e.getMessage());
         }
     }
+
+
+    public int getQuestionIdByText(String selectedQuestion, int selectedQuizId) {
+        int questionId = -1; // Default value if not found
+
+        String query = "SELECT idQuestion FROM question WHERE question = ? AND idQuiz = ?";
+
+        try (
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, selectedQuestion);
+            statement.setInt(2, selectedQuizId);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                questionId = resultSet.getInt("idQuestion");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return questionId; // Returns -1 if no matching question is found
+    }
 }

@@ -1,6 +1,6 @@
 package Services;
 
-import modles.Reponse; // Fixed import statement
+import modles.Reponse;
 import utils.MyDb;
 
 import java.sql.*;
@@ -17,31 +17,26 @@ public class ReponseService implements CrudInterface<Reponse> {
 
     // CREATE
     public void create(Reponse reponse) throws SQLException {
-        // SQL query to insert the response into the database
-        String sql = "INSERT INTO reponse (Response, status) VALUES (?, ?)";
+        String sql = "INSERT INTO reponse (reponse, statut, idQuestion) VALUES (?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            // Set the parameters for the PreparedStatement
-            stmt.setString(1, reponse.getReponse()); // Set the answer text
-            stmt.setString(2, reponse.getStatut());  // Set the status (correct or incorrect)
-            //stmt.setInt(3, reponse.getIdQuestion()); // Set the associated question ID
+            stmt.setString(1, reponse.getReponse());
+            stmt.setString(2, reponse.getStatut());
+            stmt.setInt(3, reponse.getIdQuestion());
 
-            // Execute the update (insert the response)
             stmt.executeUpdate();
+            System.out.println("Réponse insérée avec succès.");
         } catch (SQLException e) {
-            // Log the error or handle it according to your application needs
-            System.err.println("Error inserting response: " + e.getMessage());
-            // Optionally, rethrow the exception or handle more gracefully
-            throw new SQLException("Failed to insert response into the database", e);
+            System.err.println("Erreur lors de l'insertion de la réponse: " + e.getMessage());
+            throw new SQLException("Échec de l'insertion de la réponse dans la base de données", e);
         }
-
     }
 
-
+    // UPDATE
     @Override
     public void update(Reponse obj) throws SQLException {
         if (obj == null) {
-            throw new SQLException("Reponse object cannot be null.");
+            throw new SQLException("L'objet Reponse ne peut pas être null.");
         }
 
         String query = "UPDATE reponse SET reponse = ?, statut = ?, idQuestion = ? WHERE idReponse = ?";
@@ -53,13 +48,14 @@ public class ReponseService implements CrudInterface<Reponse> {
 
             int rowsUpdated = stmt.executeUpdate();
             if (rowsUpdated == 0) {
-                throw new SQLException("No rows were updated. Reponse with ID " + obj.getIdReponse() + " may not exist.");
+                throw new SQLException("Aucune mise à jour effectuée. ID de réponse non trouvé: " + obj.getIdReponse());
             }
         } catch (SQLException e) {
-            throw new SQLException("Error while updating answer", e);
+            throw new SQLException("Erreur lors de la mise à jour de la réponse", e);
         }
     }
 
+    // DELETE
     @Override
     public void delete(int id) throws SQLException {
         String query = "DELETE FROM reponse WHERE idReponse = ?";
@@ -67,20 +63,18 @@ public class ReponseService implements CrudInterface<Reponse> {
             stmt.setInt(1, id);
             int rowsDeleted = stmt.executeUpdate();
             if (rowsDeleted == 0) {
-                throw new SQLException("No rows were deleted. Reponse with ID " + id + " may not exist.");
+                throw new SQLException("Aucune suppression effectuée. ID de réponse non trouvé: " + id);
             }
         } catch (SQLException e) {
-            throw new SQLException("Error while deleting answer", e);
+            throw new SQLException("Erreur lors de la suppression de la réponse", e);
         }
     }
 
+    // GET ALL RESPONSES
     @Override
     public List<Reponse> getAll() throws SQLException {
         List<Reponse> reponseList = new ArrayList<>();
-        // SQL query to join reponse and question tables
-        String query = "SELECT r.idReponse , r.Response, r.status, r.idQuestion " +
-                "FROM reponse r " +
-                "JOIN question q ON r.idQuestion = q.idQuestion";
+        String query = "SELECT idReponse, reponse, statut, idQuestion FROM reponse";
 
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
@@ -92,18 +86,16 @@ public class ReponseService implements CrudInterface<Reponse> {
                 ));
             }
         } catch (SQLException e) {
-            throw new SQLException("Error while retrieving all answers with question details", e);
+            throw new SQLException("Erreur lors de la récupération de toutes les réponses", e);
         }
         return reponseList;
     }
 
+    // GET RESPONSES BY QUESTION ID
     public List<Reponse> getReponsesByQuestionId(int questionId) throws SQLException {
         List<Reponse> reponseList = new ArrayList<>();
-        // SQL query to join reponse and question tables based on idQuestion
-        String query = "SELECT r.idReponse, r.Response, r.status, r.idQuestion " +
-                "FROM reponse r " +
-                "JOIN question q ON r.idQuestion = q.idQuestion " +
-                "WHERE r.idQuestion = ?";
+        String query = "SELECT idReponse, Response, status, idQuestion FROM reponse WHERE idQuestion = ?";
+
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, questionId);
@@ -111,14 +103,14 @@ public class ReponseService implements CrudInterface<Reponse> {
                 while (rs.next()) {
                     reponseList.add(new Reponse(
                             rs.getInt("idReponse"),
-                            rs.getString("reponse"),
-                            rs.getString("statut"),
+                            rs.getString("Response"),
+                            rs.getString("status"),
                             rs.getInt("idQuestion")
                     ));
                 }
             }
         } catch (SQLException e) {
-            throw new SQLException("Error while retrieving answers for question ID " + questionId, e);
+            throw new SQLException("Erreur lors de la récupération des réponses pour la question ID " + questionId, e);
         }
         return reponseList;
     }

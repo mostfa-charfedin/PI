@@ -1,14 +1,13 @@
 package Controllers;
 
 import Services.ReponseService;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import modles.Question;
 import modles.Reponse;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class AddAnswers {
 
@@ -19,115 +18,109 @@ public class AddAnswers {
     private ToggleButton toggle1, toggle2, toggle3, toggle4;
 
     @FXML
-    private Button add_button, cancel_button;
+    private Button add_button, clear, cancel_button;
 
     @FXML
     private Label lblstatus;
 
-    private Question selectedQuestion;  // Store the selected question
-
-    private ReponseService reponseService = new ReponseService();  // Instance of ReponseService to interact with the DB
+    private ReponseService reponseService;
+    private int questionId;
 
     @FXML
-    private void add_button(ActionEvent event) {
-        String answer1Text = answer1.getText();
-        String answer2Text = answer2.getText();
-        String answer3Text = answer3.getText();
-        String answer4Text = answer4.getText();
+    private void initialize() {
+        reponseService = new ReponseService();
+        add_button.setDisable(true); // Désactiver le bouton au démarrage
 
-        // Check if all answers are filled in
-        if (answer1Text.isEmpty() || answer2Text.isEmpty() || answer3Text.isEmpty() || answer4Text.isEmpty()) {
-            lblstatus.setText("Please fill in all the answers.");
+        // Ajouter des listeners pour activer le bouton add
+        List.of(answer1, answer2, answer3, answer4).forEach(field ->
+                field.textProperty().addListener((observable, oldValue, newValue) -> validateFields()));
+    }
+
+    public void setQuestionId(int questionId) {
+        this.questionId = questionId;
+    }
+
+    @FXML
+    private void addAnswers() {
+        boolean hasCorrect = false;
+
+        if (answer1.getText().trim().isEmpty() && answer2.getText().trim().isEmpty() &&
+                answer3.getText().trim().isEmpty() && answer4.getText().trim().isEmpty()) {
+            lblstatus.setText("Please enter at least one answer.");
             return;
         }
 
-        // Process the toggle states (to track which answer is correct)
-        String statut1 = toggle1.isSelected() ? "correct" : "incorrect";
-        String statut2 = toggle2.isSelected() ? "correct" : "incorrect";
-        String statut3 = toggle3.isSelected() ? "correct" : "incorrect";
-        String statut4 = toggle4.isSelected() ? "correct" : "incorrect";
-
-        // Assume 'questionId' is the ID of the question you're adding answers for.
-        // You need to get this ID somehow, for example from the UI or from the controller.
-        int questionId = 1;  // This should be dynamically assigned based on your question context.
-
         try {
-            // Create Reponse objects for each answer
-            Reponse reponse1 = new Reponse(answer1Text, statut1, questionId);
-            Reponse reponse2 = new Reponse(answer2Text, statut2, questionId);
-            Reponse reponse3 = new Reponse(answer3Text, statut3, questionId);
-            Reponse reponse4 = new Reponse(answer4Text, statut4, questionId);
+            if (!answer1.getText().trim().isEmpty()) {
+                boolean isCorrect = toggle1.isSelected();
+                hasCorrect |= isCorrect;
+                reponseService.create(new Reponse(answer1.getText(), isCorrect ? "correct" : "incorrect", questionId));
+            }
 
-            // Create an instance of your ReponseService to insert data
-            ReponseService reponseService = new ReponseService();  // Assuming you have a no-argument constructor for ReponseService
-            reponseService.create(reponse1);
-            reponseService.create(reponse2);
-            reponseService.create(reponse3);
-            reponseService.create(reponse4);
+            if (!answer2.getText().trim().isEmpty()) {
+                boolean isCorrect = toggle2.isSelected();
+                hasCorrect |= isCorrect;
+                reponseService.create(new Reponse(answer2.getText(), isCorrect ? "correct" : "incorrect", questionId));
+            }
 
-            // Update the label to show success message
-            lblstatus.setText("Answers Added Successfully.");
+            if (!answer3.getText().trim().isEmpty()) {
+                boolean isCorrect = toggle3.isSelected();
+                hasCorrect |= isCorrect;
+                reponseService.create(new Reponse(answer3.getText(), isCorrect ? "correct" : "incorrect", questionId));
+            }
+
+            if (!answer4.getText().trim().isEmpty()) {
+                boolean isCorrect = toggle4.isSelected();
+                hasCorrect |= isCorrect;
+                reponseService.create(new Reponse(answer4.getText(), isCorrect ? "correct" : "incorrect", questionId));
+            }
+
+            if (!hasCorrect) {
+                lblstatus.setText("Please select at least one correct answer.");
+                return;
+            }
+
+            lblstatus.setText("Answers added successfully!");
+            clearFields();
         } catch (SQLException e) {
-            // Handle any SQL errors
+            lblstatus.setText("Error adding answers.");
             e.printStackTrace();
-            lblstatus.setText("Error adding answers to the database.");
-        }}
+        }
+    }
 
-
-
-    // Helper method to clear input fields
-    private void clearInputFields() {
-        answer1.clear();
-        answer2.clear();
-        answer3.clear();
-        answer4.clear();
-
-        toggle1.setSelected(false);
-        toggle2.setSelected(false);
-        toggle3.setSelected(false);
-        toggle4.setSelected(false);
-
-        // Reset the status label after clearing
+    @FXML
+    private void clear() {
+        clearFields();
         lblstatus.setText("");
     }
 
-    @FXML
-    private void cancel_button(ActionEvent event) {
-        Stage stage = (Stage) cancel_button.getScene().getWindow();
-        stage.close();
-    }
-
-    // Set the selected question for the controller
-    public void setQuestion(Question selectedQuestion) {
-        this.selectedQuestion = selectedQuestion;
+    private void clearFields() {
+        List.of(answer1, answer2, answer3, answer4).forEach(TextField::clear);
+        List.of(toggle1, toggle2, toggle3, toggle4).forEach(toggle -> toggle.setSelected(false));
+        add_button.setDisable(true);
     }
 
     @FXML
-    void clear(ActionEvent event) {
-        clearInputFields();
-        lblstatus.setText("❌ Input cleared.");
+    private void cancel() {
+        ((Stage) cancel_button.getScene().getWindow()).close();
     }
 
     @FXML
-    void correct(ActionEvent event) {
-        // Get the clicked toggle button
-        ToggleButton clickedButton = (ToggleButton) event.getSource();
-
-        // Update the status for the selected answer
-        updateAnswerStatus(clickedButton);
+    private void enforceSingleCorrectAnswer() {
+        toggle1.setOnAction(e -> updateToggles(toggle1));
+        toggle2.setOnAction(e -> updateToggles(toggle2));
+        toggle3.setOnAction(e -> updateToggles(toggle3));
+        toggle4.setOnAction(e -> updateToggles(toggle4));
     }
 
-    // Helper method to update the status message for each answer button
-    private void updateAnswerStatus(ToggleButton clickedButton) {
-        // Check which toggle button was clicked and update the label accordingly
-        if (clickedButton == toggle1) {
-            lblstatus.setText("Answer 1 is " + (clickedButton.isSelected() ? "correct." : "incorrect."));
-        } else if (clickedButton == toggle2) {
-            lblstatus.setText("Answer 2 is " + (clickedButton.isSelected() ? "correct." : "incorrect."));
-        } else if (clickedButton == toggle3) {
-            lblstatus.setText("Answer 3 is " + (clickedButton.isSelected() ? "correct." : "incorrect."));
-        } else if (clickedButton == toggle4) {
-            lblstatus.setText("Answer 4 is " + (clickedButton.isSelected() ? "correct." : "incorrect."));
-        }
+    private void updateToggles(ToggleButton selectedToggle) {
+        List.of(toggle1, toggle2, toggle3, toggle4).forEach(toggle -> toggle.setSelected(false));
+        selectedToggle.setSelected(true);
+    }
+
+    @FXML
+    private void validateFields() {
+        boolean isEmpty = List.of(answer1, answer2, answer3, answer4).stream().allMatch(field -> field.getText().trim().isEmpty());
+        add_button.setDisable(isEmpty);
     }
 }
