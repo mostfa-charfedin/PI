@@ -8,7 +8,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
-import modles.Quiz;
+import Models.Quiz;
 import java.sql.Date;
 import java.time.LocalDate;
 

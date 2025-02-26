@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import modles.Question;
+import Models.Question;
 
 import java.io.IOException;
 import java.sql.SQLException;

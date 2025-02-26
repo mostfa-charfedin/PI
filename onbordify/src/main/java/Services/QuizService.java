@@ -1,9 +1,8 @@
 package Services;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import modles.Quiz;
+import Models.Quiz;
 import utils.MyDb;
 
 public  class QuizService implements CrudInterface<Quiz> {

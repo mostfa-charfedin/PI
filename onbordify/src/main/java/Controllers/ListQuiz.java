@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import modles.Quiz;
+import Models.Quiz;
 import java.io.IOException;
 import java.util.List;
 import javafx.collections.FXCollections;

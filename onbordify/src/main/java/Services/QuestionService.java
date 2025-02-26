@@ -1,6 +1,6 @@
 package Services;
 
-import modles.Question;
+import Models.Question;
 import utils.MyDb;
 
 import java.sql.*;

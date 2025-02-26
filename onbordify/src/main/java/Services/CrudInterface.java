@@ -1,8 +1,5 @@
 package Services;
 
-import modles.Quiz;
-import modles.Reponse;
-
 import java.util.List;
 
 public interface CrudInterface<T> {

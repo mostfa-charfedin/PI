@@ -1,6 +1,6 @@
 package Services;
 
-import modles.Reponse;
+import Models.Reponse;
 import utils.MyDb;
 
 import java.sql.*;
