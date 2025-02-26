@@ -12,7 +12,7 @@ public class EmailService {
 
     public EmailService() {
         // Charger les informations d'identification par email de manière sécurisée
-        this.senderEmail = "hopefulhearts.3a12@gmail.com"; // Utiliser des variables d'environnement
+        this.senderEmail = "asmaakrimiii@gmail.com"; // Utiliser des variables d'environnement
         this.senderPassword = "Asmakrimi2002*"; // Utiliser des variables d'environnement
 
         // Configuration SMTP pour Gmail
