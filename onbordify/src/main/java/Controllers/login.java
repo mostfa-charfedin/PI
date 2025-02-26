@@ -78,7 +78,9 @@ public class login {
             if (isAuthenticated) {
                 showAlert("Success", "Connected successfuly !");
 
-                // Rediriger vers une autre fenêtre si besoin
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GestionUser.fxml"));
+                Parent root = loader.load();
+                emailField.getScene().setRoot(root);
             } else {
                 errorMessage.setText("Incorrect email or password!");
             }

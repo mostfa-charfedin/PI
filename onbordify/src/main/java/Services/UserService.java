@@ -2,6 +2,7 @@ package Services;
 
 import Models.Role;
 import Models.User;
+import javafx.scene.control.Alert;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import utils.MyDb;
@@ -12,11 +13,13 @@ import java.util.*;
 
 public class UserService implements CrudInterface<User> {
     Connection con;
-EmailService emailService = new EmailService();
-String nonHashedPassword;
+    EmailService emailService = new EmailService();
+    String nonHashedPassword;
+
     public UserService() {
         this.con = MyDb.getMydb().getConnection();
     }
+
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public String generateRandomPassword(int length) {
@@ -27,7 +30,7 @@ String nonHashedPassword;
         for (int i = 0; i < length; i++) {
             password.append(chars.charAt(random.nextInt(chars.length())));
         }
-this.nonHashedPassword = password.toString();
+        this.nonHashedPassword = password.toString();
         return passwordEncoder.encode(password.toString());
     }
 
@@ -67,11 +70,11 @@ this.nonHashedPassword = password.toString();
             String password = generateRandomPassword(10).toString();
             stmt.setString(7, password);
             stmt.executeUpdate();
-            String emailBody ="Hello "+ obj.getNom() +"."+ " "+" <br> "+ " "+ " Account created succeffuly."
-                    + " "+" <br> "+ " "+ "Email : "+obj.getEmail()+ " "+" <br> "+ " "+
-                    " "+" <br> "+ " "+ "Paswword : "+nonHashedPassword+" "+" <br> "+ " ";
-            String subject ="Welcome email";
-            emailService.sendEmail(obj.getEmail(), emailBody ,subject);
+            String emailBody = "Hello " + obj.getNom() + "." + " " + " </br> " + " " + " Account created succeffuly."
+                    + " " + " </br> " + " " + "Email : " + obj.getEmail() + " " + " </br> " + " " +
+                    " " + " </br> " + " " + "Paswword : " + nonHashedPassword + " " + " </br> " + " ";
+            String subject = "Welcome email";
+            emailService.sendEmail(obj.getEmail(), emailBody, subject);
         } catch (SQLException e) {
             e.printStackTrace();  // Affiche l'erreur complète dans la console
             throw new SQLException("Erreur lors de l'ajout de l'utilisateur : " + e.getMessage());
@@ -107,12 +110,14 @@ this.nonHashedPassword = password.toString();
         }
     }
 
-    public void updatePassword(int id, String newPassword) throws SQLException {
+    public Boolean updatePassword(String code, String newPassword) throws SQLException {
+
         String sql = "update user set password = ? where id = ?";
         PreparedStatement stmt = con.prepareStatement(sql);
-        stmt.setString(1, newPassword);
-        stmt.setInt(2, id);
+        stmt.setString(1, passwordEncoder.encode(newPassword));
+        stmt.setInt(2, findUserByCode(code).getId());
         stmt.executeUpdate();
+        return true;
     }
 
     @Override
@@ -143,16 +148,69 @@ this.nonHashedPassword = password.toString();
         return users;
     }
 
-   /* public boolean authenticateUser(String email, String rawPassword) {
-        Optional<User> optionalUser = userRepository.findByEmail(email);
 
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            return passwordEncoder.matches(rawPassword, user.getPassword());
+    public User findUserByEmail(String email) throws SQLException {
+        String sql = "select * from user where email = ?";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setString(1, email);
+        ResultSet rs = stmt.executeQuery();
+
+        User user = new User();
+        while (rs.next()) {
+            user.setId(rs.getInt("id"));
+            user.setNom(rs.getString("nom"));
+            user.setPrenom(rs.getString("prenom"));
+            user.setEmail(rs.getString("email"));
+            user.setCin(rs.getInt("cin"));
+            user.setDateNaissance(rs.getDate("dateNaissance"));
+            user.setRole(Role.valueOf(rs.getObject("role").toString()));
+        }
+        return user;
+    }
+
+    public User findUserByCode(String code) throws SQLException {
+        String sql = "SELECT * FROM code WHERE code = ?";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setString(1, code);
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            User user = new User();
+            user.setId(rs.getInt("idUser"));
+            return user;
+        }
+        return null; // No user found
+    }
+
+
+    public String generateCode(String email) throws SQLException {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder code = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 8; i++) {
+            code.append(chars.charAt(random.nextInt(chars.length())));
         }
 
-        return false; // Utilisateur non trouvé ou mot de passe incorrect
-    }*/
+        String sql = "INSERT INTO code (code , idUser) VALUES (?,?)";
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, code.toString());
+            stmt.setInt(2,findUserByEmail(email).getId());
+            stmt.executeUpdate();
+            return code.toString();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
 
+
+    }
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+
+    }
 
 }

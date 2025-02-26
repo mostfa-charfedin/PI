@@ -213,6 +213,7 @@ private FilteredList<String> filteredList;
             reset();
             initialize();
             message.setText("User created successfully");
+            message.setStyle("-fx-text-fill: #4CAF50;");
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");

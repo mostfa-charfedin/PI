@@ -157,3 +157,17 @@
     -fx-font-size: 12px;
     -fx-text-fill: #4CAF50; /* Vert pour les succès */
 }
+
+/* Style pour les champs de texte */
+ .password-field {
+    -fx-font-size: 14px;
+    -fx-pref-width: 300px; /* Largeur fixe */
+    -fx-pref-height: 30px;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5px;
+}
+
+
+
+

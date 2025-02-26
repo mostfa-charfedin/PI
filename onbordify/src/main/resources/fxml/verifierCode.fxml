@@ -9,26 +9,29 @@
 <?import javafx.scene.text.Font?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="Controllers.ResetPassword"
+            fx:controller="Controllers.verifierCode"
             prefHeight="400.0" prefWidth="600.0"
             stylesheets="@/css/Style.css">
-    <!-- VBox pour centrer les éléments -->
+
+
     <VBox alignment="CENTER" spacing="20" AnchorPane.topAnchor="50" AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50">
 
-        <!-- Titre -->
-        <Label text="Réinitialisation du Mot de Passe" styleClass="welcome-label_Password">
+
+        <Label text="Réinitialisation du Mot de Passe" styleClass="welcome-label">
             <font>
                 <Font size="24.0" />
             </font>
         </Label>
 
-        <!-- Champ pour l'email -->
-        <TextField fx:id="emailReset" promptText="Entrez votre email" styleClass="text-field" />
 
-        <!-- Bouton pour envoyer la demande -->
-        <Button fx:id="resetButton" text="Envoyer" onAction="#SendEmail" styleClass="button" />
+        <TextField fx:id="codeField" promptText="Entrez le code reçu par email" styleClass="text-field" />
 
-        <!-- Message d'erreur ou de succès -->
+        <PasswordField fx:id="newPasswordField" promptText="Nouveau mot de passe" styleClass="text-field" />
+
+        <PasswordField fx:id="confirmPasswordField" promptText="Confirmer le nouveau mot de passe" styleClass="text-field" />
+
+        <Button fx:id="resetButton" text="Valider" onAction="#handleResetPassword" styleClass="button" />
+
         <Label fx:id="messageLabel" styleClass="error-message" />
     </VBox>
 </AnchorPane>
