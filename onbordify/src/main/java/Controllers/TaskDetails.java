@@ -1,4 +1,4 @@
-package controllers;
+package Controllers;
 
 import Models.Tache;
 import javafx.fxml.FXML;

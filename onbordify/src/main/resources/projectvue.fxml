@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: #bbdefb;" xmlns="http://javafx.com/javafx/21.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Projectview">
+<AnchorPane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: #bbdefb;" xmlns="http://javafx.com/javafx/21.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Projectview">
 
     <children>
         <!-- Top Bar with Small Logo -->

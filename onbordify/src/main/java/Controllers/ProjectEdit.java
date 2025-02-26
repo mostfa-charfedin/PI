@@ -1,4 +1,4 @@
-package controllers;
+package Controllers;
 
 import Models.Projet;
 import Services.ProjetService;

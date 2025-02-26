@@ -8,7 +8,7 @@
 <AnchorPane prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: #f9f9f9;"
             xmlns="http://javafx.com/javafx/21.0.2"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.Taskupdate">
+            fx:controller="Controllers.Taskupdate">
 
     <children>
         <VBox alignment="CENTER" spacing="10" style="-fx-background-color: white; -fx-padding: 20px;
