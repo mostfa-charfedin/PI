@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@/css/Style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Profile">
+    <!-- VBox pour centrer les éléments -->
+    <VBox alignment="CENTER" spacing="20" AnchorPane.topAnchor="50" AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50">
+
+        <!-- Titre -->
+        <Label text="Profil Utilisateur" styleClass="welcome-label">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+
+        <!-- Champ pour le nom -->
+        <TextField fx:id="nomField" promptText="Nom" disable="true" styleClass="text-field" />
+
+        <!-- Champ pour le prénom -->
+        <TextField fx:id="prenomField" promptText="Prénom" disable="true" styleClass="text-field" />
+
+        <!-- Champ pour l'email -->
+        <TextField fx:id="emailField" promptText="Email" disable="true" styleClass="text-field" />
+        <HBox alignment="CENTER" spacing="20">
+        <!-- Champ pour la date de naissance -->
+        <DatePicker fx:id="dateNaissanceField" disable="true" promptText="Date de naissance" styleClass="date-picker" />
+
+        <!-- Champ pour le CIN -->
+        <TextField fx:id="cinField" promptText="CIN" disable="true" styleClass="text-field" />
+        </HBox>
+        <!-- HBox pour les boutons -->
+        <HBox alignment="CENTER" spacing="20">
+            <!-- Bouton Enregistrer -->
+            <Button fx:id="saveButton" disable="true" onAction="#handleSave" styleClass="button" text="Enregistrer" />
+
+            <!-- Bouton Retour -->
+            <Button fx:id="backButton" onAction="#handleBack" styleClass="button" text="Vers gestion" />
+        </HBox>
+    </VBox>
+
+    <!-- Message d'erreur ou de succès -->
+    <Label fx:id="messageLabel" styleClass="error-message" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" />
+</AnchorPane>

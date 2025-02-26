@@ -6,6 +6,8 @@ import javafx.scene.control.Alert;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import utils.MyDb;
+import utils.UserSession;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,18 +37,26 @@ public class UserService implements CrudInterface<User> {
     }
 
     public boolean login(String email, String password) {
-        String sql = "SELECT password FROM user WHERE email = ?";
+        String sql = "SELECT * FROM user WHERE email = ?";
 
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                String hashedPassword = rs.getString("password");
-                return BCrypt.checkpw(password, hashedPassword); // Comparaison avec le hash
-            } else {
-                System.out.println("Utilisateur non trouvé.");
-                return false;
+            User user = new User();
+            while (rs.next()) {
+                user.setId(rs.getInt("id"));
+                user.setNom(rs.getString("nom"));
+                user.setPrenom(rs.getString("prenom"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setCin(rs.getInt("cin"));
+                user.setDateNaissance(rs.getDate("dateNaissance"));
+                user.setRole(Role.valueOf(rs.getObject("role").toString()));
             }
+
+            UserSession.createSession(user.getId(), user.getRole());
+            System.out.println("User logged in with ID: " + UserSession.getInstance().getUserId());
+            return BCrypt.checkpw(password, user.getPassword());
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -173,7 +183,6 @@ public class UserService implements CrudInterface<User> {
         PreparedStatement stmt = con.prepareStatement(sql);
         stmt.setString(1, code);
         ResultSet rs = stmt.executeQuery();
-
         if (rs.next()) {
             User user = new User();
             user.setId(rs.getInt("idUser"));
@@ -181,6 +190,30 @@ public class UserService implements CrudInterface<User> {
         }
         return null; // No user found
     }
+
+    public User findUserById(String id) {
+        String sql = "SELECT * FROM user WHERE id = ?";
+        PreparedStatement stmt = null;
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, id);
+            ResultSet rs = stmt.executeQuery();
+            User user = new User();
+            while (rs.next()) {
+                user.setId(rs.getInt("id"));
+                user.setNom(rs.getString("nom"));
+                user.setPrenom(rs.getString("prenom"));
+                user.setEmail(rs.getString("email"));
+                user.setCin(rs.getInt("cin"));
+                user.setDateNaissance(rs.getDate("dateNaissance"));
+                user.setRole(Role.valueOf(rs.getObject("role").toString()));
+            }
+            return user;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 
     public String generateCode(String email) throws SQLException {
