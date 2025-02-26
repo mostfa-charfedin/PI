@@ -1,6 +1,6 @@
 package TestMain;
 
-import models.programmebienetre;
+import Models.programmebienetre;
 import Services.programmebienetreService;
 
 import java.util.List;
@@ -10,7 +10,7 @@ public class Main {
         programmebienetreService service = new programmebienetreService();
 
         // Ajouter un programme
-        models.programmebienetre programme = new programmebienetre(1, "competition", "lucrative", "Session de yoga relaxante");
+        Models.programmebienetre programme = new programmebienetre(1, "competition", "lucrative", "Session de yoga relaxante");
         try {
             service.create(programme);
         } catch (Exception e) {
@@ -19,7 +19,7 @@ public class Main {
 
         // Afficher tous les programmes
         try {
-            List<models.programmebienetre> programmes = service.getAll();
+            List<Models.programmebienetre> programmes = service.getAll();
             programmes.forEach(p -> System.out.println(p.getTitre() + " - " + p.getDescription()));
         } catch (Exception e) {
             e.printStackTrace();

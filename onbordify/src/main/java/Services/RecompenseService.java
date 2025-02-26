@@ -1,6 +1,6 @@
 package Services;
 
-import models.Recompense;
+import Models.Recompense;
 import utils.MyDb;
 
 import java.sql.Connection;

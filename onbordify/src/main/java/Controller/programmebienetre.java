@@ -33,35 +33,28 @@ public class programmebienetre implements Initializable {
 
     @FXML
     private Button btnAjouter;
+
     @FXML
     private Button btnModifier;
 
-
     @FXML
-    private Button btnCreateRecompense; // Nouveau bouton
+    private Button btnCreateRecompense;
 
     private programmebienetreService service = new programmebienetreService();
-    //conversion taa liste observation liste bch tkhali listeview dima dynamique
-    private ObservableList<models.programmebienetre> programmeList = FXCollections.observableArrayList();
+    private ObservableList<Models.programmebienetre> programmeList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Initialiser la ComboBox avec les types
         cmbType.getItems().addAll("Fitness", "Nutrition", "Mental Health", "Wellness");
 
-        // Charger les programmes existants
         loadProgrammes();
 
-        // Ajouter un événement au bouton Ajouter
         btnAjouter.setOnAction(event -> ajouterProgramme());
-
-        // Ajouter un événement au bouton CreateRecompense
         btnCreateRecompense.setOnAction(event -> createRecompense());
         btnModifier.setOnAction(event -> modifierProgramme());
 
-        // Ajouter un événement de suppression sur double-clic
         listViewProgrammes.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) { // Double-clic détecté
+            if (event.getClickCount() == 2) {
                 supprimerProgramme();
             }
         });
@@ -69,7 +62,7 @@ public class programmebienetre implements Initializable {
 
     private void loadProgrammes() {
         try {
-            List<models.programmebienetre> programmes = service.getAll();
+            List<Models.programmebienetre> programmes = service.getAll();
             programmeList.clear();
             programmeList.addAll(programmes);
 
@@ -88,7 +81,6 @@ public class programmebienetre implements Initializable {
         String type = cmbType.getValue();
         String description = txtDescription.getText();
 
-        // Vérification des champs vides
         if (titre.isEmpty() || type == null || description.isEmpty()) {
             showAlert("Attention", "Veuillez remplir tous les champs !");
             return;
@@ -97,7 +89,7 @@ public class programmebienetre implements Initializable {
             showAlert("Erreur de saisie", "Le titre ne doit contenir que des lettres (pas de nombres ni d'espaces).");
             return;
         }
-        // Si le bouton "Ajouter" est en mode "Mettre à jour"
+
         if (btnAjouter.getText().equals("Mettre à jour")) {
             int selectedIndex = listViewProgrammes.getSelectionModel().getSelectedIndex();
             if (selectedIndex == -1) {
@@ -105,10 +97,7 @@ public class programmebienetre implements Initializable {
                 return;
             }
 
-            // Récupérer le programme sélectionné
-            models.programmebienetre selectedProgramme = programmeList.get(selectedIndex);
-
-            // Mettre à jour les données du programme
+            Models.programmebienetre selectedProgramme = programmeList.get(selectedIndex);
             selectedProgramme.setTitre(titre);
             selectedProgramme.setType(type);
             selectedProgramme.setDescription(description);
@@ -117,32 +106,26 @@ public class programmebienetre implements Initializable {
                 service.update(selectedProgramme);
                 showAlert("Succès", "Le programme a été mis à jour avec succès !");
 
-                // Recharger les programmes après la mise à jour
                 loadProgrammes();
 
-                // Réinitialiser les champs après la mise à jour
                 txtTitre.clear();
                 cmbType.getSelectionModel().clearSelection();
                 txtDescription.clear();
                 btnModifier.setDisable(false);
-                // Revenir au mode "Ajouter"
-                btnAjouter.setText("Ajouter Programme");
 
+                btnAjouter.setText("Ajouter Programme");
 
             } catch (Exception e) {
                 e.printStackTrace();
                 showAlert("Erreur", "Erreur lors de la mise à jour du programme !");
             }
         } else {
-            // Création et ajout du programme
-            models.programmebienetre programme = new models.programmebienetre(0, titre, type, description);
+            Models.programmebienetre programme = new Models.programmebienetre(0, titre, type, description);
             try {
                 service.create(programme);
 
-                // Recharger les programmes après ajout
                 loadProgrammes();
 
-                // Réinitialiser les champs après l'ajout
                 txtTitre.clear();
                 cmbType.getSelectionModel().clearSelection();
                 txtDescription.clear();
@@ -153,6 +136,7 @@ public class programmebienetre implements Initializable {
             }
         }
     }
+
     @FXML
     private void modifierProgramme() {
         int selectedIndex = listViewProgrammes.getSelectionModel().getSelectedIndex();
@@ -162,20 +146,16 @@ public class programmebienetre implements Initializable {
             return;
         }
 
-        // Récupérer le programme sélectionné
-        models.programmebienetre selectedProgramme = programmeList.get(selectedIndex);
+        Models.programmebienetre selectedProgramme = programmeList.get(selectedIndex);
 
-        // Remplir les champs avec les données du programme sélectionné
         txtTitre.setText(selectedProgramme.getTitre());
         cmbType.setValue(selectedProgramme.getType());
         txtDescription.setText(selectedProgramme.getDescription());
 
-        // Changer le texte du bouton "Ajouter" en "Mettre à jour"
         btnAjouter.setText("Mettre à jour");
-
-        // Désactiver uniquement le bouton "Modifier" pour éviter les conflits
         btnModifier.setDisable(true);
     }
+
     @FXML
     private void supprimerProgramme() {
         int selectedIndex = listViewProgrammes.getSelectionModel().getSelectedIndex();
@@ -185,8 +165,7 @@ public class programmebienetre implements Initializable {
             return;
         }
 
-        // Récupérer l'objet programmebienetre correspondant
-        models.programmebienetre selectedProgramme = programmeList.get(selectedIndex);
+        Models.programmebienetre selectedProgramme = programmeList.get(selectedIndex);
         int id = selectedProgramme.getIdProgramme();
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -197,8 +176,8 @@ public class programmebienetre implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
-                service.delete(id); // Suppression par ID
-                loadProgrammes(); // Recharger la liste après suppression
+                service.delete(id);
+                loadProgrammes();
                 showAlert("Succès", "Le programme a été supprimé avec succès !");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -210,27 +189,20 @@ public class programmebienetre implements Initializable {
     @FXML
     private void createRecompense() {
         try {
-            // Charger la nouvelle vue (recompense.fxml)
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/recompense.fxml"));
             Parent root = loader.load();
 
-            // Créer une nouvelle scène
             Scene scene = new Scene(root);
 
-            // Créer une nouvelle fenêtre (Stage) pour le popup
             Stage popupStage = new Stage();
-            popupStage.setTitle("Créer une Récompense"); // Titre de la fenêtre
+            popupStage.setTitle("Créer une Récompense");
             popupStage.setScene(scene);
-
-            // Configurer la fenêtre comme modale (bloque l'interaction avec la fenêtre principale)
             popupStage.initModality(Modality.APPLICATION_MODAL);
 
-            // Récupérer la fenêtre actuelle (stage) pour définir le propriétaire du popup
             Stage mainStage = (Stage) btnCreateRecompense.getScene().getWindow();
             popupStage.initOwner(mainStage);
 
-            // Afficher la fenêtre popup
-            popupStage.showAndWait(); // showAndWait() bloque l'exécution jusqu'à ce que la fenêtre soit fermée
+            popupStage.showAndWait();
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Erreur", "Impossible d'ouvrir la fenêtre de récompense !");

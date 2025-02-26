@@ -1,4 +1,4 @@
-package models;
+package Models;
 
 public class programmebienetre {
     private int idProgramme;
@@ -8,13 +8,23 @@ public class programmebienetre {
     private int idUser;       // Identifiant de l'utilisateur
     private String nom;       // Nom de l'utilisateur
     private String prenom;    // Prénom de l'utilisateur
-    private String email;      // Email de l'utilisateur
+    private String email;     // Email de l'utilisateur
 
     // Constructeur par défaut
-    public programmebienetre() {}
+    public programmebienetre() {
+        // Initialisation des champs avec des valeurs par défaut
+        this.idProgramme = 0;
+        this.titre = "";
+        this.type = "";
+        this.description = "";
+        this.idUser = 0;
+        this.nom = "";
+        this.prenom = "";
+        this.email = "";
+    }
 
     // Constructeur complet
-    public programmebienetre(int idProgramme, String titre, String type, String description, int idUser, String nom, String prenom, String email) {
+    public programmebienetre(int idProgramme, String titre, String type, String description) {
         this.idProgramme = idProgramme;
         this.titre = titre;
         this.type = type;
@@ -58,11 +68,11 @@ public class programmebienetre {
         this.description = description;
     }
 
-    public int getidUser() {
+    public int getIdUser() {
         return idUser;
     }
 
-    public void setidUser(int idUser) {
+    public void setIdUser(int idUser) {
         this.idUser = idUser;
     }
 
@@ -82,11 +92,11 @@ public class programmebienetre {
         this.prenom = prenom;
     }
 
-    public String getemail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setemail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 

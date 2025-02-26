@@ -4,7 +4,6 @@ import Services.RecompenseService;
 import Services.programmebienetreService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -17,68 +16,84 @@ import java.util.ResourceBundle;
 
 public class Recompense implements Initializable {
     @FXML
-    public ComboBox<models.programmebienetre> cmbProgrammes;  // Ensure type safety with generics
+    public ComboBox<Models.programmebienetre> cmbProgrammes;  // Ensure type safety with generics
+    @FXML
+    private TextField txtType;  // Champ de texte pour le type de récompense
 
     @FXML
-    private TextField txtType;
+    private DatePicker dateAttribution;  // Sélecteur de date pour la date d'attribution
 
     @FXML
-    private DatePicker dateAttribution;
+    private ComboBox<String> cmbStatut;  // ComboBox pour le statut de la récompense
 
     @FXML
-    private ComboBox<String> cmbStatut;
+    private ListView<String> listViewRecompenses;  // ListView pour afficher les récompenses
 
     @FXML
-    private ListView<String> listViewRecompenses;
+    private Button btnAjouter;  // Bouton pour ajouter une récompense
 
     @FXML
-    private Button btnAjouter;
+    private Button btnSupprimer;  // Bouton pour supprimer une récompense
 
     @FXML
-    private Button btnSupprimer;
-    @FXML
-    private Button btnModifier;
+    private Button btnModifier;  // Bouton pour modifier une récompense
 
-    private RecompenseService service = new RecompenseService();
-    private ObservableList<models.Recompense> recompenseList = FXCollections.observableArrayList();
+    private RecompenseService service = new RecompenseService();  // Service pour gérer les récompenses
+    private ObservableList<Models.Recompense> recompenseList = FXCollections.observableArrayList();  // Liste observable des récompenses
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Initialisation des données
+        initializeProgrammes();
+        initializeStatut();
+        initializeListView();
+    }
+
+    // Initialiser la ComboBox des programmes
+    private void initializeProgrammes() {
         programmebienetreService programmeService = new programmebienetreService();
         try {
-            List<models.programmebienetre> programmes = programmeService.getAll();
+            List<Models.programmebienetre> programmes = programmeService.getAll();
             cmbProgrammes.setItems(FXCollections.observableList(programmes));
 
-            cmbProgrammes.setCellFactory(param -> new ListCell<models.programmebienetre>() {
+            cmbProgrammes.setCellFactory(param -> new ListCell<Models.programmebienetre>() {
                 @Override
-                protected void updateItem(models.programmebienetre programme, boolean empty) {
+                protected void updateItem(Models.programmebienetre programme, boolean empty) {
                     super.updateItem(programme, empty);
                     setText(programme == null || empty ? null : programme.getTitre());
                 }
             });
 
-            cmbProgrammes.setButtonCell(new ListCell<models.programmebienetre>() {
+            cmbProgrammes.setButtonCell(new ListCell<Models.programmebienetre>() {
                 @Override
-                protected void updateItem(models.programmebienetre programme, boolean empty) {
+                protected void updateItem(Models.programmebienetre programme, boolean empty) {
                     super.updateItem(programme, empty);
                     setText(programme == null || empty ? null : programme.getTitre());
                 }
             });
-
-            listViewRecompenses.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-                if (newSelection != null) {
-                    loadSelectedRecompense(newSelection);
-                }
-            });
-
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Erreur", "Impossible de charger les programmes !");
         }
+    }
+
+    // Initialiser la ComboBox des statuts
+    private void initializeStatut() {
+        cmbStatut.setItems(FXCollections.observableArrayList("Expired", "Received", "Waiting"));
+    }
+
+    // Initialiser la ListView des récompenses
+    private void initializeListView() {
+        listViewRecompenses.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                loadSelectedRecompense(newSelection);
+            }
+        });
 
         loadRecompenses();
     }
 
+    // Charger les détails de la récompense sélectionnée dans le formulaire
     private void loadSelectedRecompense(String selection) {
         String[] details = selection.split(" - ");
         if (details.length == 3) {
@@ -88,9 +103,10 @@ public class Recompense implements Initializable {
         }
     }
 
+    // Charger toutes les récompenses dans la ListView
     private void loadRecompenses() {
         try {
-            List<models.Recompense> recompenses = service.getAll();
+            List<Models.Recompense> recompenses = service.getAll();
             recompenseList.clear();
             recompenseList.addAll(recompenses);
             listViewRecompenses.setItems(FXCollections.observableArrayList(
@@ -102,7 +118,7 @@ public class Recompense implements Initializable {
         }
     }
 
-
+    // Ajouter une récompense
     @FXML
     private void creer() {
         String type = txtType.getText();
@@ -119,14 +135,14 @@ public class Recompense implements Initializable {
             return;
         }
 
-        models.programmebienetre programmeSelectionne = cmbProgrammes.getSelectionModel().getSelectedItem();
+        Models.programmebienetre programmeSelectionne = cmbProgrammes.getSelectionModel().getSelectedItem();
         if (programmeSelectionne == null) {
             showAlert("Attention", "Veuillez sélectionner un programme !");
             return;
         }
 
         // Création de la récompense
-        models.Recompense recompense = new models.Recompense(0, type, date, statusRecompence, programmeSelectionne.getIdProgramme());
+        Models.Recompense recompense = new Models.Recompense(0, type, date, statusRecompence, programmeSelectionne.getIdProgramme());
         try {
             service.create(recompense);
             loadRecompenses(); // Recharger la liste des récompenses
@@ -140,13 +156,7 @@ public class Recompense implements Initializable {
         }
     }
 
-    // Méthode pour effacer les champs du formulaire
-    private void clearForm() {
-        txtType.clear();
-        dateAttribution.setValue(null);
-        cmbStatut.getSelectionModel().clearSelection();
-        cmbProgrammes.getSelectionModel().clearSelection();
-    }
+    // Supprimer une récompense
     @FXML
     private void supprimerRecompense() {
         int selectedIndex = listViewRecompenses.getSelectionModel().getSelectedIndex();
@@ -155,7 +165,7 @@ public class Recompense implements Initializable {
             return;
         }
 
-        models.Recompense selectedRecompense = recompenseList.get(selectedIndex);
+        Models.Recompense selectedRecompense = recompenseList.get(selectedIndex);
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Voulez-vous vraiment supprimer \"" + selectedRecompense.getType_Recompense() + "\" ?", ButtonType.OK, ButtonType.CANCEL);
         alert.setTitle("Confirmation de suppression");
         alert.setHeaderText("Supprimer la récompense");
@@ -172,6 +182,8 @@ public class Recompense implements Initializable {
             }
         }
     }
+
+    // Modifier une récompense
     @FXML
     private void ModifierRecompense() {
         int selectedIndex = listViewRecompenses.getSelectionModel().getSelectedIndex();
@@ -180,7 +192,7 @@ public class Recompense implements Initializable {
             return;
         }
 
-        models.Recompense selectedRecompense = recompenseList.get(selectedIndex);
+        Models.Recompense selectedRecompense = recompenseList.get(selectedIndex);
 
         String type = txtType.getText();
         LocalDate date = dateAttribution.getValue();
@@ -191,7 +203,7 @@ public class Recompense implements Initializable {
             return;
         }
 
-        models.programmebienetre programmeSelectionne = cmbProgrammes.getSelectionModel().getSelectedItem();
+        Models.programmebienetre programmeSelectionne = cmbProgrammes.getSelectionModel().getSelectedItem();
         if (programmeSelectionne == null) {
             showAlert("Attention", "Veuillez sélectionner un programme !");
             return;
@@ -204,9 +216,9 @@ public class Recompense implements Initializable {
 
         try {
             service.update(selectedRecompense);
-            loadRecompenses(); // Reload the rewards list
+            loadRecompenses(); // Recharger la liste des récompenses
             showAlert("Succès", "La récompense a été modifiée avec succès !");
-            clearForm(); // Clear the form fields
+            clearForm(); // Effacer les champs du formulaire
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Erreur SQL", "Problème lors de la mise à jour en base de données : " + e.getMessage());
@@ -216,7 +228,15 @@ public class Recompense implements Initializable {
         }
     }
 
+    // Effacer les champs du formulaire
+    private void clearForm() {
+        txtType.clear();
+        dateAttribution.setValue(null);
+        cmbStatut.getSelectionModel().clearSelection();
+        cmbProgrammes.getSelectionModel().clearSelection();
+    }
 
+    // Afficher une alerte
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);
