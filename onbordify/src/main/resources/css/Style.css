@@ -124,7 +124,7 @@
 
 /* Style pour le bouton de connexion */
 #loginButton {
-    -fx-background-color: #4770E8; /* Vert */
+    -fx-background-color: #4770E8;
     -fx-pref-width: 120px;
 }
 
@@ -159,7 +159,7 @@
 }
 
 /* Style pour les champs de texte */
- .password-field {
+.password-field {
     -fx-font-size: 14px;
     -fx-pref-width: 300px; /* Largeur fixe */
     -fx-pref-height: 30px;
@@ -167,7 +167,7 @@
     -fx-border-color: #cccccc;
     -fx-border-radius: 5px;
 }
-
-
-
-
+.Cancelbutton {
+    -fx-font-size: 14px;
+    -fx-background-color: orange;
+}

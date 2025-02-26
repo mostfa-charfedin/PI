@@ -14,13 +14,16 @@ public class MainFx extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/Style.css")).toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/style.css")).toExternalForm());
         primaryStage.setScene(scene);
-        primaryStage.setTitle("User management");
+        primaryStage.setTitle("Onboardfiy");
         primaryStage.show();
 
+
     }
+
     public static void main(String[] args) {
         launch(args);
+
     }
 }

@@ -12,8 +12,19 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>21.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>21.0.2</version>
+        </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -36,7 +47,7 @@
             <artifactId>spring-security-core</artifactId>
             <version>6.1.5</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>javax.mail</artifactId>
@@ -45,8 +56,6 @@
 
 
     </dependencies>
-
-
     <build>
         <plugins>
             <plugin>
@@ -57,7 +66,9 @@
                     <mainClass>TestMain.MainFx</mainClass>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
+
 
 </project>
