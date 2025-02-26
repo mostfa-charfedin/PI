@@ -12,7 +12,7 @@ public class programmebienetreService implements CrudInterface<programmebienetre
     private final Connection conn;
 
     public programmebienetreService() {
-        this.conn = MyDb.getInstance().getConnection();
+        this.conn = MyDb.getMydb().getConnection();
     }
 
     @Override

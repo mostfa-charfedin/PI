@@ -14,9 +14,8 @@ public class RecompenseService implements CrudInterface<Recompense> {
 
     private MyDb DatabaseConnection;
 
-    // Initialisation correcte dans le constructeur
     public RecompenseService() {
-        DatabaseConnection = MyDb.getInstance();
+        DatabaseConnection = MyDb.getMydb();
     }
 
 
