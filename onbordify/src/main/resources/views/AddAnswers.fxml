@@ -16,7 +16,7 @@
             fx:controller="Controllers.AddAnswers">
 
     <children>
-        <Label layoutX="91.0" layoutY="19.0" stylesheets="@Css/style.css"
+        <Label layoutX="91.0" layoutY="19.0" stylesheets="@../Css/style.css"
                text="Create Answer" textFill="INDIANRED">
             <font>
                 <Font name="Candara" size="16.0" />
@@ -26,12 +26,12 @@
         <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="69.0" layoutY="21.0"
                    pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@assets/magic.png" />
+                <Image url="@../assets/magic.png" />
             </image>
         </ImageView>
 
         <Pane layoutX="98.0" layoutY="70.0" prefHeight="296.0" prefWidth="387.0"
-              styleClass="pane_lv" stylesheets="@Css/style.css">
+              styleClass="pane_lv" stylesheets="@../Css/style.css">
 
             <children>
                 <Label layoutX="26.0" layoutY="14.0" text="Enter Answers">
@@ -59,9 +59,9 @@
                 </Label>
 
                 <!-- Buttons -->
-                <Button fx:id="add_button" layoutX="55.0" layoutY="220.0" mnemonicParsing="false" onAction="#addAnswers" styleClass="add_button" stylesheets="@Css/style.css" text="Add" />
-                <Button fx:id="clear" layoutX="150.0" layoutY="220.0" mnemonicParsing="false" onAction="#clear" prefHeight="36.0" prefWidth="78.0" stylesheets="@Css/style.css" text="Clear" textFill="WHITE" />
-                <Button fx:id="cancel_button" layoutX="254.0" layoutY="220.0" mnemonicParsing="false" onAction="#cancel" prefHeight="36.0" prefWidth="78.0" styleClass="cancel_button" stylesheets="@Css/style.css" text="Cancel" textFill="WHITE" />
+                <Button fx:id="add_button" layoutX="55.0" layoutY="220.0" mnemonicParsing="false" onAction="#addAnswers" styleClass="add_button" stylesheets="@../Css/style.css" text="Add" />
+                <Button fx:id="clear" layoutX="150.0" layoutY="220.0" mnemonicParsing="false" onAction="#clear" prefHeight="36.0" prefWidth="78.0" stylesheets="@../Css/style.css" text="Clear" textFill="WHITE" />
+                <Button fx:id="cancel_button" layoutX="254.0" layoutY="220.0" mnemonicParsing="false" onAction="#cancel" prefHeight="36.0" prefWidth="78.0" styleClass="cancel_button" stylesheets="@../Css/style.css" text="Cancel" textFill="WHITE" />
 
                 <Label fx:id="lblstatus" layoutX="43.0" layoutY="270.0" prefHeight="36.0" prefWidth="311.0" />
             </children>

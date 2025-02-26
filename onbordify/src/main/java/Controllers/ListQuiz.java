@@ -1,6 +1,5 @@
 package Controllers;
 
-import Services.QuestionService;
 import Services.QuizService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -61,7 +60,7 @@ public class ListQuiz {
     }
     private void openQuestionsDetails(int quizId) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Questionsdetails.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Questionsdetails.fxml"));
             Parent root = loader.load();
 
             Questionsdetails controller = loader.getController();
@@ -97,7 +96,7 @@ public class ListQuiz {
     @FXML
     private void create_quiz_action(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CreateQuiz.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/CreateQuiz.fxml"));
             Parent root = loader.load();
 
             CreateQuiz createController = loader.getController();
@@ -123,7 +122,7 @@ public class ListQuiz {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EditQuiz.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/EditQuiz.fxml"));
             Parent root = loader.load();
 
             EditQuiz editController = loader.getController();
@@ -171,7 +170,7 @@ public class ListQuiz {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/addquestions.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/addquestions.fxml"));
             Parent root = loader.load();
 
             Addquestions addQuestionsController = loader.getController();

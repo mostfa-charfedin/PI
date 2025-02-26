@@ -13,12 +13,12 @@
             <font>
                 <Font name="Candara" size="15.0" />
             </font></Label>
-        <Pane fx:id="panel_l" layoutX="26.0" layoutY="67.0" prefHeight="318.0" prefWidth="556.0" styleClass="panel_l" stylesheets="@Css/style.css">
+        <Pane fx:id="panel_l" layoutX="26.0" layoutY="67.0" prefHeight="318.0" prefWidth="556.0" styleClass="panel_l" stylesheets="@../Css/style.css">
             <children>
                 <ListView fx:id="listViewQuiz" layoutX="14.0" layoutY="21.0" prefHeight="276.0" prefWidth="522.0" />
             </children>
         </Pane>
-        <Button layoutX="499.0" layoutY="17.0" mnemonicParsing="false" onAction="#cancel_button" styleClass="cancel_button" stylesheets="@Css/style.css" text="Cancel" />
-      <Button layoutX="413.0" layoutY="17.0" mnemonicParsing="false" onAction="#remove_button" stylesheets="@Css/style.css" text="Remove" />
+        <Button layoutX="499.0" layoutY="17.0" mnemonicParsing="false" onAction="#cancel_button" styleClass="cancel_button" stylesheets="@../Css/style.css" text="Cancel" />
+      <Button layoutX="413.0" layoutY="17.0" mnemonicParsing="false" onAction="#remove_button" stylesheets="@../Css/style.css" text="Remove" />
     </children>
 </AnchorPane>

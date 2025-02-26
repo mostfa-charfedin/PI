@@ -1,6 +1,5 @@
 package Controllers;
 
-import Services.QuizService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,7 +13,6 @@ import modles.Question;
 import Services.QuestionService;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,7 +68,7 @@ public class Questionsdetails {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Answersdetails.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Answersdetails.fxml"));
             Parent root = loader.load();
 
             Answersdetails answersDetailsController = loader.getController();
@@ -105,7 +103,7 @@ public class Questionsdetails {
     @FXML
     void addQuestion(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/addquestions.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/addquestions.fxml"));
             Parent root = loader.load();
 
             Addquestions addQuestionsController = loader.getController();

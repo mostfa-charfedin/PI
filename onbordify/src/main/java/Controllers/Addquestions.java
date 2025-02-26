@@ -192,7 +192,7 @@ public class Addquestions {
             int questionId = Integer.parseInt(parts[1]);
 
             // Load AddAnswers.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddAnswers.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AddAnswers.fxml"));
             Parent root = loader.load();
 
             // Pass question ID to AddAnswers controller
