@@ -31,6 +31,19 @@
             <version>8.0.33</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>6.1.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+
+
     </dependencies>
     <build>
         <plugins>
@@ -42,6 +55,9 @@
                     <mainClass>TestMain.MainFx</mainClass>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
+
+
 </project>
