@@ -24,13 +24,6 @@ public class MainFx extends Application {
 
     public static void main(String[] args) {
         launch(args);
-       /* EmailService emailService = new EmailService();
-        // Test email sending (Replace with actual values)
-        String recipient = "akrimi041@gmail.com"; // Replace with the actual recipient email
-        String subject = "Test Email";
-        String messageBody = "<h3>Hello!</h3><p>This is a test email from the Java email service.</p>";
-        boolean isHtml = true; // Set to false if you want plain text
 
-        emailService.sendEmail(recipient, subject, messageBody, isHtml);*/
     }
 }
