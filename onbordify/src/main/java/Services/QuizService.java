@@ -8,10 +8,9 @@ import utils.MyDb;
 public  class QuizService implements CrudInterface<Quiz> {
 
 
-    private final Connection connection;
-
+    Connection connection;
     public QuizService() {
-        this.connection = MyDb.getInstance().getConnection();
+        this.connection = MyDb.getMydb().getConnection();
     }
 
     @Override

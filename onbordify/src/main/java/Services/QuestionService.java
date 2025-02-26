@@ -9,12 +9,10 @@ import java.util.List;
 
 public class QuestionService implements CrudInterface<Question> {
 
-    private final Connection connection;
-
+    Connection connection;
     public QuestionService() {
-        this.connection = MyDb.getInstance().getConnection();
+        this.connection = MyDb.getMydb().getConnection();
     }
-
     @Override
     public void create(Question obj) throws Exception {
         String getQuizIdSQL = "SELECT idQuiz FROM Quiz WHERE nom = ?";

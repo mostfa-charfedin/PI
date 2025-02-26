@@ -16,18 +16,18 @@
          <font>
             <Font name="Candara" size="15.0" />
          </font></Label>
-      <TextField fx:id="search_field" layoutX="436.0" layoutY="22.0" prefHeight="27.0" prefWidth="102.0" promptText="Search for quiz " stylesheets="@../Css/style.css" />
+      <TextField fx:id="search_field" layoutX="389.0" layoutY="19.0" prefHeight="31.0" prefWidth="150.0" promptText="Search for quiz "  />
       <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="34.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/list.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="18.0" fitWidth="19.0" layoutX="408.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="18.0" fitWidth="19.0" layoutX="360.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/magnifier.png" />
          </image>
       </ImageView>
-      <Pane fx:id="panel_l" layoutX="26.0" layoutY="67.0" prefHeight="318.0" prefWidth="556.0" styleClass="panel_l" stylesheets="@../Css/style.css">
+      <Pane fx:id="panel_l" layoutX="26.0" layoutY="67.0" prefHeight="318.0" prefWidth="556.0" styleClass="panel_l" >
          <children>
             <ListView fx:id="listViewQuiz" layoutX="14.0" layoutY="64.0" prefHeight="207.0" prefWidth="511.0" />
             <Button layoutX="243.0" layoutY="14.0" mnemonicParsing="false" onAction="#add_questions" prefHeight="36.0" prefWidth="131.0" text="add question" />
@@ -36,6 +36,6 @@
             <Button layoutX="103.0" layoutY="14.0" mnemonicParsing="false" onAction="#edit_questions" prefHeight="36.0" prefWidth="131.0" text="Edit Quiz" />
          </children>
       </Pane>
-      <Button layoutX="293.0" layoutY="20.0" mnemonicParsing="false" onAction="#create_quiz_action" stylesheets="@../Css/style.css" text="Create Quiz" />
+      <Button layoutX="242.0" layoutY="20.0" mnemonicParsing="false" onAction="#create_quiz_action"  text="Create Quiz" />
    </children>
 </AnchorPane>

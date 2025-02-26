@@ -2,18 +2,16 @@ package Services;
 
 import Models.Reponse;
 import utils.MyDb;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReponseService implements CrudInterface<Reponse> {
 
-    private final Connection connection;
-
-    public ReponseService() {
-        this.connection = MyDb.getInstance().getConnection();
-    }
+    Connection connection;
+  public ReponseService() {
+      this.connection = MyDb.getMydb().getConnection();
+  }
 
     // CREATE
     public void create(Reponse reponse) throws SQLException {
