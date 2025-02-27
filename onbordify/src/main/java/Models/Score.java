@@ -1,31 +1,28 @@
 package Models;
 
 public class Score {
-    int id;
     int idUser;
+    int idQuiz;
     double score;
-
-    public Score(int id, int idUser, double score) {
-        this.id = id;
-        this.idUser = idUser;
-        this.score = score;
-    }
-
-    public Score(int idUser, double score) {
-        this.idUser = idUser;
-        this.score = score;
-    }
 
     public Score() {
     }
 
-    public int getId() {
-        return id;
+
+    public Score(int idUser, int idQuiz, double score) {
+        this.idUser = idUser;
+        this.idQuiz = idQuiz;
+        this.score = score;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getIdQuiz() {
+        return idQuiz;
     }
+
+    public void setIdQuiz(int idQuiz) {
+        this.idQuiz = idQuiz;
+    }
+
 
     public int getIdUser() {
         return idUser;

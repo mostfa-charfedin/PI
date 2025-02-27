@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="800.0" stylesheets="/css/Style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GestionUser">
+<AnchorPane prefHeight="400.0" prefWidth="800.0" stylesheets="/css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GestionUser">
     <children>
         <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
             <tabs>
@@ -21,11 +21,11 @@
                         <AnchorPane>
                             <children>
                                 <!-- Left VBox -->
-                                <VBox fx:id="vboxLeft" prefHeight="331.0" prefWidth="239.0" spacing="10" stylesheets="@../css/Style.css" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="20">
+                                <VBox fx:id="vboxLeft" prefHeight="331.0" prefWidth="239.0" spacing="10" stylesheets="@../css/style.css" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="20">
                                     <children>
                                         <Label text="Nom" />
                                         <TextField fx:id="nom" />
-                                        <VBox fx:id="nomErrorBox" stylesheets="@../css/Style.css" /> <!-- Pour afficher les erreurs du nom -->
+                                        <VBox fx:id="nomErrorBox" stylesheets="@../css/style.css" /> <!-- Pour afficher les erreurs du nom -->
                                         <Label text="Prenom" />
                                         <TextField fx:id="prenom" />
                                         <VBox fx:id="prenomErrorBox" /> <!-- Pour afficher les erreurs du prénom -->
@@ -36,8 +36,8 @@
                                 </VBox>
                                 <VBox layoutX="326.0" layoutY="20.0" prefHeight="277.0" prefWidth="242.0" spacing="10">
                                     <children>
-                                        <Label stylesheets="@../css/Style.css" text="Cin" />
-                                        <TextField fx:id="cin" prefHeight="31.0" prefWidth="166.0" stylesheets="@../css/Style.css" />
+                                        <Label stylesheets="@../css/style.css" text="Cin" />
+                                        <TextField fx:id="cin" prefHeight="31.0" prefWidth="166.0" stylesheets="@../css/style.css" />
                                         <VBox fx:id="cinErrorBox" /> <!-- Pour afficher les erreurs du CIn -->
                                         <Label text="Date de naissance" />
                                         <DatePicker fx:id="date" prefHeight="33.0" prefWidth="242.0" />
@@ -62,15 +62,16 @@
                         <AnchorPane>
                             <children>
                                 <!-- Search Field -->
-                                <TextField fx:id="rechercheFildMod" layoutX="194.4" layoutY="19.0" prefHeight="26.0" prefWidth="330.0" AnchorPane.leftAnchor="194.0" AnchorPane.rightAnchor="276.0" AnchorPane.topAnchor="19.0" />
+                                <TextField fx:id="rechercheFildMod" layoutX="142.4" layoutY="19.0" prefHeight="26.0" prefWidth="382.0" AnchorPane.leftAnchor="142.0" AnchorPane.rightAnchor="276.0" AnchorPane.topAnchor="19.0" />
                                 <!-- ListView -->
                                 <ListView fx:id="listview" prefHeight="241.0" prefWidth="755.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60" />
                                 <!-- Update Button -->
                                 <Button fx:id="updateButton" layoutX="676.0" layoutY="20.0" onAction="#updateUser" prefHeight="26.0" prefWidth="103.0" text="Modifier" AnchorPane.bottomAnchor="324.8" AnchorPane.rightAnchor="20.799999999999955" />
                                 <!-- Delete Button -->
                                 <Button fx:id="deleteButton" layoutX="556.0" layoutY="20.0" onAction="#deleteUser" prefHeight="26.0" prefWidth="94.0" text="Supprimer" AnchorPane.bottomAnchor="324.8" AnchorPane.rightAnchor="149.60000000000002" />
-                        <Label layoutX="20.0" layoutY="24.0" text="Chercher par nom ou Cin" />
+                        <Label layoutX="20.0" layoutY="24.0" text="Recherche" />
                         <Label fx:id="messagelist" layoutX="20.0" layoutY="319.0" />
+                        <Button layoutX="668.0" layoutY="323.0" onAction="#goToScoreList" prefHeight="26.0" prefWidth="94.0" text="Score List" />
                             </children>
                         </AnchorPane>
                     </content>

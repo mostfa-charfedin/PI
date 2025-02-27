@@ -12,6 +12,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -61,7 +63,7 @@ public class GestionUser {
 
 
 
-    private final String LOGIN_URL = "http://localhost:8080/users/login";
+  //  private final String LOGIN_URL = "http://localhost:8080/users/login";
 
 private User selectedUser ;
 private ObservableList<String> userList;
@@ -279,6 +281,13 @@ private FilteredList<String> filteredList;
             alert.setContentText("Error opening edit window: " + e.getMessage());
             alert.showAndWait();
         }
+    }
+
+    @FXML
+    void goToScoreList(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Score.fxml"));
+        Parent root = loader.load();
+        messagelist.getScene().setRoot(root);
     }
 
     void reset() {
