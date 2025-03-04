@@ -1,29 +1,46 @@
 package Model;
 
+import java.util.List;
+
 public class Ressource {
-    private int id;
+    private int idResource;
+    private int idUser ;
     private String titre;
     private String type;
     private String description;
     private String lien;
+    private List<Evaluation> evaluations;
 
     public Ressource() {}
 
-    public Ressource(int id, String titre, String type, String description, String lien) {
-        this.id = id;
+    public Ressource(int idResource, int idUser , String titre, String type, String description, String lien) {
+        this.idUser  = idUser ;
+        this.idResource = idResource;
         this.titre = titre;
         this.type = type;
         this.description = description;
         this.lien = lien;
     }
-
-
-    public int getId() {
-        return id;
+    public int getIdResource() {
+        return idResource;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdResource(int idResource) {
+        this.idResource = idResource;
+    }
+
+    public List<Evaluation> getEvaluations() {
+        return evaluations;
+    }
+    public void setEvaluations(List<Evaluation> evaluations) {
+        this.evaluations = evaluations;
+    }
+    public int getidUser () {
+        return idUser ;
+    }
+
+    public void setId(int idUser ) {
+        this.idUser  = idUser ;
     }
 
     public String getTitre() {
@@ -60,7 +77,8 @@ public class Ressource {
     @Override
     public String toString() {
         return "Ressource{" +
-                "id=" + id +
+                "idResource=" + idResource +
+                "idUser =" + idUser  +
                 ", titre='" + titre + '\'' +
                 ", type='" + type + '\'' +
                 ", description='" + description + '\'' +

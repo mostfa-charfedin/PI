@@ -35,6 +35,16 @@
         <Label fx:id="labelLien" style="-fx-font-size: 14px; -fx-text-fill: blue; -fx-underline: true;" />
     </HBox>
 
+    <!-- Section de notation -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Notez cette ressource :" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #555555;" />
+        <!-- Slider pour la note (0 à 5) -->
+        <Slider fx:id="ratingSlider" min="0" max="5" value="0" showTickMarks="true" showTickLabels="true" majorTickUnit="1" blockIncrement="0.1" layoutX="14" layoutY="100" />
+    </HBox>
+
+    <!-- Bouton pour soumettre la note -->
+    <Button fx:id="btnNoter" text="Soumettre la Note" onAction="#noterRessource" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5px; -fx-padding: 10px 20px;" />
+
     <!-- Bouton Fermer -->
-    <Button text="Fermer" onAction="#fermerFenetre" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5px; -fx-padding: 10px 20px;"/>
+    <Button text="Fermer" onAction="#fermerFenetre" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5px; -fx-padding: 10px 20px;"/>
 </VBox>

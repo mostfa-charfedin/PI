@@ -21,8 +21,8 @@ public class ListeRessources {
 
     @FXML private ListView<String> listViewRessources;
     @FXML private Button btnAjouter;
-    @FXML private Button btnFavoris; // Added the Favoris button
-    @FXML private TextField searchField; // Champ de recherche ajouté
+    @FXML private Button btnFavoris;
+    @FXML private TextField searchField;
 
     private RessourceService ressourceService;
     private List<Ressource> ressources = new ArrayList<>();
@@ -65,6 +65,8 @@ public class ListeRessources {
         // Option "Mettre en favoris"
         MenuItem mettreEnFavorisItem = new MenuItem("Mettre en favoris");
         contextMenu.getItems().add(mettreEnFavorisItem);
+        MenuItem modifierItem = new MenuItem("Modifier");
+        contextMenu.getItems().add(modifierItem);
 
         // Gestion de l'événement "Consulter"
         consulterItem.setOnAction(event -> {
@@ -88,6 +90,20 @@ public class ListeRessources {
                 Ressource selectedRessource = findRessourceByTitle(selectedTitre);
                 if (selectedRessource != null) {
                     ajouterAuxFavoris(selectedRessource);
+                } else {
+                    showAlert("Aucune ressource trouvée pour ce titre.");
+                }
+            } else {
+                showAlert("Veuillez sélectionner une ressource.");
+            }
+        });
+        // Gestion de l'événement "Modifier"
+        modifierItem.setOnAction(event -> {
+            String selectedTitre = listViewRessources.getSelectionModel().getSelectedItem();
+            if (selectedTitre != null) {
+                Ressource selectedRessource = findRessourceByTitle(selectedTitre);
+                if (selectedRessource != null) {
+                    ouvrirModifierRessource(selectedRessource);
                 } else {
                     showAlert("Aucune ressource trouvée pour ce titre.");
                 }
@@ -124,20 +140,20 @@ public class ListeRessources {
         }
     }
 
+
     // Méthode pour filtrer les ressources en fonction du texte de recherche
     private void filterRessources(String searchText) {
-        ObservableList<String> filteredRessources = FXCollections.observableArrayList();
+        ObservableList<String> filteredRessources;
 
         // Si le champ de recherche est vide, on affiche toutes les ressources
         if (searchText.isEmpty()) {
-            filteredRessources.addAll(titresObservableList);
+            filteredRessources = FXCollections.observableArrayList(titresObservableList);
         } else {
-            for (String titre : titresObservableList) {
-                // Si le titre contient le texte de recherche (insensible à la casse), on l'ajoute à la liste filtrée
-                if (titre.toLowerCase().contains(searchText.toLowerCase())) {
-                    filteredRessources.add(titre);
-                }
-            }
+            filteredRessources = FXCollections.observableArrayList(
+                    titresObservableList.stream()
+                            .filter(titre -> titre.toLowerCase().contains(searchText.toLowerCase()))
+                            .toList() // Collect the filtered results into a List
+            );
         }
 
         // Mettre à jour la ListView avec les ressources filtrées
@@ -159,8 +175,27 @@ public class ListeRessources {
             e.printStackTrace();
         }
     }
+    private void ouvrirModifierRessource(Ressource ressource) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/ModifierRessource.fxml"));
+            Parent root = loader.load();
 
-    // Méthode pour ouvrir la fenêtre de détails de la ressource
+            // Passer la ressource au contrôleur de la fenêtre d'édition
+            ModifierRessourceController controller = loader.getController();
+            controller.setRessource(ressource);
+
+            // Ouvrir une nouvelle fenêtre pour la modification
+            Stage stage = new Stage();
+            stage.setTitle("Modifier Ressource");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    //  ouvrir les détails de la ressource
     private void ouvrirDetailRessource(Ressource ressource) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/DetailResource.fxml"));
@@ -203,7 +238,7 @@ public class ListeRessources {
         }
     }
 
-    // Méthode pour trouver une ressource par son titre
+    // Méthode t33 trouver une ressource par son titre
     private Ressource findRessourceByTitle(String titre) {
         for (Ressource ressource : ressources) {
             if (ressource.getTitre().equals(titre)) {
@@ -213,7 +248,7 @@ public class ListeRessources {
         return null;
     }
 
-    // Méthode pour afficher une alerte en cas d'erreur
+    //  afficher une alerte en cas d'erreur
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.OK);
         alert.showAndWait();

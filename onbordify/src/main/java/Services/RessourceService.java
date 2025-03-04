@@ -36,7 +36,7 @@ public class RessourceService implements CrudInterface<Ressource> {
                 "type = '" + res.getType() + "', " +
                 "description = '" + res.getDescription() + "', " +
                 "lien = '" + res.getlien() + "' " +
-                "WHERE idResource = " + res.getId();
+                "WHERE idResource = " + res.getIdResource();
 
         Statement stmt = connection.createStatement();
         stmt.executeUpdate(sql);
@@ -46,8 +46,8 @@ public class RessourceService implements CrudInterface<Ressource> {
 
     // DELETE
     @Override
-    public void delete(int id) throws Exception {
-        String sql = "DELETE FROM onboardify.ressources WHERE idResource = " + id;
+    public void delete(int IdResource) throws Exception {
+        String sql = "DELETE FROM onboardify.ressources WHERE idResource = " + IdResource;
 
         Statement stmt = connection.createStatement();
         stmt.executeUpdate(sql);
