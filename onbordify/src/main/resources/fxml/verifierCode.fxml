@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controllers.verifierCode"
+            prefHeight="400.0" prefWidth="800.0"
+            stylesheets="@/css/style.css">
+
+
+    <VBox alignment="CENTER" spacing="20" AnchorPane.topAnchor="50" AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50">
+
+
+        <Label text="Réinitialisation du Mot de Passe" styleClass="welcome-label">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+
+
+        <TextField fx:id="codeField" promptText="Entrez le code reçu par email" styleClass="text-field" />
+
+        <PasswordField fx:id="newPasswordField" promptText="Nouveau mot de passe" styleClass="text-field" />
+
+        <PasswordField fx:id="confirmPasswordField" promptText="Confirmer le nouveau mot de passe" styleClass="text-field" />
+
+        <Button fx:id="resetButton" text="Valider" onAction="#handleResetPassword" styleClass="button" />
+
+        <Label fx:id="messageLabel" styleClass="error-message" />
+    </VBox>
+</AnchorPane>

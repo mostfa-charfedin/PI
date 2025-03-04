@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GestionUser">
+    <children>
+        <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+            <tabs>
+
+                <Tab closable="false" text="Ajouter user">
+                    <content>
+                        <AnchorPane>
+                            <children>
+                                <!-- Left VBox -->
+                                <VBox fx:id="vboxLeft" prefHeight="331.0" prefWidth="239.0" spacing="10" stylesheets="@../css/style.css" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="20">
+                                    <children>
+                                        <Label text="Nom" />
+                                        <TextField fx:id="nom" />
+                                        <VBox fx:id="nomErrorBox" stylesheets="@../css/style.css" /> <!-- Pour afficher les erreurs du nom -->
+                                        <Label text="Prenom" />
+                                        <TextField fx:id="prenom" />
+                                        <VBox fx:id="prenomErrorBox" /> <!-- Pour afficher les erreurs du prénom -->
+                                        <Label text="Email" />
+                                        <TextField fx:id="email" />
+                                        <VBox fx:id="emailErrorBox" /> <!-- Pour afficher les erreurs de l'email -->
+                                    </children>
+                                </VBox>
+                                <VBox layoutX="326.0" layoutY="20.0" prefHeight="277.0" prefWidth="242.0" spacing="10">
+                                    <children>
+                                        <Label stylesheets="@../css/style.css" text="Cin" />
+                                        <TextField fx:id="cin" prefHeight="31.0" prefWidth="166.0" stylesheets="@../css/style.css" />
+                                        <VBox fx:id="cinErrorBox" /> <!-- Pour afficher les erreurs du CIn -->
+                                        <Label text="Date de naissance" />
+                                        <DatePicker fx:id="date" prefHeight="33.0" prefWidth="242.0" />
+                                        <VBox fx:id="dateNaissanceErrorBox" />
+                                        <Label text="Role" />
+                                        <ComboBox fx:id="role" prefHeight="31.0" prefWidth="242.0" />
+                                    </children>
+                                </VBox>
+
+                                <!-- Add Button -->
+                                <Button fx:id="addButton" onAction="#addUser" text="Enregistrer" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" />
+
+                                <!-- Message Label -->
+                                <Label fx:id="message" AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="20" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+
+                <!-- Tab 2: List Users -->
+                <Tab closable="false" text="List users">
+                    <content>
+                        <AnchorPane>
+                            <children>
+                                <!-- Search Field -->
+                                <TextField fx:id="rechercheFildMod" layoutX="91.0" layoutY="20.0" prefHeight="26.0" prefWidth="79.0" AnchorPane.leftAnchor="91.0" AnchorPane.rightAnchor="631.0" AnchorPane.topAnchor="20.0" />
+                                <!-- ListView -->
+                                <ListView fx:id="listview" prefHeight="241.0" prefWidth="755.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60" />
+                                <!-- Update Button -->
+                                <Button fx:id="updateButton"  onAction="#updateUser" prefHeight="26.0" prefWidth="100.0" text="Modifier" AnchorPane.bottomAnchor="524.8" AnchorPane.rightAnchor="190.39999999999998" />
+                                <!-- Delete Button -->
+                                <Button fx:id="deleteButton"  onAction="#deleteUser" prefHeight="26.0" prefWidth="100.0" text="Supprimer" AnchorPane.bottomAnchor="524.8" AnchorPane.rightAnchor="306.20000000000005" />
+                        <Label layoutX="20.0" layoutY="24.0" text="Recherche" />
+                        <Label fx:id="messagelist" layoutX="20.0" layoutY="319.0" />
+                        <ComboBox fx:id="roleFilter" layoutX="300.0" layoutY="20.0" onAction="#filterByRole" prefHeight="26.0" prefWidth="88.0" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </children>
+</AnchorPane>
