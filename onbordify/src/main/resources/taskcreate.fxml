@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: #f9f9f9;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Taskcreate">
+
+    <children>
+        <VBox alignment="CENTER" spacing="10" style="-fx-background-color: white; -fx-padding: 20px;                      -fx-border-radius: 10px; -fx-background-radius: 10px;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+
+            <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #007acc;" text="ajouter tache" />
+
+            <TextField fx:id="txtTitle" promptText="titre" style="-fx-padding: 8px; -fx-border-radius: 5px; -fx-border-color: #007acc;" />
+
+            <TextArea fx:id="txtDescription" promptText="tache description" style="-fx-padding: 8px; -fx-border-radius: 5px; -fx-border-color: #007acc;" wrapText="true" />
+
+            <!-- Week Input -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <TextField fx:id="txtWeeks" promptText="entre le nombre des semaines" style="-fx-padding: 8px; -fx-border-radius: 5px; -fx-border-color: #007acc; width: 80px;" />
+                <Label style="-fx-font-weight: bold;" text="semaine" />
+            </HBox>
+
+            <!-- Search and Sort in the same row -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <TextField fx:id="searchUser" promptText="chercher" style="-fx-padding: 8px; -fx-border-radius: 5px; -fx-border-color: #007acc;" />
+
+                <ComboBox fx:id="cmbSort" promptText="filer" style="-fx-padding: 8px; -fx-border-radius: 5px; -fx-border-color: #007acc;">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Nom" />
+                            <String fx:value="Role" />
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+            </HBox>
+
+            <ListView fx:id="listUsers" prefHeight="150.0" style="-fx-border-color: #007acc;">
+                <VBox.margin>
+                    <Insets bottom="5.0" top="5.0" />
+                </VBox.margin>
+            </ListView>
+
+            <HBox alignment="CENTER" spacing="10">
+                <Button fx:id="btnSubmit" onAction="#handleCreateTask" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-border-radius: 5px;" text="ajouter" />
+                <Button fx:id="btnCancel" onAction="#handleCancel" style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-border-radius: 5px;" text="annuler" />
+            </HBox>
+
+            <Label fx:id="lblStatus" style="-fx-text-fill: red; -fx-font-weight: bold;" text="" />
+        </VBox>
+    </children>
+</AnchorPane>

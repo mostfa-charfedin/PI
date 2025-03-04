@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to bottom, #E3F2FD, #bbbcfb);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Projectview">
+
+    <children>
+        <!-- Top Bar with Small Logo -->
+        <HBox prefHeight="50" style="-fx-background-color: #1e3a8a; -fx-alignment: CENTER_LEFT; -fx-padding: 5px;" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+            <children>
+                <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="file:/C:/Users/Acer/Desktop/pi dev/PI/onbordify/src/main/resources/assests/Screenshot 2025-02-20 092600.png" />
+                    </image>
+                </ImageView>
+            </children>
+        </HBox>
+
+        <!-- Sidebar -->
+        <VBox prefHeight="350.0" prefWidth="120.0" style="-fx-background-color: #1e3a8a; -fx-alignment: CENTER;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="50.0">
+            <VBox style="-fx-background-color: #0f2540; -fx-padding: 10px; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-margin: 5px;">
+                <Label alignment="CENTER" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;" text="Projet" />
+            </VBox>
+        </VBox>
+
+        <!-- Main Content Box -->
+        <VBox spacing="12" style="-fx-background-color: white; -fx-padding: 30; -fx-border-radius: 15; -fx-background-radius: 15; -fx-border-color: rgba(0,0,0,0.1); -fx-border-width: 2px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="140" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0">
+
+            <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #34495E;" text="📋 les projets" />
+
+            <!-- ListView to display projects -->
+            <ListView fx:id="projectListView" maxWidth="600" style="-fx-border-radius: 8px; -fx-background-radius: 8px; -fx-padding: 8px;" VBox.vgrow="ALWAYS" />
+
+            <!-- Button Container -->
+            <HBox spacing="15">
+                <Button fx:id="btnCreateProject" onAction="#handleCreateProject" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px;" text="➕ Ajouter" />
+                <Button fx:id="btnEditProject" onAction="#handleEditProject" style="-fx-background-color: #F39C12; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px;" text="✏️ Modifier" />
+                <Button fx:id="btnDeleteProject" onAction="#handleDeleteProject" style="-fx-background-color: #e53935; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px;" text="❌ Supprimer" />
+            </HBox>
+
+            <!-- Status Label -->
+            <Label fx:id="lblStatus" style="-fx-text-fill: red; -fx-font-weight: bold;" text="" />
+        </VBox>
+    </children>
+</AnchorPane>
