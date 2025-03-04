@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UpdateReclamationStatusController">
+    <!-- Title -->
+    <Label text="Update Reclamation Status" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1850F8; -fx-effect: dropshadow(gaussian, #3e5bb2, 10, 0.5, 2, 2); -fx-padding: 10;"/>
+
+    <!-- Reclamation ID Display -->
+    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: #d7dae3; -fx-border-radius: 10px; -fx-padding: 12;">
+        <Label text="Reclamation ID:" style="-fx-font-size: 16px; -fx-text-fill: #1850F8; -fx-font-weight: bold;"/>
+        <TextField fx:id="reclamationIdField" editable="false" style="-fx-background-color: white; -fx-border-color: #3e5bb2; -fx-border-radius: 8px; -fx-font-size: 14px;"/>
+    </HBox>
+
+    <!-- Status Selector -->
+    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: #d7dae3; -fx-border-radius: 10px; -fx-padding: 12;">
+        <Label text="New Status:" style="-fx-font-size: 16px; -fx-text-fill: #1850F8; -fx-font-weight: bold;"/>
+        <ComboBox fx:id="statusComboBox" promptText="Select new status" style="-fx-background-color: white; -fx-border-color: #3e5bb2; -fx-border-radius: 8px; -fx-font-size: 14px;"/>
+    </HBox>
+
+    <!-- Save Button -->
+    <Button fx:id="saveButton" text="Save" style="-fx-background-color: #3e5bb2; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-padding: 10;" onAction="#saveStatus"/>
+
+    <!-- Cancel Button -->
+    <Button fx:id="cancelButton" text="Cancel" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-padding: 10;" onAction="#cancelUpdate"/>
+</VBox>

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+<<<<<<< HEAD
     <data-source source="LOCAL" name="onboardify" uuid="bcf0f2a9-9b28-47bf-a6f2-fefceac40f8c">
+=======
+    <data-source source="LOCAL" name="onboardify" uuid="2a300ff4-5abc-42e3-9af4-ad86cb34ddc7">
+>>>>>>> origin/dev_complaints_posts
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
@@ -9,6 +13,10 @@
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.host.port" />
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
+<<<<<<< HEAD
+=======
+        <property name="com.intellij.clouds.kubernetes.db.resource.type" value="Deployment" />
+>>>>>>> origin/dev_complaints_posts
         <property name="com.intellij.clouds.kubernetes.db.container.port" />
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
