@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import utils.MyDb;
 import utils.UserSession;
 
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.*;
 public class UserService implements CrudInterface<User> {
     Connection con;
     EmailService emailService = new EmailService();
+    UserSession userSession = new UserSession();
     String nonHashedPassword;
 
     public UserService() {
@@ -54,7 +56,8 @@ public class UserService implements CrudInterface<User> {
                 user.setRole(Role.valueOf(rs.getObject("role").toString()));
             }
 
-            UserSession.createSession(user.getId(), user.getRole());
+            userSession.createSession(user.getId(), user.getRole());
+            userSession.toString();
             System.out.println("User logged in with ID: " + UserSession.getInstance().getUserId());
             return BCrypt.checkpw(password, user.getPassword());
         } catch (SQLException e) {
@@ -65,7 +68,7 @@ public class UserService implements CrudInterface<User> {
 
     @Override
     public void create(User obj) throws SQLException {
-        String sql = "INSERT INTO user (nom, prenom, email, cin, dateNaissance, role, password) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO user (nom, prenom, email, cin, dateNaissance, role, password, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, obj.getNom());
             stmt.setString(2, obj.getPrenom());
@@ -79,10 +82,15 @@ public class UserService implements CrudInterface<User> {
             stmt.setString(6, obj.getRole().toString());
             String password = generateRandomPassword(10).toString();
             stmt.setString(7, password);
+
+            // Définir l'image par défaut ici
+            String defaultImageUrl = "/assets/logo.png"; // Remplace par l'URL de ton image par défaut
+            stmt.setString(8, defaultImageUrl);
+
             stmt.executeUpdate();
-            String emailBody = "Hello " + obj.getNom() + "." + " " + " </br> " + " " + " Account created succeffuly."
+            String emailBody = "Hello " + obj.getNom() + "." + " " + " </br> " + " " + " Account created successfully."
                     + " " + " </br> " + " " + "Email : " + obj.getEmail() + " " + " </br> " + " " +
-                    " " + " </br> " + " " + "Paswword : " + nonHashedPassword + " " + " </br> " + " ";
+                    " " + " </br> " + " " + "Password : " + nonHashedPassword + " " + " </br> " + " ";
             String subject = "Welcome email";
             emailService.sendEmail(obj.getEmail(), emailBody, subject);
         } catch (SQLException e) {
@@ -92,33 +100,37 @@ public class UserService implements CrudInterface<User> {
     }
 
 
+
     @Override
     public void update(User obj) throws SQLException {
-        String sql = "UPDATE user SET nom = ?, prenom = ?, email = ?, cin = ?, dateNaissance = ?, role = ? WHERE id = ?";
-        System.out.println(obj);
-
+        String sql = "UPDATE user SET nom = ?, prenom = ?, email = ?, cin = ?, dateNaissance = ?, role = ?, image_url = ? WHERE id = ?";
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, obj.getNom());
             stmt.setString(2, obj.getPrenom());
             stmt.setString(3, obj.getEmail());
             stmt.setInt(4, obj.getCin());
 
-            // Convertir LocalDate en java.sql.Date pour la base de données
             if (obj.getDateNaissance() != null) {
                 stmt.setDate(5, java.sql.Date.valueOf(obj.getDateNaissance().toString()));
             } else {
                 stmt.setNull(5, java.sql.Types.DATE);
             }
             stmt.setString(6, obj.getRole().toString());
-            stmt.setInt(7, obj.getId());
+
+            // Si l'image est fournie, utiliser l'URL de l'image sinon une image par défaut
+            String imageUrl = obj.getImage_url() != null ? obj.getImage_url() : "/assets/logo.png";
+            stmt.setString(7, imageUrl);
+
+            stmt.setInt(8, obj.getId());
 
             int rowsUpdated = stmt.executeUpdate();
             System.out.println(rowsUpdated + " user updated.");
         } catch (SQLException e) {
             System.err.println("Error updating user: " + e.getMessage());
-            throw e; // Propager l'exception pour la gestion des erreurs
+            throw e; // Propager l'erreur pour gestion ultérieure
         }
     }
+
 
     public Boolean updatePassword(String code, String newPassword) throws SQLException {
 
@@ -207,6 +219,7 @@ public class UserService implements CrudInterface<User> {
                 user.setCin(rs.getInt("cin"));
                 user.setDateNaissance(rs.getDate("dateNaissance"));
                 user.setRole(Role.valueOf(rs.getObject("role").toString()));
+                user.setImage_url(rs.getString("image_url"));
             }
             return user;
         } catch (SQLException e) {

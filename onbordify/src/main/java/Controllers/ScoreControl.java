@@ -11,10 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -36,6 +33,8 @@ public class ScoreControl {
 
     @FXML
     private TextField rechercheFild;
+    @FXML
+    private ComboBox<String> quizFilter;
 
     private Score selectedUser ;
     private ObservableList<String> userList;
@@ -43,7 +42,14 @@ public class ScoreControl {
 
     @FXML
     public void initialize() {
+        // Charger les noms de quiz dans le ComboBox
+        loadQuizNames();
+
+        // Charger la liste des scores
         loadScors();
+
+        // Appliquer le filtre au changement de sélection
+        quizFilter.setOnAction(event -> filterByQuiz());
 
         rechercheFild.textProperty().addListener((observable, oldValue, newValue) -> {
             chercherUser();
@@ -63,40 +69,69 @@ public class ScoreControl {
     }
 
 
+    private void loadQuizNames() {
+        try {
+            List<String> quizNames = quizService.getAll().stream()
+                    .map(quiz -> quiz.getNom())
+                    .collect(Collectors.toList());
+
+            ObservableList<String> quizList = FXCollections.observableArrayList(quizNames);
+            quizList.add(0, "Tous"); // Option pour afficher tous les scores
+            quizFilter.setItems(quizList);
+            quizFilter.setValue("Tous"); // Valeur par défaut
+        } catch (Exception e) {
+            messagelist.setText("Erreur de chargement des quiz : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     public void loadScors() {
         try {
-            List<Score> scors = scoreService.getAll();
+            List<Score> scores = scoreService.getAll();
 
-            // Vérifier si userList est null avant de l'utiliser
             if (userList == null) {
                 userList = FXCollections.observableArrayList();
             }
 
-            // Mettre à jour userList
-            userList.setAll(scors.stream()
+            // Mettre à jour scoreList avec les scores formatés
+            userList.setAll(scores.stream()
                     .map(score -> {
                         try {
-                            return " | Nom user:  " +userService.findUserById(String.valueOf(score.getIdUser())).getNom() +" | Id Quiz : " +
-                                    quizService.getById(score.getIdQuiz()).getNom()  +" | Score : " + score.getScore() +" %" ;
+                            return " | Nom user: " + userService.findUserById(String.valueOf(score.getIdUser())).getNom() +
+                                    " | Quiz : " + quizService.getById(score.getIdQuiz()).getNom() +
+                                    " | Score : " + score.getScore() + " %";
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
                         }
                     }).collect(Collectors.toList()));
 
-            // Vérifier si filteredList est null avant de l'utiliser
             if (filteredList == null) {
                 filteredList = new FilteredList<>(userList, p -> true);
-                listview.setItems(filteredList); // Lier la liste filtrée à la ListView une seule fois
+                listview.setItems(filteredList);
+            } else {
+                filteredList.setPredicate(p -> true); // Réinitialiser le filtre
             }
 
-            // Appliquer les filtres déjà présents
-            chercherUser();
-
         } catch (Exception e) {
-            messagelist.setText("Error loading users: " + e.getMessage());
+            messagelist.setText("Erreur de chargement des scores : " + e.getMessage());
             e.printStackTrace();
         }
     }
+
+    @FXML
+    public void filterByQuiz() {
+        String selectedQuiz = quizFilter.getValue();
+
+        if (filteredList != null) {
+            filteredList.setPredicate(item -> {
+                if (selectedQuiz == null || selectedQuiz.equals("Tous")) {
+                    return true; // Afficher tous les scores
+                }
+                return item.contains("Quiz : " + selectedQuiz);
+            });
+        }
+    }
+
 
     @FXML
     void chercherUser() {
@@ -130,7 +165,7 @@ public class ScoreControl {
 
     @FXML
     void goToGestion(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GestionUser.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainPage.fxml"));
         Parent root = loader.load();
         messagelist.getScene().setRoot(root);
     }

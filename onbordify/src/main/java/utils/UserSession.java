@@ -8,6 +8,9 @@ public class UserSession {
     private int userId;
     private Role role;
 
+    public UserSession() {
+    }
+
     private UserSession(int userId, Role role) {
         this.userId = userId;
         this.role = role;
@@ -33,6 +36,14 @@ public class UserSession {
 
     public Role getRole() {
         return role;
+    }
+
+    @Override
+    public String toString() {
+        return "UserSession{" +
+                "userId=" + userId +
+                ", role=" + role +
+                '}';
     }
 
     public static void destroySession() {

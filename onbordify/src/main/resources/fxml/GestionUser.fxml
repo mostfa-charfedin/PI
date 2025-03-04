@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="800.0" stylesheets="/css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GestionUser">
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GestionUser">
     <children>
         <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
             <tabs>
@@ -41,6 +41,7 @@
                                         <VBox fx:id="cinErrorBox" /> <!-- Pour afficher les erreurs du CIn -->
                                         <Label text="Date de naissance" />
                                         <DatePicker fx:id="date" prefHeight="33.0" prefWidth="242.0" />
+                                        <VBox fx:id="dateNaissanceErrorBox" />
                                         <Label text="Role" />
                                         <ComboBox fx:id="role" prefHeight="31.0" prefWidth="242.0" />
                                     </children>
@@ -62,16 +63,16 @@
                         <AnchorPane>
                             <children>
                                 <!-- Search Field -->
-                                <TextField fx:id="rechercheFildMod" layoutX="142.4" layoutY="19.0" prefHeight="26.0" prefWidth="382.0" AnchorPane.leftAnchor="142.0" AnchorPane.rightAnchor="276.0" AnchorPane.topAnchor="19.0" />
+                                <TextField fx:id="rechercheFildMod" layoutX="91.0" layoutY="20.0" prefHeight="26.0" prefWidth="79.0" AnchorPane.leftAnchor="91.0" AnchorPane.rightAnchor="631.0" AnchorPane.topAnchor="20.0" />
                                 <!-- ListView -->
                                 <ListView fx:id="listview" prefHeight="241.0" prefWidth="755.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60" />
                                 <!-- Update Button -->
-                                <Button fx:id="updateButton" layoutX="676.0" layoutY="20.0" onAction="#updateUser" prefHeight="26.0" prefWidth="103.0" text="Modifier" AnchorPane.bottomAnchor="324.8" AnchorPane.rightAnchor="20.799999999999955" />
+                                <Button fx:id="updateButton"  onAction="#updateUser" prefHeight="26.0" prefWidth="100.0" text="Modifier" AnchorPane.bottomAnchor="524.8" AnchorPane.rightAnchor="190.39999999999998" />
                                 <!-- Delete Button -->
-                                <Button fx:id="deleteButton" layoutX="556.0" layoutY="20.0" onAction="#deleteUser" prefHeight="26.0" prefWidth="94.0" text="Supprimer" AnchorPane.bottomAnchor="324.8" AnchorPane.rightAnchor="149.60000000000002" />
+                                <Button fx:id="deleteButton"  onAction="#deleteUser" prefHeight="26.0" prefWidth="100.0" text="Supprimer" AnchorPane.bottomAnchor="524.8" AnchorPane.rightAnchor="306.20000000000005" />
                         <Label layoutX="20.0" layoutY="24.0" text="Recherche" />
                         <Label fx:id="messagelist" layoutX="20.0" layoutY="319.0" />
-                        <Button layoutX="668.0" layoutY="323.0" onAction="#goToScoreList" prefHeight="26.0" prefWidth="94.0" text="Score List" />
+                        <ComboBox fx:id="roleFilter" layoutX="300.0" layoutY="20.0" onAction="#filterByRole" prefHeight="26.0" prefWidth="88.0" />
                             </children>
                         </AnchorPane>
                     </content>

@@ -7,12 +7,20 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import utils.UserSession;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Date;
 
 public class Profile {
     @FXML
@@ -39,25 +47,51 @@ public class Profile {
     @FXML
     private Label messageLabel; // Message d'erreur ou de succès
 
+    @FXML
+    private ImageView image;
+
+    @FXML
+    private Label role;
+
     UserService userService = new UserService();
     UserSession session = UserSession.getInstance();
     User user = new User();
 
     @FXML
     public void initialize() {
-
         loadUserData();
+        image.setOnMouseClicked(event -> handleImageClick());
+
+
+
     }
+
 
     private void loadUserData() {
         int userId = session.getUserId();
-        Role role = session.getRole();
+        Role roleSession = session.getRole();
         user = userService.findUserById(String.valueOf(userId));
         nomField.setText(user.getNom());
         prenomField.setText(user.getPrenom());
         emailField.setText(user.getEmail());
+        role.setText(roleSession.toString());
+
+        if (user.getImage_url() != null) {
+
+            String imagePath = user.getImage_url();
+
+            // Load the image using getClass().getResource() for resources in the project
+            URL imageUrl = getClass().getResource(imagePath);
+
+            if (imageUrl != null) {
+                image.setImage(new Image(imageUrl.toString()));
+            } else {
+                System.out.println("Image introuvable à l'emplacement : " + imagePath);
+            }
+        }
+
         if (user.getDateNaissance() != null) {
-            java.util.Date utilDate = new java.util.Date(user.getDateNaissance().getTime());
+            Date utilDate = new Date(user.getDateNaissance().getTime());
             Instant instant = utilDate.toInstant();
             LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
             dateNaissanceField.setValue(localDate);
@@ -67,6 +101,48 @@ public class Profile {
         cinField.setText(String.valueOf(user.getCin()));
 
     }
+private String pathSelectedimage = user.getImage_url();
+
+
+    @FXML
+    void handleImageClick() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choisir une image");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif")
+        );
+
+        File selectedFile = fileChooser.showOpenDialog(image.getScene().getWindow());
+
+        if (selectedFile != null) {
+            try {
+                // Définir le dossier de destination dans votre projet
+                File directory = new File("src/main/resources/uploads/");
+                if (!directory.exists()) {
+                    directory.mkdirs(); // Créer le dossier s'il n'existe pas
+                }
+
+                // Nom de fichier unique pour éviter les conflits
+                String newFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
+                File destinationFile = new File(directory, newFileName);
+
+                // Copier le fichier dans le dossier du projet
+                Files.copy(selectedFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                // Mettre à jour l'affichage de l'image
+                String imagePath = destinationFile.toURI().toString();
+                image.setImage(new Image(imagePath));
+
+                // Enregistrer le chemin relatif dans l'objet utilisateur
+                pathSelectedimage="/uploads/" + newFileName;
+                System.out.println(pathSelectedimage);
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert("Erreur", "Impossible de sauvegarder l'image.");
+            }
+        }
+    }
+
 
     @FXML
     void handleSave() {
@@ -76,6 +152,7 @@ public class Profile {
         LocalDate dateNaissance = dateNaissanceField.getValue();
         String cin = cinField.getText();
 
+
         // Vérifier si les champs sont vides
         if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || dateNaissance == null || cin.isEmpty()) {
             messageLabel.setText("Veuillez remplir tous les champs obligatoires.");
@@ -84,11 +161,12 @@ public class Profile {
         }
 
 
-        boolean updateSuccessful = updateProfile(nom, prenom, email, dateNaissance, cin);
+        boolean updateSuccessful = updateProfile(nom, prenom, email, dateNaissance, cin, pathSelectedimage);
 
         if (updateSuccessful) {
             messageLabel.setText("Profil mis à jour avec succès.");
-            messageLabel.setStyle("-fx-text-fill: #4CAF50; -fx-font-size: 12px;"); // Vert pour les succès
+            messageLabel.setStyle("-fx-text-fill: #4CAF50; -fx-font-size: 12px;");// Vert pour les succès
+            loadUserData();
         } else {
             messageLabel.setText("Erreur lors de la mise à jour du profil.");
             messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;"); // Rouge pour les erreurs
@@ -97,32 +175,49 @@ public class Profile {
 
     @FXML
     void handleBack() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GestionUser.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainPage.fxml"));
         Parent root = loader.load();
         messageLabel.getScene().setRoot(root);
+        loadUserData();
     }
 
 
-    private boolean updateProfile(String nom, String prenom, String email, LocalDate dateNaissance, String cin) {
+    private boolean updateProfile(String nom, String prenom, String email, LocalDate dateNaissance, String cin, String imageUrl) {
         try {
-            // Créer un nouvel utilisateur avec les données du formulaire
-            User Newuser = new User();
             user.setNom(nom);
             user.setPrenom(prenom);
             user.setEmail(email);
             user.setDateNaissance(java.sql.Date.valueOf(dateNaissance));
             user.setCin(Integer.parseInt(cin));
             user.setRole(session.getRole());
-            this.userService.update(Newuser);
+            user.setImage_url(imageUrl);
+            System.out.println(imageUrl);
+
+
+            // Vérification si l'image a été changée
+            if (user.getImage_url() != null && !user.getImage_url().isEmpty()) {
+                userService.update(user);
+            } else {
+                userService.update(user);
+            }
+
             return true;
         } catch (Exception e) {
-            System.out.println(e.fillInStackTrace());
+            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
+            alert.setTitle("Erreur");
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
         return false;
     }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 }
 

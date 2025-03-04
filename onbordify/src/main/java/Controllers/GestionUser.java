@@ -14,6 +14,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -53,6 +55,9 @@ public class GestionUser {
     private ComboBox<Role> role;
 
     @FXML
+    private ComboBox<Role> roleFilter;
+
+    @FXML
     private VBox prenomErrorBox;
     @FXML
     private VBox nomErrorBox;
@@ -60,6 +65,8 @@ public class GestionUser {
     private VBox emailErrorBox;
     @FXML
     private VBox cinErrorBox;
+    @FXML
+    private VBox dateNaissanceErrorBox;
 
 
 
@@ -72,7 +79,13 @@ private FilteredList<String> filteredList;
     @FXML
     public void initialize() {
         role.setItems(FXCollections.observableArrayList(Role.values()));
-        loadUsers();
+        ObservableList<Role> roles = FXCollections.observableArrayList(Role.values());
+        roleFilter.setItems(roles);
+        roleFilter.getItems().add(0, null);
+        roleFilter.setValue(null);
+        loadUsers(null);
+
+        roleFilter.setOnAction(event -> filterByRole());
         // Listener pour la recherche en temps réel
         rechercheFildMod.textProperty().addListener((observable, oldValue, newValue) -> {
             chercherUser();
@@ -94,6 +107,9 @@ private FilteredList<String> filteredList;
             if (!newValue.matches("\\d*")) {
                 cin.setText(oldValue);
                 showError(cinErrorBox, "The Cin should contain only numbers.");
+            } else if (newValue.length() > 8) {
+                cin.setText(oldValue);
+                showError(cinErrorBox, "The Cin should not exceed 8 digits.");
             } else {
                 clearError(cinErrorBox);
             }
@@ -127,6 +143,22 @@ private FilteredList<String> filteredList;
                 clearError(emailErrorBox);
             }
         });
+
+
+        // Contrôle de saisie pour la Date de Naissance
+        date.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                LocalDate today = LocalDate.now();
+                int age = Period.between(newValue, today).getYears();
+
+                if (age < 18) {
+                    date.setValue(oldValue); // Rétablir l'ancienne valeur
+                    showError(dateNaissanceErrorBox, "The employee must be at least 18 years old.");
+                } else {
+                    clearError(dateNaissanceErrorBox);
+                }
+            }
+        });
     }
 
     // Méthode pour valider le format de l'email
@@ -149,34 +181,40 @@ private FilteredList<String> filteredList;
         errorBox.getChildren().clear();
     }
 
-    public void loadUsers() {
+    public void loadUsers(Role roleFilter) {
         try {
             List<User> users = userservice.getAll();
 
-            // Vérifier si userList est null avant de l'utiliser
             if (userList == null) {
                 userList = FXCollections.observableArrayList();
             }
 
-            // Mettre à jour userList
-            userList.setAll(users.stream()
+            // Appliquer un filtre par rôle si nécessaire
+            List<User> filteredUsers = users.stream()
+                    .filter(user -> roleFilter == null || user.getRole() == roleFilter)
+                    .collect(Collectors.toList());
+
+            userList.setAll(filteredUsers.stream()
                     .map(user -> user.getNom() + " | " + user.getPrenom() + " | " + user.getCin())
                     .collect(Collectors.toList()));
 
-            // Vérifier si filteredList est null avant de l'utiliser
             if (filteredList == null) {
                 filteredList = new FilteredList<>(userList, p -> true);
-                listview.setItems(filteredList); // Lier la liste filtrée à la ListView une seule fois
+                listview.setItems(filteredList);
             }
-
-            // Appliquer les filtres déjà présents
-            chercherUser();
 
         } catch (Exception e) {
             messagelist.setText("Error loading users: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
+    @FXML
+    public void filterByRole() {
+        Role selectedRole = roleFilter.getValue();
+        loadUsers(selectedRole);
+    }
+
 
 
 
@@ -251,7 +289,7 @@ private FilteredList<String> filteredList;
         }
         try {
             userservice.delete(selectedUser.getId());
-            loadUsers();
+            loadUsers(roleFilter.getValue());
             messagelist.setText("User deleted.");
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -289,6 +327,8 @@ private FilteredList<String> filteredList;
         Parent root = loader.load();
         messagelist.getScene().setRoot(root);
     }
+
+
 
     void reset() {
         this.nom.clear();

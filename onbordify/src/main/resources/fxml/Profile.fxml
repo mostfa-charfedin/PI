@@ -4,47 +4,49 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.geometry.Pos?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@/css/Style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Profile">
-    <!-- VBox pour centrer les éléments -->
-    <VBox alignment="CENTER" spacing="20" AnchorPane.topAnchor="50" AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50">
+<AnchorPane stylesheets="@/css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Profile">
+    <!-- Ajout d'un ScrollPane pour rendre la page scrollable -->
+    <ScrollPane fitToWidth="true" fitToHeight="true" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <content>
+            <VBox alignment="CENTER" spacing="20" prefWidth="400" prefHeight="500" style="-fx-padding: 20;">
+                <!-- Titre et rôle -->
+                <HBox alignment="CENTER" spacing="20">
+                    <Label styleClass="welcome-label" text="Mon Profile">
 
-        <!-- Titre -->
-        <Label text="Profil Utilisateur" styleClass="welcome-label">
-            <font>
-                <Font size="24.0" />
-            </font>
-        </Label>
+                    </Label>
+                    <Label fx:id="role" text="Label" />
+                </HBox>
 
-        <!-- Champ pour le nom -->
-        <TextField fx:id="nomField" promptText="Nom" disable="true" styleClass="text-field" />
+                <!-- Image de profil (Cliquable pour changer l'image) -->
+                <ImageView fx:id="image" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true"
+                           style="-fx-cursor: hand; -fx-border-color: gray; -fx-border-width: 2px; -fx-padding: 5px;" />
 
-        <!-- Champ pour le prénom -->
-        <TextField fx:id="prenomField" promptText="Prénom" disable="true" styleClass="text-field" />
+                <!-- Champs pour les informations utilisateur -->
+                <TextField fx:id="nomField" disable="true" promptText="Nom" styleClass="text-field" />
+                <TextField fx:id="prenomField" disable="true" promptText="Prénom" styleClass="text-field" />
+                <TextField fx:id="emailField" disable="true" promptText="Email" styleClass="text-field" />
 
-        <!-- Champ pour l'email -->
-        <TextField fx:id="emailField" promptText="Email" disable="true" styleClass="text-field" />
-        <HBox alignment="CENTER" spacing="20">
-        <!-- Champ pour la date de naissance -->
-        <DatePicker fx:id="dateNaissanceField" disable="true" promptText="Date de naissance" styleClass="date-picker" />
+                <HBox alignment="CENTER" spacing="20">
+                    <DatePicker fx:id="dateNaissanceField" disable="true" promptText="Date de naissance" styleClass="date-picker" />
+                    <TextField fx:id="cinField" disable="true" promptText="CIN" styleClass="text-field" />
+                </HBox>
 
-        <!-- Champ pour le CIN -->
-        <TextField fx:id="cinField" promptText="CIN" disable="true" styleClass="text-field" />
-        </HBox>
-        <!-- HBox pour les boutons -->
-        <HBox alignment="CENTER" spacing="20">
-            <!-- Bouton Enregistrer -->
-            <Button fx:id="saveButton" disable="true" onAction="#handleSave" styleClass="button" text="Enregistrer" />
+                <!-- Boutons -->
+                <HBox alignment="CENTER" spacing="20">
+                    <Button fx:id="saveButton"  onAction="#handleSave" styleClass="button" text="Enregistrer" />
+                    <Button fx:id="backButton" onAction="#handleBack" styleClass="button" text="Retour" />
+                </HBox>
 
-            <!-- Bouton Retour -->
-            <Button fx:id="backButton" onAction="#handleBack" styleClass="button" text="Vers gestion" />
-        </HBox>
-    </VBox>
-
-    <!-- Message d'erreur ou de succès -->
-    <Label fx:id="messageLabel" styleClass="error-message" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" />
+                <!-- Message d'erreur ou de succès -->
+                <Label fx:id="messageLabel" styleClass="error-message" />
+            </VBox>
+        </content>
+    </ScrollPane>
 </AnchorPane>
