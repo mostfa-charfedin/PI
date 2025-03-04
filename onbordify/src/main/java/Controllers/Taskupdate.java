@@ -14,12 +14,14 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Taskupdate implements Initializable {
 
     @FXML
-    private TextField txtTitle, searchUser;
+    private TextField txtTitle, txtDate, searchUser;
 
     @FXML
     private TextArea txtDescription;
@@ -75,21 +77,19 @@ public class Taskupdate implements Initializable {
             return;
         }
         this.taskToUpdate = task;
+        this.tacheviewController = tacheview;
 
         txtTitle.setText(task.getTitre());
         txtDescription.setText(task.getDescription());
+        txtDate.setText(String.valueOf(task.getDate())); // Ensure date is set
 
         // Select the correct user in the ListView
         String selectedUser = task.getNom() + " " + task.getPrenom();
         listUsers.getSelectionModel().select(selectedUser);
     }
 
-    public void setTacheviewController(Tacheview controller) {
-        this.tacheviewController = controller;
-    }
-
     @FXML
-    private void handleSaveTask() {
+    private void handleUpdateTask() {
         if (taskToUpdate == null) {
             lblStatus.setText("No task selected for update.");
             return;
@@ -97,31 +97,43 @@ public class Taskupdate implements Initializable {
 
         String newTitle = txtTitle.getText().trim();
         String newDescription = txtDescription.getText().trim();
+        String dateText = txtDate.getText().trim();
         String selectedUser = listUsers.getSelectionModel().getSelectedItem();
 
-        if (newTitle.isEmpty() || newDescription.isEmpty() || selectedUser == null || selectedUser.trim().isEmpty()) {
+        if (newTitle.isEmpty() || newDescription.isEmpty() || dateText.isEmpty() || selectedUser == null || selectedUser.trim().isEmpty()) {
             lblStatus.setText("Please fill all fields and select a user.");
             return;
         }
 
-        // Extracting nom and prenom (ignores role)
-        String userPattern = "^(.+?)\\s+(.+?)\\s*\\(.*\\)$"; // Matches "John Doe (Admin)"
-        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(userPattern);
-        java.util.regex.Matcher matcher = pattern.matcher(selectedUser.trim());
+        // Validate that "date" is a valid integer
+        int newDate;
+        try {
+            newDate = Integer.parseInt(dateText);
+            if (newDate < 0) {
+                lblStatus.setText("Date must be a positive number.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            lblStatus.setText("Invalid date. Please enter a valid number.");
+            return;
+        }
+
+        // Extract nom and prenom
+        Pattern pattern = Pattern.compile("^(.+?)\\s+(.+?)\\s*\\(.*\\)$");
+        Matcher matcher = pattern.matcher(selectedUser.trim());
 
         String nom, prenom;
         if (matcher.matches()) {
-            nom = matcher.group(1).trim(); // Get 'nom' part (first name)
-            prenom = matcher.group(2).trim(); // Get 'prenom' part (last name)
+            nom = matcher.group(1).trim();
+            prenom = matcher.group(2).trim();
         } else {
-            // Fallback: user string without role (e.g., "John Doe")
-            String[] nameParts = selectedUser.split("\\s+", 2); // Splits on the first space
+            String[] nameParts = selectedUser.split("\\s+", 2);
             if (nameParts.length < 2) {
                 lblStatus.setText("Invalid user format. Please select a valid user.");
                 return;
             }
-            nom = nameParts[0].trim(); // First part is 'nom'
-            prenom = nameParts[1].trim(); // Second part is 'prenom'
+            nom = nameParts[0].trim();
+            prenom = nameParts[1].trim();
         }
 
         try {
@@ -129,16 +141,15 @@ public class Taskupdate implements Initializable {
             taskToUpdate.setDescription(newDescription);
             taskToUpdate.setNom(nom);
             taskToUpdate.setPrenom(prenom);
+            taskToUpdate.setDate(newDate); // Set the date as an integer
 
             tacheService.update(taskToUpdate);
             lblStatus.setText("Task updated successfully!");
 
-            // Refresh the task list in the Tacheview
             if (tacheviewController != null) {
                 tacheviewController.refreshTasks();
             }
 
-            // Close the window after successful update
             Stage stage = (Stage) btnSubmit.getScene().getWindow();
             stage.close();
         } catch (Exception e) {

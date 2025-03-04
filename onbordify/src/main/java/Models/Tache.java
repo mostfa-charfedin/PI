@@ -9,6 +9,8 @@ public class Tache {
     private String nom;
     private String prenom;
     private String TitreProjet;
+    private int date ;
+    private String status;
     public Tache() {
     }
 
@@ -23,12 +25,21 @@ public class Tache {
         this.titre = titre;
     }
 
-    public Tache(String titre, String description, int idProjet, String nom, String prenom) {
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Tache(String titre, String description, int idProjet, String nom, String prenom, int date) {
         this.titre = titre;
         this.Description = description;
         this.idProjet = idProjet;
         this.nom = nom;
         this.prenom = prenom;
+        this.date = date;
     }
 
     public Tache(String titre, String nom, String prenom, String description) {
@@ -118,6 +129,14 @@ public class Tache {
 
     public void setPrenom(String prenom) {
         this.prenom = prenom;
+    }
+
+    public int getDate() {
+        return date;
+    }
+
+    public void setDate(int date) {
+        this.date = date;
     }
 
     @Override

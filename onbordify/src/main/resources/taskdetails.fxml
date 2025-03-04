@@ -2,23 +2,23 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="500.0"
+<AnchorPane prefHeight="400.0" prefWidth="500.0" style="-fx-background-color: #f9f9f9;"
             xmlns="http://javafx.com/javafx/21.0.2"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="Controllers.TaskDetails">
 
-    <VBox alignment="CENTER" spacing="10" style="-fx-padding: 20px;">
-        <Label text="Task Details" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+    <VBox alignment="CENTER" spacing="12" style="-fx-padding: 20px; -fx-background-color: white; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5);">
+        <Label text="Task Details" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #007acc;"/>
 
-        <Label text="Title:" />
-        <TextField fx:id="txtTitle" editable="false" />
+        <Label text="Title:" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="txtTitle" editable="false" style="-fx-background-color: #eef7ff; -fx-border-color: #007acc; -fx-border-radius: 5px;"/>
 
-        <Label text="Description:" />
-        <TextArea fx:id="txtDescription" editable="false" wrapText="true" />
+        <Label text="Description:" style="-fx-font-weight: bold;"/>
+        <TextArea fx:id="txtDescription" editable="false" wrapText="true" style="-fx-background-color: #eef7ff; -fx-border-color: #007acc; -fx-border-radius: 5px;"/>
 
-        <Label text="Assigned User:" />
-        <TextField fx:id="txtUser" editable="false" />
+        <Label text="Assigned User:" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="txtUser" editable="false" style="-fx-background-color: #eef7ff; -fx-border-color: #007acc; -fx-border-radius: 5px;"/>
 
-        <Button text="Close" onAction="#handleClose"/>
+        <Button text="Close" onAction="#handleClose" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-border-radius: 5px;"/>
     </VBox>
 </AnchorPane>

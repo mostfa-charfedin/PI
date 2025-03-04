@@ -17,18 +17,18 @@ public class TacheService implements CrudInterface<Tache> {
     /**
      * Create a new task by selecting the user (nom, prenom) and project (titre).
      */
-    @Override
 
+
+    @Override
     public void create(Tache obj) throws Exception {
         String getUserIdSQL = "SELECT id FROM user WHERE LOWER(nom) = LOWER(?) AND LOWER(prenom) = LOWER(?)";
-        String insertSQL = "INSERT INTO tache (titre, description, idProjet, idUser) VALUES (?, ?, ?, ?)";
+        String insertSQL = "INSERT INTO tache (titre, description, idProjet, idUser, date) VALUES (?, ?, ?, ?, ?)";
 
         try (
                 PreparedStatement getUserStmt = con.prepareStatement(getUserIdSQL);
                 PreparedStatement insertStmt = con.prepareStatement(insertSQL)
         ) {
             // Step 1: Get User ID
-            System.out.println("Fetching user with nom: " + obj.getNom() + ", prenom: " + obj.getPrenom());
             getUserStmt.setString(1, obj.getNom());
             getUserStmt.setString(2, obj.getPrenom());
             ResultSet userRs = getUserStmt.executeQuery();
@@ -49,6 +49,7 @@ public class TacheService implements CrudInterface<Tache> {
             insertStmt.setString(2, obj.getDescription());
             insertStmt.setInt(3, idProjet);
             insertStmt.setInt(4, idUser);
+            insertStmt.setInt(5, obj.getDate()); // Ensure date is an integer
 
             int rowsInserted = insertStmt.executeUpdate();
             if (rowsInserted == 0) {
@@ -62,7 +63,6 @@ public class TacheService implements CrudInterface<Tache> {
     }
 
 
-
     /**
      * Update an existing task.
      */
@@ -70,7 +70,7 @@ public class TacheService implements CrudInterface<Tache> {
     public void update(Tache obj) throws Exception {
         String getUserIdSQL = "SELECT id FROM user WHERE nom = ? AND prenom = ?";
         String getProjectIdSQL = "SELECT idProjet FROM projet WHERE titre = ?";
-        String updateSQL = "UPDATE tache SET titre = ?, description = ?, idProjet = ?, idUser = ? WHERE idTache = ?";
+        String updateSQL = "UPDATE tache SET titre = ?, description = ?, idProjet = ?, idUser = ?, date = ? WHERE idTache = ?";
 
         try (
                 PreparedStatement getUserStmt = con.prepareStatement(getUserIdSQL);
@@ -101,7 +101,9 @@ public class TacheService implements CrudInterface<Tache> {
             updateStmt.setString(2, obj.getDescription());
             updateStmt.setInt(3, idProjet);
             updateStmt.setInt(4, idUser);
-            updateStmt.setInt(5, obj.getIdTache());
+            updateStmt.setInt(5, obj.getDate());
+            updateStmt.setInt(6, obj.getIdTache());
+
 
             int rowsUpdated = updateStmt.executeUpdate();
             if (rowsUpdated == 0) {
@@ -242,7 +244,7 @@ public class TacheService implements CrudInterface<Tache> {
     }
 
     public List<Tache> getAllByProject(int idProjet) throws Exception {
-        String sql = "SELECT t.idTache, t.titre, t.description, t.idUser, " +
+        String sql = "SELECT t.idTache, t.titre, t.description, t.idUser,t.date,t.status, " +
                 "p.titre AS titreProjet, u.nom AS nom, u.prenom AS prenom " +
                 "FROM tache t " +
                 "JOIN projet p ON t.idProjet = p.idProjet " +
@@ -262,7 +264,8 @@ public class TacheService implements CrudInterface<Tache> {
                     task.setTitreProjet(rs.getString("titreProjet")); // Only storing the project title
                     task.setNom(rs.getString("nom"));
                     task.setPrenom(rs.getString("prenom"));
-
+                    task.setDate(rs.getInt("date"));
+                    task.setStatus(rs.getString("status"));
                     tasks.add(task);
                 }
             }

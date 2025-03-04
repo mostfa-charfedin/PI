@@ -1,36 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-   <?import javafx.geometry.Insets?>
-   <?import javafx.scene.control.*?>
-   <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-   <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ffe6f0;" xmlns="http://javafx.com/javafx/21.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Projectcreate">
-      <children>
-         <VBox alignment="CENTER" spacing="12" AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0"
-               style="-fx-background-color: white; -fx-padding: 20px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5);">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #E3F2FD, #bbbcfb);" xmlns="http://javafx.com/javafx/21.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Projectcreate">
+   <children>
+      <VBox alignment="CENTER" spacing="12" AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0"
+            style="-fx-background-color: white; -fx-padding: 30px; -fx-border-radius: 15px; -fx-background-radius: 15px; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5);">
 
-            <Label text="Create New Project" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #d63384;" />
+         <Label text="Créer un Nouveau Projet" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #34495E;" />
 
-            <TextField fx:id="txtTitle" promptText="Project Title" maxWidth="600" HBox.hgrow="ALWAYS"
-                       style="-fx-background-color: #ffffff; -fx-border-color: #d63384; -fx-border-radius: 8px; -fx-padding: 8px;" />
+         <TextField fx:id="txtTitle" promptText="Titre du projet" maxWidth="600" HBox.hgrow="ALWAYS"
+                    style="-fx-font-size: 14px; -fx-background-color: #ffffff; -fx-border-color: #7F8C8D; -fx-border-radius: 8px; -fx-padding: 8px;" />
 
-            <TextArea fx:id="txtDescription" promptText="Project Description" maxWidth="600" VBox.vgrow="ALWAYS"
-                      style="-fx-background-color: #ffffff; -fx-border-color: #d63384; -fx-border-radius: 8px; -fx-padding: 8px;" />
+         <TextArea fx:id="txtDescription" promptText="Description du projet" maxWidth="600" VBox.vgrow="ALWAYS"
+                   style="-fx-font-size: 14px; -fx-background-color: #ffffff; -fx-border-color: #7F8C8D; -fx-border-radius: 8px; -fx-padding: 8px;" />
 
-            <!-- Styled ComboBox -->
-            <ComboBox fx:id="cbProjectManager" promptText="Select Project Manager" maxWidth="600"
-                      style="-fx-background-color: #ffffff; -fx-border-color: #d63384; -fx-border-radius: 8px; -fx-padding: 8px;" />
+         <ComboBox fx:id="cbProjectManager" promptText="Sélectionner un Responsable" maxWidth="600"
+                   style="-fx-font-size: 14px; -fx-background-color: #ffffff; -fx-border-color: #7F8C8D; -fx-border-radius: 8px; -fx-padding: 8px;" />
 
-            <!-- Button Container -->
-            <HBox spacing="10">
-               <Button text="Créer un projet" fx:id="btnCreate" onAction="#handleCreateProject" HBox.hgrow="ALWAYS"
-                       style="-fx-background-color: #d63384; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-border-radius: 8px;" />
-               <Button text="Annuler" fx:id="btnViewProjects" onAction="#handleViewProjects" HBox.hgrow="ALWAYS"
-                       style="-fx-background-color: #ff69b4; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-border-radius: 8px;" />
-            </HBox>
+         <HBox spacing="15">
+            <Button text="➕ Créer un projet" fx:id="btnCreate" onAction="#handleCreateProject" HBox.hgrow="ALWAYS"
+                    style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px;" />
+            <Button text="❌ Annuler" fx:id="btnViewProjects" onAction="#handleViewProjects" HBox.hgrow="ALWAYS"
+                    style="-fx-background-color: #F39C12; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px;" />
+         </HBox>
 
-            <!-- Status Label -->
-            <Label fx:id="lblStatus" text="" style="-fx-text-fill: red; -fx-font-weight: bold;" />
-         </VBox>
-      </children>
-   </AnchorPane>
+         <Label fx:id="lblStatus" text="" style="-fx-text-fill: red; -fx-font-weight: bold;" />
+      </VBox>
+   </children>
+</AnchorPane>

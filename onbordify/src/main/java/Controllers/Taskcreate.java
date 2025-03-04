@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class Taskcreate {
 
     @FXML
-    private TextField txtTitle, searchUser;
+    private TextField txtTitle, searchUser, txtWeeks;
 
     @FXML
     private TextArea txtDescription;
@@ -103,9 +103,18 @@ public class Taskcreate {
             String title = txtTitle.getText().trim();
             String description = txtDescription.getText().trim();
             String selectedUser = listUsers.getSelectionModel().getSelectedItem();
+            String weeksStr = txtWeeks.getText().trim();
 
-            if (title.isEmpty() || description.isEmpty() || selectedUser == null || selectedUser.trim().isEmpty()) {
+            if (title.isEmpty() || description.isEmpty() || selectedUser == null || selectedUser.trim().isEmpty() || weeksStr.isEmpty()) {
                 lblStatus.setText("Please fill all fields and select a user.");
+                return;
+            }
+
+            int weeks;
+            try {
+                weeks = Integer.parseInt(weeksStr);
+            } catch (NumberFormatException e) {
+                lblStatus.setText("Invalid weeks value. Please enter a number.");
                 return;
             }
 
@@ -126,7 +135,7 @@ public class Taskcreate {
             System.out.println("Creating task for Project ID: " + projectId); // Debugging output
 
             // Create and store the task
-            Tache task = new Tache(title, description, projectId, nom, prenom);
+            Tache task = new Tache(title, description, projectId, nom, prenom, weeks);
             tacheService.create(task);
 
             lblStatus.setText("Task created successfully!");
@@ -135,6 +144,7 @@ public class Taskcreate {
             txtTitle.clear();
             txtDescription.clear();
             searchUser.clear();
+            txtWeeks.clear();
             listUsers.getSelectionModel().clearSelection();
             listUsers.setItems(userList);
 

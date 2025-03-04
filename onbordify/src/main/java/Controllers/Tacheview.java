@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,10 +22,16 @@ public class Tacheview {
     private ListView<String> taskListView;
 
     @FXML
-    private Label lblStatus;
+    private Label lblStatus, progressLabel;
 
     @FXML
     private Button btnCreateTask, btnEditTask, btnDeleteTask;
+
+    @FXML
+    private ProgressBar progressBar;
+
+    @FXML
+    private ProgressIndicator progressIndicator;
 
     private TacheService tacheService;
     private Tache selectedTask;
@@ -58,11 +66,44 @@ public class Tacheview {
         taskListView.getItems().clear();
         try {
             List<Tache> tasks = tacheService.getAllByProject(projectId);
+            int completedTasks = 0;
+
             for (Tache task : tasks) {
-                taskListView.getItems().add(task.getTitre());
+                // Construct a string containing the task title, username, and status
+                String taskDisplay = "Titre: " + task.getTitre()
+                        + " | Attribué à: " + task.getNom()
+                        + " | Statut: " + task.getStatus();
+                taskListView.getItems().add(taskDisplay);
+
+                // Count completed tasks
+                if (task.getStatus().equalsIgnoreCase("terminer")) {
+                    completedTasks++;
+                }
             }
+
+            // Update Progress
+            updateProgress(tasks.size(), completedTasks);
+
         } catch (Exception e) {
             lblStatus.setText("Error loading tasks: " + e.getMessage());
+        }
+    }
+
+    private void updateProgress(int totalTasks, int completedTasks) {
+        double progress = (totalTasks > 0) ? (double) completedTasks / totalTasks : 0;
+
+        progressBar.setProgress(progress);
+        progressIndicator.setProgress(progress);
+
+        // Update percentage label
+        int percentage = (int) (progress * 100);
+        progressLabel.setText(percentage + "%");
+
+        // Change label color based on progress
+        if (progress == 1.0) {
+            progressLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
+        } else {
+            progressLabel.setStyle("-fx-text-fill: #2c3e50; -fx-font-weight: bold;");
         }
     }
 
@@ -74,8 +115,8 @@ public class Tacheview {
 
             // Get Taskcreate controller and set project ID
             Taskcreate taskCreateController = loader.getController();
-            taskCreateController.setProjectId(this.projectId); // Pass the project ID ✅
-            taskCreateController.setTacheviewController(this); // Pass Tacheview reference ✅
+            taskCreateController.setProjectId(this.projectId);
+            taskCreateController.setTacheviewController(this);
 
             Stage popupStage = new Stage();
             popupStage.setScene(new Scene(root));
@@ -83,7 +124,6 @@ public class Tacheview {
             popupStage.show();
         } catch (IOException e) {
             lblStatus.setText("Error opening Create Task window: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -129,10 +169,9 @@ public class Tacheview {
         loadTasks();
     }
 
-    // Handle double-click to open task details
     @FXML
     private void handleTaskDoubleClick(MouseEvent event) {
-        if (event.getClickCount() == 2) { // Detect double-click
+        if (event.getClickCount() == 2) {
             int selectedIndex = taskListView.getSelectionModel().getSelectedIndex();
             if (selectedIndex >= 0) {
                 try {
@@ -145,13 +184,11 @@ public class Tacheview {
         }
     }
 
-    // Open task details page
     private void openTaskDetailsPage(Tache task) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/taskdetails.fxml"));
             Parent root = loader.load();
 
-            // Pass task data to the details controller
             TaskDetails controller = loader.getController();
             controller.setTaskData(task);
 
@@ -164,18 +201,6 @@ public class Tacheview {
         }
     }
 
-    private void openPopup(String fxmlPath, String title) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Parent root = loader.load();
-            Stage popupStage = new Stage();
-            popupStage.setScene(new Scene(root));
-            popupStage.setTitle(title);
-            popupStage.show();
-        } catch (IOException e) {
-            lblStatus.setText("Error opening window.");
-        }
-    }
     @FXML
     private void handleExportToPDF() {
         try {
@@ -188,4 +213,3 @@ public class Tacheview {
         }
     }
 }
-
