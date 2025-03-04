@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import utils.UserSession;
+
 import java.io.IOException;
 import java.util.regex.Pattern;
 
@@ -22,9 +24,6 @@ public class login {
     @FXML
     private PasswordField passwordField;
 
-
-
-
     @FXML
     public void initialize() {
         // Contrôle de saisie pour l'Email
@@ -36,11 +35,9 @@ public class login {
                 this.errorMessage.setText("");
             }
         });
-
-
-
-
     }
+
+
     // Méthode pour valider le format de l'email
     private boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
@@ -78,7 +75,7 @@ public class login {
             if (isAuthenticated) {
                 showAlert("Success", "Connected successfuly !");
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GestionUser.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainPage.fxml"));
                 Parent root = loader.load();
                 emailField.getScene().setRoot(root);
             } else {

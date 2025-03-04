@@ -10,8 +10,8 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="Controllers.verifierCode"
-            prefHeight="400.0" prefWidth="600.0"
-            stylesheets="@/css/Style.css">
+            prefHeight="400.0" prefWidth="800.0"
+            stylesheets="@/css/style.css">
 
 
     <VBox alignment="CENTER" spacing="20" AnchorPane.topAnchor="50" AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50">

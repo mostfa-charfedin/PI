@@ -17,6 +17,7 @@ public class MainFx extends Application {
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/style.css")).toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.setTitle("Onboardfiy");
+        primaryStage.setFullScreen(true);
         primaryStage.show();
 
 

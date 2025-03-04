@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -50,6 +51,9 @@ public class EditUser {
     private VBox prenomErrorBox;
 
     @FXML
+    private VBox dateNaissanceErrorBox;
+
+    @FXML
     private VBox emailErrorBox;
 
     private User selectedUser;
@@ -65,6 +69,21 @@ public class EditUser {
                 showError(cinErrorBox, "Le CIn doit contenir uniquement des chiffres.");
             } else {
                 clearError(cinErrorBox);
+            }
+        });
+
+        // Contrôle de saisie pour la Date de Naissance
+        dateMod.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                LocalDate today = LocalDate.now();
+                int age = Period.between(newValue, today).getYears();
+
+                if (age < 18) {
+                    dateMod.setValue(oldValue); // Rétablir l'ancienne valeur
+                    showError(dateNaissanceErrorBox, "The employee must be at least 18 years old.");
+                } else {
+                    clearError(dateNaissanceErrorBox);
+                }
             }
         });
 
@@ -141,6 +160,7 @@ public class EditUser {
                     Integer.parseInt(this.cinMod.getText()),
                     java.sql.Date.valueOf(this.dateMod.getValue()), // LocalDate
                     this.roleMod.getValue()
+
             );
             Newuser.setId(selectedUser.getId()); // Définir l'ID de l'utilisateur sélectionné
             this.userservice.update(Newuser);
@@ -149,7 +169,7 @@ public class EditUser {
             alert.setContentText("User updated successfully");
             alert.showAndWait();
             reset();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GestionUser.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainPage.fxml"));
             Parent root = loader.load();
             nomMod.getScene().setRoot(root);
 

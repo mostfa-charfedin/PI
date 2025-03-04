@@ -11,7 +11,7 @@ public class User {
     private Date dateNaissance ;
     private String password ;
     private Role role ;
-
+    private String image_url;
     public User(){}
 
     public User(int id, String nom, String prenom, String email, int cin, Date dateNaissance, String password, Role role) {
@@ -24,6 +24,19 @@ public class User {
         this.password = password;
         this.role = role;
     }
+
+    public User(int id, String nom, String prenom, String email, int cin, Date dateNaissance, String password, Role role, String image_url) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.cin = cin;
+        this.dateNaissance = dateNaissance;
+        this.password = password;
+        this.role = role;
+        this.image_url = image_url;
+    }
+
     /*sans id pour l'affichage*/
     public User(String nom, String prenom, String email, int cin, Date dateNaissance, String password, Role role) {
         this.id = id;
@@ -34,6 +47,7 @@ public class User {
         this.dateNaissance = dateNaissance;
         this.password = password;
         this.role = role;
+
     }
 /*sans password car admin ne peut pas changer mot de passe de l'utilisateur*/
     public User(String nom, String prenom, String email, int cin, Date dateNaissance, Role role) {
@@ -109,6 +123,14 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 
     @Override

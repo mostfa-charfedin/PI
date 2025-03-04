@@ -1,7 +1,97 @@
-/* Style de base pour l'AnchorPane */
+/* Root styles */
 .anchor-pane {
-    -fx-background-color: #f4f4f4;
+    -fx-background-color: linear-gradient(to bottom, #E3F2FD, #bbbcfb);
 }
+
+/* Header styles */
+.header-label {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+/* Form section styles */
+.form-vbox {
+    -fx-background-color: white;
+    -fx-padding: 30;
+    -fx-background-radius: 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+.form-label {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495E;
+}
+
+.form-sub-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #7F8C8D;
+}
+
+.form-text-field {
+    -fx-font-size: 14px;
+    -fx-background-radius: 8px;
+}
+
+.form-combo-box {
+    -fx-font-size: 14px;
+    -fx-background-radius: 8px;
+}
+
+.form-text-area {
+    -fx-font-size: 14px;
+    -fx-background-radius: 8px;
+    -fx-pref-height: 120;
+    -fx-wrap-text: true;
+}
+
+/* Button styles */
+.button {
+    -fx-font-size: 14px;
+    -fx-background-radius: 8px;
+    -fx-text-fill: white;
+}
+
+.button-ajouter {
+    -fx-background-color: #2ECC71;
+}
+
+.button-modifier {
+    -fx-background-color: #F39C12;
+}
+
+.button-create-recompense {
+    -fx-background-color: #3498DB;
+}
+
+/* List section styles */
+.list-vbox {
+    -fx-background-color: white;
+    -fx-padding: 30;
+    -fx-background-radius: 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+.list-label {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495E;
+}
+
+.list-view {
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+}
+.danger-button {
+    -fx-background-color: #dc3545;
+    -fx-font-size: 14px;
+    -fx-border-radius: 5px;
+}
+
+
+
+
 
 /* Style pour les VBox */
 .vbox {
@@ -110,9 +200,7 @@
     -fx-text-fill: #4CAF50;
 }
 
-/* Ajouts pour l'interface de connexion */
 
-/* Style pour les TextField et PasswordField */
 .text-field, .password-field {
     -fx-font-size: 14px;
     -fx-pref-width: 200px;
@@ -125,11 +213,11 @@
 /* Style pour le bouton de connexion */
 #loginButton {
     -fx-background-color: #4770E8;
-    -fx-pref-width: 120px;
+    -fx-pref-width: 100px;
 }
 
 #loginButton:hover {
-    -fx-background-color: #1976D2; /* Vert plus foncé */
+    -fx-background-color: #1976D2;
 }
 
 /* Style pour les messages d'erreur */
@@ -170,4 +258,7 @@
 .Cancelbutton {
     -fx-font-size: 14px;
     -fx-background-color: orange;
+}
+.sidebar{
+    -fx-background-color: #82c2e3;
 }
