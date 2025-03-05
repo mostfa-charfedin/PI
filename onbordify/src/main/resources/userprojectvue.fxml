@@ -25,7 +25,7 @@
         <!-- Main Content Box -->
         <VBox layoutX="80.0" layoutY="66.0" spacing="12" style="-fx-background-color: white; -fx-padding: 30; -fx-border-radius: 15; -fx-background-radius: 15; -fx-border-color: rgba(0,0,0,0.1); -fx-border-width: 2px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);" AnchorPane.bottomAnchor="24.399999999999977" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="66.0">
 
-            <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #34495E;" text="📋 les projets" />
+            <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #34495E;" text="📋 project" />
 
             <!-- ListView to display projects -->
             <ListView fx:id="projectListView" style="-fx-border-radius: 8px; -fx-background-radius: 8px; -fx-padding: 8px;" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0" VBox.vgrow="ALWAYS" />

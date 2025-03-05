@@ -70,13 +70,13 @@ public class Tacheview {
 
             for (Tache task : tasks) {
                 // Construct a string containing the task title, username, and status
-                String taskDisplay = "Titre: " + task.getTitre()
-                        + " | Attribué à: " + task.getNom()
-                        + " | Statut: " + task.getStatus();
+                String taskDisplay = "Title: " + task.getTitre()
+                        + " | Attributed to: " + task.getNom()
+                        + " | Status: " + task.getStatus();
                 taskListView.getItems().add(taskDisplay);
 
                 // Count completed tasks
-                if (task.getStatus().equalsIgnoreCase("terminer")) {
+                if (task.getStatus().equalsIgnoreCase("done")) {
                     completedTasks++;
                 }
             }

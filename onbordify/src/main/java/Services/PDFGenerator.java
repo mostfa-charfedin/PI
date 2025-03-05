@@ -85,7 +85,7 @@ public class PDFGenerator {
 
             // Title
             Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 22, Font.UNDERLINE, BaseColor.BLUE);
-            Paragraph title = new Paragraph("Rapport des Tâches", titleFont);
+            Paragraph title = new Paragraph("task report", titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
             document.add(new Paragraph("\n\n"));
@@ -100,9 +100,9 @@ public class PDFGenerator {
             Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16, BaseColor.DARK_GRAY);
             Font contentFont = FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.BLACK);
 
-            PdfPCell header1 = new PdfPCell(new Phrase("Titre de la Tâche", headerFont));
+            PdfPCell header1 = new PdfPCell(new Phrase("task title", headerFont));
             PdfPCell header2 = new PdfPCell(new Phrase("Description", headerFont));
-            PdfPCell header3 = new PdfPCell(new Phrase("Assigné à", headerFont));
+            PdfPCell header3 = new PdfPCell(new Phrase("attributed to", headerFont));
 
             BaseColor headerColor = new BaseColor(200, 200, 200);
             header1.setBackgroundColor(headerColor);

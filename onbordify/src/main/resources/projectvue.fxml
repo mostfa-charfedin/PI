@@ -26,16 +26,16 @@
         <!-- Main Content Box -->
         <VBox layoutX="80.0" layoutY="66.0" spacing="12" style="-fx-background-color: white; -fx-padding: 30; -fx-border-radius: 15; -fx-background-radius: 15; -fx-border-color: rgba(0,0,0,0.1); -fx-border-width: 2px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);" AnchorPane.bottomAnchor="24.399999999999977" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="66.0">
 
-            <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #34495E;" text="📋 les projets" />
+            <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #34495E;" text="📋 Projects" />
 
             <!-- ListView to display projects -->
-            <ListView fx:id="projectListView" style="-fx-border-radius: 8px; -fx-background-radius: 8px; -fx-padding: 8px;" VBox.vgrow="ALWAYS" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" />
+            <ListView fx:id="projectListView" style="-fx-border-radius: 8px; -fx-background-radius: 8px; -fx-padding: 8px;" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0" VBox.vgrow="ALWAYS" />
 
             <!-- Button Container -->
             <HBox spacing="15" AnchorPane.bottomAnchor="10.0">
-                <Button fx:id="btnCreateProject" onAction="#handleCreateProject" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px;" text="➕ Ajouter" HBox.hgrow="ALWAYS" />
-                <Button fx:id="btnEditProject" onAction="#handleEditProject" style="-fx-background-color: #F39C12; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px;" text="✏️ Modifier" HBox.hgrow="ALWAYS" />
-                <Button fx:id="btnDeleteProject" onAction="#handleDeleteProject" style="-fx-background-color: #e53935; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px;" text="❌ Supprimer" HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnCreateProject" onAction="#handleCreateProject" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px;" text="➕ Add" HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnEditProject" onAction="#handleEditProject" style="-fx-background-color: #F39C12; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px;" text="✏️ Update" HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnDeleteProject" onAction="#handleDeleteProject" style="-fx-background-color: #e53935; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px;" text="❌ Delete" HBox.hgrow="ALWAYS" />
             </HBox>
 
             <!-- Status Label -->

@@ -28,7 +28,7 @@ public class TaskDetailController {
         lblTaskStatus.setText("Status: " + task.getStatus());
 
         // Disable button if task is already completed
-        if ("terminer".equalsIgnoreCase(task.getStatus())) {
+        if ("done".equalsIgnoreCase(task.getStatus())) {
             btnCompleteTask.setDisable(true);
         }
     }
@@ -36,8 +36,8 @@ public class TaskDetailController {
     @FXML
     private void handleCompleteTask() {
         if (currentTask != null) {
-            tacheService.updateTaskStatus(currentTask.getIdTache(), "terminer");
-            lblTaskStatus.setText("Status: terminer");
+            tacheService.updateTaskStatus(currentTask.getIdTache(), "done");
+            lblTaskStatus.setText("Status: done");
             btnCompleteTask.setDisable(true);
 
             // Refresh the task list in Usertachevue
