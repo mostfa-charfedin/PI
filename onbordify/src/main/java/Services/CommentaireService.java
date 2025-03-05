@@ -1,4 +1,4 @@
-package service;
+package Services;
 
 import Models.Commentaire;
 import utils.MyDb;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommentaireService {
-    static Connection conn = MyDb.getInstance().getConnection();
+    static Connection conn = MyDb.getMydb().getConnection();
 
     public void add(Commentaire commentaire) {
         String query = "INSERT INTO commentaire (titre, description, imagePath, idUser, idPublication) VALUES (?, ?, ?, ?, ?)";

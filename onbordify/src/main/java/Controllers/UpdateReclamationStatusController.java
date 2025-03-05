@@ -1,11 +1,11 @@
-package controller;
+package Controllers;
 
 import Models.Reclamation;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
-import service.ReclamationService;
+import Services.ReclamationService;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

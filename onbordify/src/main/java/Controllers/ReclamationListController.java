@@ -1,4 +1,4 @@
-package controller;
+package Controllers;
 
 import Models.Reclamation;
 import javafx.fxml.FXML;
@@ -13,7 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
-import service.ReclamationService;
+import Services.ReclamationService;
 import java.io.IOException;
 import java.util.List;
 
@@ -63,7 +63,7 @@ public class ReclamationListController {
             Parent root = loader.load();
 
             // Set the selected reclamation in the update form
-            UpdateReclamationStatusController controller = loader.getController();
+            Controllers.UpdateReclamationStatusController controller = loader.getController();
             controller.setReclamation(reclamation);
 
             // Show the window
