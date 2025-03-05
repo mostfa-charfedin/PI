@@ -9,6 +9,8 @@ import javafx.scene.layout.StackPane;
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;
 import java.io.IOException;
+import Models.Role;
+import utils.UserSession;
 
 public class MainPage {
 
@@ -16,18 +18,24 @@ public class MainPage {
     private StackPane contentPane;  // Zone où afficher les pages
 
     @FXML
-    private Button btnPage1, btnPage2, btnPage3, btnPage4;  // Boutons du menu latéral
+    private Button btnPage1, btnPage2, btnPage3, btnPage6;  // Boutons du menu latéral
 
     @FXML
     public void initialize() {
         // Charger la page d'accueil par défaut
         loadPage("/fxml/GestionUser.fxml");
-
+        UserSession session = UserSession.getInstance();
+        Role roleSession = session.getRole();
         // Gestion des clics sur les boutons
         btnPage1.setOnAction(e -> loadPage("/fxml/Profile.fxml"));
         btnPage2.setOnAction(e -> loadPage("/fxml/Score.fxml"));
         btnPage3.setOnAction(e -> loadPage("/fxml/GestionUser.fxml"));
-        btnPage4.setOnAction(e -> loadPage("/views/QuizEmployee.fxml"));
+
+        if (roleSession == Role.ADMIN) {
+            btnPage6.setOnAction(e -> loadPage("/views/ListQuiz.fxml"));
+        } else {
+            btnPage6.setOnAction(e -> loadPage("/views/QuizEmployee.fxml"));
+        }
     }
 
     private void loadPage(String fxmlFile) {
@@ -53,4 +61,5 @@ public class MainPage {
             e.printStackTrace();
         }
     }
+
 }
