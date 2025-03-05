@@ -66,6 +66,7 @@ public class RessourceService implements CrudInterface<Ressource> {
             Ressource res = new Ressource();
 
             res.setTitre(rs.getString("titre"));
+            res.setIdResource(rs.getInt("idResource"));
             res.setType(rs.getString("type"));
             res.setDescription(rs.getString("description"));
             res.setlien(rs.getString("lien"));
