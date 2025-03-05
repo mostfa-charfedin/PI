@@ -33,6 +33,7 @@ public class TaskDetailController {
         }
     }
 
+
     @FXML
     private void handleCompleteTask() {
         if (currentTask != null) {

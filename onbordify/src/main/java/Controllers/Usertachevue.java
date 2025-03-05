@@ -68,8 +68,11 @@ public class Usertachevue {
 
     private void openTaskDetailPopup(String taskTitle) {
         try {
+            // Extract just the task title from the selected item
+            String actualTitle = taskTitle.split(" - Status:")[0];
+
             for (Tache task : tacheService.getTasksForUserInProject(UserSession.getInstance().getUserId(), projectId)) {
-                if (taskTitle.contains(task.getTitre())) { // Match title
+                if (task.getTitre().equals(actualTitle)) { // Exact match on the title only
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/TaskDetailView.fxml"));
                     Parent root = loader.load();
 
