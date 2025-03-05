@@ -215,6 +215,7 @@ public class programmebienetre implements Initializable {
             e.printStackTrace();
             showAlert("Erreur", "Impossible d'ouvrir la fenêtre de récompense !");
         }
+
     }
 
     private void showAlert(String title, String message) {
