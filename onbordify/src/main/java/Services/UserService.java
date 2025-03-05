@@ -66,6 +66,8 @@ public class UserService implements CrudInterface<User> {
         }
     }
 
+
+
     @Override
     public void create(User obj) throws SQLException {
         String sql = "INSERT INTO user (nom, prenom, email, cin, dateNaissance, role, password, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";

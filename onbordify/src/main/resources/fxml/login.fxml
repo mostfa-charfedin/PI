@@ -21,7 +21,7 @@
         </Label>
         <TextField fx:id="emailField" promptText="Email" />
         <PasswordField fx:id="passwordField" promptText="Mot de passe" />
-        <Button fx:id="loginButton" onAction="#handleLogin" text="Se connecter" />
+        <Button fx:id="loginButton" onAction="#handleLogin" text="Sign-in" />
       <Label fx:id="restPassord" onMouseClicked="#resetPassword" text="Forgot your password?" />
         <Label fx:id="errorMessage" styleClass="error-message" /> <!-- Message d'erreur -->
     </VBox>

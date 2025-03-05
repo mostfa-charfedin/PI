@@ -17,7 +17,7 @@
             <!-- Logo or Profile Picture -->
             <ImageView fx:id="logo" fitHeight="100" fitWidth="100" pickOnBounds="true" preserveRatio="true">
                 <image>
-                    <Image url="@../assests/Screenshot%202025-02-20%20092600.png" />
+                    <Image url="@../assests/logo.png" />
                 </image>
             </ImageView>
 

@@ -61,11 +61,7 @@ public class Profile {
     public void initialize() {
         loadUserData();
         image.setOnMouseClicked(event -> handleImageClick());
-
-
-
     }
-
 
     private void loadUserData() {
         int userId = session.getUserId();
@@ -79,10 +75,7 @@ public class Profile {
         if (user.getImage_url() != null) {
 
             String imagePath = user.getImage_url();
-
-            // Load the image using getClass().getResource() for resources in the project
             URL imageUrl = getClass().getResource(imagePath);
-
             if (imageUrl != null) {
                 image.setImage(new Image(imageUrl.toString()));
             } else {
@@ -173,14 +166,6 @@ private String pathSelectedimage = user.getImage_url();
         }
     }
 
-    @FXML
-    void handleBack() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainPage.fxml"));
-        Parent root = loader.load();
-        messageLabel.getScene().setRoot(root);
-        loadUserData();
-    }
-
 
     private boolean updateProfile(String nom, String prenom, String email, LocalDate dateNaissance, String cin, String imageUrl) {
         try {
@@ -191,14 +176,14 @@ private String pathSelectedimage = user.getImage_url();
             user.setCin(Integer.parseInt(cin));
             user.setRole(session.getRole());
             user.setImage_url(imageUrl);
-            System.out.println(imageUrl);
-
-
             // Vérification si l'image a été changée
             if (user.getImage_url() != null && !user.getImage_url().isEmpty()) {
                 userService.update(user);
+                initialize();
             } else {
-                userService.update(user);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur");
+                alert.showAndWait();
             }
 
             return true;

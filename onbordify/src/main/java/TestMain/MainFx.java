@@ -22,11 +22,15 @@ public class MainFx extends Application {
         // Create scene
         Scene scene = new Scene(root, 600, 400);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("FXML Test");
+        primaryStage.setTitle("Onboardfiy");
+        primaryStage.setFullScreen(true);
         primaryStage.show();
+
+
     }
 
     public static void main(String[] args) {
         launch(args);
+
     }
 }
