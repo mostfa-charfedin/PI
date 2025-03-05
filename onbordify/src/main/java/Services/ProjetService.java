@@ -10,7 +10,7 @@ public class ProjetService implements CrudInterface<Projet> {
     private Connection con;
 
     public ProjetService() {
-        this.con = MyDb.getInstance().getConnection();
+        this.con = MyDb.getMydb().getConnection();
     }
 
     /**
@@ -156,27 +156,61 @@ public class ProjetService implements CrudInterface<Projet> {
     /**
      * Get a project by its ID.
      */
-    public Projet getById(int id) throws Exception {
-        String sql = "SELECT p.idProjet, p.titre, p.Description, p.idUser, u.nom AS nom, u.prenom AS prenom " +
-                "FROM projet p " +
-                "JOIN user u ON p.idUser = u.id " +
-                "WHERE p.idProjet = ?";
-        PreparedStatement stmt = con.prepareStatement(sql);
-        stmt.setInt(1, id);
-        ResultSet rs = stmt.executeQuery();
+    public List<Projet> getProjectsForUser(int userId) {
+        List<Projet> projects = new ArrayList<>();
 
-        if (rs.next()) {
-            Projet projet = new Projet();
-            projet.setIdProjet(rs.getInt("idProjet"));
-            projet.setTitre(rs.getString("titre"));
-            projet.setDescription(rs.getString("Description"));
-            projet.setidUser(rs.getInt("idUser"));
-            projet.setNom(rs.getString("nom"));
-            projet.setPrenom(rs.getString("prenom"));
-            return projet;
+        try {
+            // Query 1: Get projects where the user is the project manager
+            String queryChef = "SELECT p.idProjet, p.titre, p.description, u.nom, u.prenom " +
+                    "FROM projet p " +
+                    "JOIN user u ON p.idUser = u.id " +  // Corrected join with user table
+                    "WHERE p.idUser = ?";
+            PreparedStatement stmt1 = con.prepareStatement(queryChef);
+            stmt1.setInt(1, userId);
+            ResultSet rs1 = stmt1.executeQuery();
+
+            while (rs1.next()) {
+                projects.add(new Projet(
+                        rs1.getInt("idProjet"),
+                        rs1.getString("titre"),
+                        rs1.getString("description"),
+                        rs1.getString("nom"),
+                        rs1.getString("prenom")
+                ));
+            }
+
+            // Query 2: Get projects where the user has tasks assigned
+            String queryTache = "SELECT DISTINCT p.idProjet, p.titre, p.description, u.nom, u.prenom " +
+                    "FROM projet p " +
+                    "JOIN tache t ON p.idProjet = t.idProjet " +
+                    "JOIN user u ON p.idUser = u.id " +  // Ensure correct reference to user table
+                    "WHERE t.idUser = ?";
+            PreparedStatement stmt2 = con.prepareStatement(queryTache);
+            stmt2.setInt(1, userId);
+            ResultSet rs2 = stmt2.executeQuery();
+
+            while (rs2.next()) {
+                Projet projet = new Projet(
+                        rs2.getInt("idProjet"),
+                        rs2.getString("titre"),
+                        rs2.getString("description"),
+                        rs2.getString("nom"),
+                        rs2.getString("prenom")
+                );
+                if (!projects.contains(projet)) { // Avoid duplicates
+                    projects.add(projet);
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error fetching projects: " + e.getMessage());
         }
-        return null; // Return null if no project found
+
+        return projects;
     }
+
+
+
 
     /**
      * Get all available project managers (for UI dropdown).

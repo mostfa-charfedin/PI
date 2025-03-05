@@ -11,7 +11,7 @@ public class TacheService implements CrudInterface<Tache> {
     private Connection con;
 
     public TacheService() {
-        this.con = MyDb.getInstance().getConnection();
+        this.con = MyDb.getMydb().getConnection();
     }
 
     /**
@@ -115,6 +115,18 @@ public class TacheService implements CrudInterface<Tache> {
             throw new Exception("Database error: " + e.getMessage(), e);
         }
     }
+    public void updateTaskStatus(int taskId, String newStatus) {
+        try {
+            String query = "UPDATE tache SET status = ? WHERE idTache = ?";
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setString(1, newStatus);
+            stmt.setInt(2, taskId);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Error updating task status: " + e.getMessage());
+        }
+    }
+
 
     /**
      * Delete a task by its ID.
@@ -166,50 +178,41 @@ public class TacheService implements CrudInterface<Tache> {
         return tasks;
     }
 
-    /**
-     * Get a task by its ID.
-     */
-    public Tache getById(int id) throws Exception {
-        String sql = "SELECT t.idTache, t.titre, t.description, t.idProjet, t.idUser, " +
-                "p.titre AS titreProjet, u.nom AS nom, u.prenom AS prenom " +
-                "FROM tache t " +
-                "JOIN projet p ON t.idProjet = p.idProjet " +
-                "JOIN user u ON t.idUser = u.id " +
-                "WHERE t.idTache = ?";
+    public List<Tache> getTasksForUserInProject(int userId, int projectId) {
+        List<Tache> tasks = new ArrayList<>();
+        try {
+            String query = "SELECT t.idTache, t.titre, t.description, t.idProjet, t.idUser, " +
+                    "u.nom, u.prenom, p.titre AS TitreProjet, t.date, t.status " +
+                    "FROM tache t " +
+                    "JOIN user u ON t.idUser = u.id " +  // Join to get user details
+                    "JOIN projet p ON t.idProjet = p.idProjet " + // Join to get project title
+                    "WHERE t.idUser = ? AND t.idProjet = ?";
 
-        try (PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setInt(1, id);
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setInt(1, userId);
+            stmt.setInt(2, projectId);
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                Tache task = new Tache();
-                task.setIdTache(rs.getInt("idTache"));
-                task.setTitre(rs.getString("titre"));
-                task.setDescription(rs.getString("description"));
-                task.setIdProjet(rs.getInt("idProjet"));
-                task.setIdUser(rs.getInt("idUser"));
-                task.setTitreProjet(rs.getString("titreProjet"));
-                task.setNom(rs.getString("nom"));
-                task.setPrenom(rs.getString("prenom"));
-
-                return task;
+            while (rs.next()) {
+                tasks.add(new Tache(
+                        rs.getInt("idTache"),
+                        rs.getString("titre"),
+                        rs.getString("description"),
+                        rs.getInt("idProjet"),
+                        rs.getInt("idUser"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("TitreProjet"),
+                        rs.getInt("date"),  // Fetching date
+                        rs.getString("status") // Fetching status
+                ));
             }
-        } catch (SQLException e) {
-            throw new Exception("Database error: " + e.getMessage(), e);
+        } catch (Exception e) {
+            System.out.println("Error fetching tasks: " + e.getMessage());
         }
-        return null; // Return null if no task found
+        return tasks;
     }
-    public List<String> getAllChefProjetNames() throws Exception {
-        String sql = "SELECT nom, prenom FROM user WHERE role = 'chefprojet'";
-        Statement stmt = con.createStatement();
-        ResultSet rs = stmt.executeQuery(sql);
 
-        List<String> chefNames = new ArrayList<>();
-        while (rs.next()) {
-            chefNames.add(rs.getString("nom") + " " + rs.getString("prenom")); // Combine nom + prenom
-        }
-        return chefNames;
-    }
     public List<Tache> getTasksByProjectId(int projectId) throws Exception {
         String sql = "SELECT t.idTache, t.titre, t.Description, t.idProjet, t.idUser, " +
                 "u.nom, u.prenom, p.titre AS TitreProjet " +

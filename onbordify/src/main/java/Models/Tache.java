@@ -14,7 +14,20 @@ public class Tache {
     public Tache() {
     }
 
-    public Tache(int idTache,String titre ,String description,int idProjet,int idUser,String nom, String prenom, String titreProjet) {
+    public Tache(int idTache, String titre, String description, int idProjet, int idUser, String nom, String prenom, String titreProjet, int date, String status) {
+        this.idTache = idTache;
+        this.titre = titre;
+        Description = description;
+        this.idProjet = idProjet;
+        this.idUser = idUser;
+        this.nom = nom;
+        this.prenom = prenom;
+        TitreProjet = titreProjet;
+        this.date = date;
+        this.status = status;
+    }
+
+    public Tache(int idTache, String titre , String description, int idProjet, int idUser, String nom, String prenom, String titreProjet) {
         this.idTache = idTache;
         TitreProjet = titreProjet;
         this.prenom = prenom;

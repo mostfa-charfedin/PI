@@ -1,7 +1,7 @@
-package controller;
+package Controllers;
 
 import Models.Reclamation;
-import service.ReclamationService;
+import Services.ReclamationService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;

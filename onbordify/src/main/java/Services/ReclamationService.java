@@ -1,4 +1,4 @@
-package service;
+package Services;
 
 import utils.MyDb;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReclamationService implements Services.CrudInterface<Reclamation> {
-    static Connection conn = MyDb.getInstance().getConnection();
+    static Connection conn = MyDb.getMydb().getConnection();
 
 
     public void add(Reclamation reclamation) {

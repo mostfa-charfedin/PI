@@ -20,43 +20,53 @@ public class PDFGenerator {
             document.open();
 
             // Title
-            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLUE);
+            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 22, Font.UNDERLINE, BaseColor.BLUE);
             Paragraph title = new Paragraph("Rapport du Projet", titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
-            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n\n"));
 
             // Project Information
-            Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, BaseColor.BLACK);
-            document.add(new Paragraph("Titre du Projet: " + projet.getTitre(), headerFont));
-            document.add(new Paragraph("Description: " + projet.getDescription()));
-            document.add(new Paragraph("Chef de Projet: " + projet.getNom() + " " + projet.getPrenom()));
+            Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16, BaseColor.DARK_GRAY);
+            Font contentFont = FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.BLACK);
+
+            document.add(new Paragraph("Titre du Projet: ", headerFont));
+            document.add(new Paragraph(projet.getTitre(), contentFont));
+            document.add(new Paragraph("Description: ", headerFont));
+            document.add(new Paragraph(projet.getDescription(), contentFont));
+            document.add(new Paragraph("Chef de Projet: ", headerFont));
+            document.add(new Paragraph(projet.getNom() + " " + projet.getPrenom(), contentFont));
             document.add(new Paragraph("\n"));
 
             // Table for Tasks
             PdfPTable table = new PdfPTable(3);
             table.setWidthPercentage(100);
-            table.setSpacingBefore(10f);
-            table.setSpacingAfter(10f);
+            table.setSpacingBefore(15f);
+            table.setSpacingAfter(15f);
 
-            // Headers
+            // Headers with better styling
             PdfPCell header1 = new PdfPCell(new Phrase("Titre de la Tâche", headerFont));
             PdfPCell header2 = new PdfPCell(new Phrase("Description", headerFont));
             PdfPCell header3 = new PdfPCell(new Phrase("Assigné à", headerFont));
 
-            header1.setBackgroundColor(BaseColor.LIGHT_GRAY);
-            header2.setBackgroundColor(BaseColor.LIGHT_GRAY);
-            header3.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            BaseColor headerColor = new BaseColor(200, 200, 200);
+            header1.setBackgroundColor(headerColor);
+            header2.setBackgroundColor(headerColor);
+            header3.setBackgroundColor(headerColor);
 
             table.addCell(header1);
             table.addCell(header2);
             table.addCell(header3);
 
-            // Task Data
+            // Task Data with better padding
             for (Tache tache : taches) {
-                table.addCell(tache.getTitre());
-                table.addCell(tache.getDescription());
-                table.addCell(tache.getNom() + " " + tache.getPrenom());
+                PdfPCell cell1 = new PdfPCell(new Phrase(tache.getTitre(), contentFont));
+                PdfPCell cell2 = new PdfPCell(new Phrase(tache.getDescription(), contentFont));
+                PdfPCell cell3 = new PdfPCell(new Phrase(tache.getNom() + " " + tache.getPrenom(), contentFont));
+
+                table.addCell(cell1);
+                table.addCell(cell2);
+                table.addCell(cell3);
             }
 
             document.add(table);
@@ -73,22 +83,31 @@ public class PDFGenerator {
             PdfWriter.getInstance(document, new FileOutputStream(filePath));
             document.open();
 
-            document.add(new Paragraph("Task Report\n\n", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18)));
+            // Title
+            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 22, Font.UNDERLINE, BaseColor.BLUE);
+            Paragraph title = new Paragraph("Rapport des Tâches", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph("\n\n"));
 
+            // Table for Tasks
             PdfPTable table = new PdfPTable(3);
             table.setWidthPercentage(100);
-            table.setSpacingBefore(10f);
-            table.setSpacingAfter(10f);
+            table.setSpacingBefore(15f);
+            table.setSpacingAfter(15f);
 
             // Headers
-            Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, BaseColor.BLACK);
-            PdfPCell header1 = new PdfPCell(new Phrase("Task ID", headerFont));
-            PdfPCell header2 = new PdfPCell(new Phrase("Title", headerFont));
-            PdfPCell header3 = new PdfPCell(new Phrase("Description", headerFont));
+            Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16, BaseColor.DARK_GRAY);
+            Font contentFont = FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.BLACK);
 
-            header1.setBackgroundColor(BaseColor.LIGHT_GRAY);
-            header2.setBackgroundColor(BaseColor.LIGHT_GRAY);
-            header3.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            PdfPCell header1 = new PdfPCell(new Phrase("Titre de la Tâche", headerFont));
+            PdfPCell header2 = new PdfPCell(new Phrase("Description", headerFont));
+            PdfPCell header3 = new PdfPCell(new Phrase("Assigné à", headerFont));
+
+            BaseColor headerColor = new BaseColor(200, 200, 200);
+            header1.setBackgroundColor(headerColor);
+            header2.setBackgroundColor(headerColor);
+            header3.setBackgroundColor(headerColor);
 
             table.addCell(header1);
             table.addCell(header2);
@@ -96,14 +115,18 @@ public class PDFGenerator {
 
             // Task Data
             for (Tache tache : taches) {
-                table.addCell(String.valueOf(tache.getIdTache()));
-                table.addCell(tache.getTitre());
-                table.addCell(tache.getDescription());
+                PdfPCell cell1 = new PdfPCell(new Phrase(tache.getTitre(), contentFont));
+                PdfPCell cell2 = new PdfPCell(new Phrase(tache.getDescription(), contentFont));
+                PdfPCell cell3 = new PdfPCell(new Phrase(tache.getNom() + " " + tache.getPrenom(), contentFont));
+
+                table.addCell(cell1);
+                table.addCell(cell2);
+                table.addCell(cell3);
             }
 
             document.add(table);
             document.close();
-            System.out.println("✅ Task report generated successfully: " + filePath);
+            System.out.println("✅ Rapport des tâches généré avec succès : " + filePath);
         } catch (DocumentException | IOException e) {
             e.printStackTrace();
         }

@@ -1,4 +1,4 @@
-package controller;
+package Controllers;
 
 import Models.Commentaire;
 import Models.Publication;
@@ -12,8 +12,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import service.CommentaireService;
-import service.PublicationService;
+import Services.CommentaireService;
+import Services.PublicationService;
 
 import java.io.IOException;
 import java.util.List;

@@ -1,6 +1,7 @@
 package Controllers;
 
-
+import Models.Role;
+import utils.UserSession;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -16,17 +17,26 @@ public class MainPage {
     private StackPane contentPane;  // Zone où afficher les pages
 
     @FXML
-    private Button btnPage1, btnPage2, btnPage3;  // Boutons du menu latéral
+    private Button btnPage1, btnPage2, btnPage3, btnPage4;  // Boutons du menu latéral
 
     @FXML
     public void initialize() {
         // Charger la page d'accueil par défaut
         loadPage("/fxml/GestionUser.fxml");
-
+        UserSession session = UserSession.getInstance();
+        Role roleSession = session.getRole();
         // Gestion des clics sur les boutons
         btnPage1.setOnAction(e -> loadPage("/fxml/Profile.fxml"));
         btnPage2.setOnAction(e -> loadPage("/fxml/Score.fxml"));
         btnPage3.setOnAction(e -> loadPage("/fxml/GestionUser.fxml"));
+        if (roleSession == Role.ADMIN) {
+            btnPage4.setOnAction(e -> loadPage("/projectvue.fxml"));
+        } else {
+            btnPage4.setOnAction(e -> loadPage("/userprojectvue.fxml"));
+        }
+    }
+    private void showAccessDenied() {
+        System.out.println("Accès refusé : Vous devez être administrateur pour accéder à cette page.");
     }
 
     private void loadPage(String fxmlFile) {

@@ -13,7 +13,7 @@ public class MainFx extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Load FXML file
-        URL fxmlResource = getClass().getResource("/projectvue.fxml");
+        URL fxmlResource = getClass().getResource("/fxml/login.fxml");
         if (fxmlResource == null) {
             throw new RuntimeException("Cannot find projectcreate.fxml");
         }
