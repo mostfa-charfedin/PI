@@ -5,7 +5,9 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -14,10 +16,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import utils.UserSession;
 
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 public class Avis implements Initializable {
+
     @FXML
     private ListView<HBox> listViewProgrammes;
 
@@ -28,7 +34,9 @@ public class Avis implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadProgrammes();
-    }
+    }// Remplacez par l'ID de l'utilisateur connecté
+
+
 
     private void loadProgrammes() {
         try {
@@ -45,7 +53,7 @@ public class Avis implements Initializable {
         }
     }
 
-    private HBox createProgrammeItem(programmebienetre programme) {
+    private HBox createProgrammeItem(programmebienetre programme) throws SQLException {
         Label lblTitre = new Label(programme.getTitre());
         lblTitre.setStyle("-fx-font-size: 18px; -fx-text-fill: #2C3E50; -fx-font-weight: bold;");
 
@@ -64,7 +72,14 @@ public class Avis implements Initializable {
         btnAvis.setStyle("-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px;");
 
         Button btnStats = new Button("Voir les Statistiques");
-        btnStats.setOnAction(event -> showStatistics(programme));
+        btnStats.setOnAction(event -> {
+            try {
+                openDetailedStatistics(programme);
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert("Erreur", "Impossible d'ouvrir les statistiques : " + e.getMessage(), Alert.AlertType.ERROR);
+            }
+        });
         btnStats.setStyle("-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px;");
 
         HBox hbox = new HBox(25, lblTitre, lblDescription, lblRating,  btnAvis, btnStats);
@@ -77,7 +92,7 @@ public class Avis implements Initializable {
         // Créer une nouvelle fenêtre (Stage) pour la pop-up
         Stage popupStage = new Stage();
         popupStage.setTitle("Laisser un Avis");
-        popupStage.initModality(Modality.APPLICATION_MODAL); // Rendre la pop-up modale
+        popupStage.initModality(Modality.APPLICATION_MODAL);
 
         // Conteneur principal pour la pop-up
         VBox content = new VBox(15);
@@ -90,15 +105,38 @@ public class Avis implements Initializable {
         // Conteneur pour les étoiles
         HBox starContainer = new HBox(10);
         ImageView[] stars = new ImageView[5];
-        int[] selectedRating = {0};
+        final int[] selectedRating = {0};
 
         for (int i = 0; i < stars.length; i++) {
+            final int rating = i + 1;
             stars[i] = new ImageView(new Image(getClass().getResource("/assets/star_empty.png").toExternalForm()));
             stars[i].setFitHeight(32);
             stars[i].setFitWidth(32);
-            final int rating = i + 1;
+
+            // Gestion des événements de souris pour plus de réactivité
+            stars[i].setOnMouseEntered(event -> {
+                // Prévisualisation des étoiles
+                for (int j = 0; j < rating; j++) {
+                    stars[j].setImage(new Image(getClass().getResource("/assets/star_filled.png").toExternalForm()));
+                }
+                for (int j = rating; j < stars.length; j++) {
+                    stars[j].setImage(new Image(getClass().getResource("/assets/star_empty.png").toExternalForm()));
+                }
+            });
+
+            stars[i].setOnMouseExited(event -> {
+                // Restaurer l'état précédent
+                for (int j = 0; j < stars.length; j++) {
+                    stars[j].setImage(new Image(getClass().getResource("/assets/star_empty.png").toExternalForm()));
+                }
+                // Remplir les étoiles correspondant à la note sélectionnée
+                for (int j = 0; j < selectedRating[0]; j++) {
+                    stars[j].setImage(new Image(getClass().getResource("/assets/star_filled.png").toExternalForm()));
+                }
+            });
 
             stars[i].setOnMouseClicked(event -> {
+                // Sélection définitive de la note
                 selectedRating[0] = rating;
                 for (int j = 0; j < stars.length; j++) {
                     if (j < rating) {
@@ -108,9 +146,9 @@ public class Avis implements Initializable {
                     }
                 }
             });
+
             starContainer.getChildren().add(stars[i]);
         }
-
         // Label pour le commentaire
         Label lblCommentaire = new Label("Laissez un commentaire :");
         lblCommentaire.setStyle("-fx-font-size: 14px; -fx-text-fill: #34495e;");
@@ -167,7 +205,7 @@ public class Avis implements Initializable {
     }
 
 
-    private void showStatistics(programmebienetre programme) {
+    private void showStatistics(programmebienetre programme) throws SQLException {
         double averageRating = service.getAverageRating(programme.getIdProgramme());
         int totalReviews = service.getTotalReviews(programme.getIdProgramme());
 
@@ -177,7 +215,20 @@ public class Avis implements Initializable {
         alert.setContentText(String.format("Note moyenne: %.1f/5\nTotal des avis: %d", averageRating, totalReviews));
         alert.showAndWait();
     }
+    private void openDetailedStatistics(programmebienetre programme) throws IOException {
+        // Create a new stage for detailed statistics
+        Stage statisticsStage = new Stage();
+        statisticsStage.setTitle("Statistiques détaillées - " + programme.getTitre());
+        statisticsStage.initModality(Modality.WINDOW_MODAL);
 
+        // Load the FXML for statistics
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/statisticAvis.fxml"));
+        Parent root = loader.load();
+        statisticAvis statisticsController = loader.getController();
+        Scene scene = new Scene(root);
+        statisticsStage.setScene(scene);
+        statisticsStage.showAndWait();
+    }
     private void showAlert(String title, String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

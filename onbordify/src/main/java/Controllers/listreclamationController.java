@@ -1,11 +1,11 @@
-package controller;
+package Controllers;
 import Models.Reclamation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.Callback;
-import service.ReclamationService;
+import Services.ReclamationService;
 
 import java.sql.SQLException;
 import java.util.List;
