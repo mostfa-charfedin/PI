@@ -1,7 +1,6 @@
 package Controller;
 
 import Services.programmebienetreService;
-import Services.UserService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,8 +16,10 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import Services.UserService;
 
 public class programmebienetre implements Initializable {
+
 
     @FXML
     private TextField txtTitre;
@@ -42,10 +43,9 @@ public class programmebienetre implements Initializable {
     private Button btnCreateRecompense;
 
     private programmebienetreService service = new programmebienetreService();
-    private EmailService emailService = new EmailService();
-    private UserService userService = new UserService(); // Create an instance of UserService
+    private EmailService emailService = new EmailService(); // Initialisation de EmailService
+    private UserService userService = new UserService(); // Initialisation de UserService
     private ObservableList<Models.programmebienetre> programmeList = FXCollections.observableArrayList();
-    private boolean isUpdateMode = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -59,15 +59,7 @@ public class programmebienetre implements Initializable {
 
         listViewProgrammes.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmation de suppression");
-                alert.setHeaderText("Supprimer le programme");
-                alert.setContentText("Voulez-vous vraiment supprimer ce programme ?");
-
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.isPresent() && result.get() == ButtonType.OK) {
-                    supprimerProgramme();
-                }
+                supprimerProgramme();
             }
         });
     }
@@ -89,8 +81,20 @@ public class programmebienetre implements Initializable {
 
     @FXML
     private void ajouterProgramme() {
-        if (isUpdateMode) {
-            // Update logic
+        String titre = txtTitre.getText();
+        String type = cmbType.getValue();
+        String description = txtDescription.getText();
+
+        if (titre.isEmpty() || type == null || description.isEmpty()) {
+            showAlert("Attention", "Veuillez remplir tous les champs !");
+            return;
+        }
+        if (!titre.matches("^[a-zA-Z]+$")) {
+            showAlert("Erreur de saisie", "Le titre ne doit contenir que des lettres (pas de nombres ni d'espaces).");
+            return;
+        }
+
+        if (btnAjouter.getText().equals("Mettre à jour")) {
             int selectedIndex = listViewProgrammes.getSelectionModel().getSelectedIndex();
             if (selectedIndex == -1) {
                 showAlert("Attention", "Veuillez sélectionner un programme à modifier !");
@@ -98,46 +102,42 @@ public class programmebienetre implements Initializable {
             }
 
             Models.programmebienetre selectedProgramme = programmeList.get(selectedIndex);
-            selectedProgramme.setTitre(txtTitre.getText());
-            selectedProgramme.setType(cmbType.getValue());
-            selectedProgramme.setDescription(txtDescription.getText());
+            selectedProgramme.setTitre(titre);
+            selectedProgramme.setType(type);
+            selectedProgramme.setDescription(description);
 
             try {
                 service.update(selectedProgramme);
                 showAlert("Succès", "Le programme a été mis à jour avec succès !");
+
                 loadProgrammes();
-                clearForm();
-                isUpdateMode = false;
-                btnAjouter.setText("Ajouter Programme");
+
+                txtTitre.clear();
+                cmbType.getSelectionModel().clearSelection();
+                txtDescription.clear();
                 btnModifier.setDisable(false);
+
+                btnAjouter.setText("Ajouter Programme");
+
             } catch (Exception e) {
                 e.printStackTrace();
                 showAlert("Erreur", "Erreur lors de la mise à jour du programme !");
             }
         } else {
-            // Add logic
-            List<String> allEmails = userService.getAllUserEmails(); // Call the method on the instance
-            String titre = txtTitre.getText();
-            String type = cmbType.getValue();
-            String description = txtDescription.getText();
-
-            if (titre.isEmpty() || type == null || description.isEmpty()) {
-                showAlert("Attention", "Veuillez remplir tous les champs !");
-                return;
-            }
-            if (!titre.matches("^[a-zA-Z]+$")) {
-                showAlert("Erreur de saisie", "Le titre ne doit contenir que des lettres (pas de nombres ni d'espaces).");
-                return;
-            }
-
             Models.programmebienetre programme = new Models.programmebienetre(0, titre, type, description);
             try {
                 service.create(programme);
+                List<String> allEmails = userService.getAllUserEmails(); // Appel sur l'instance de UserService
                 for (String email : allEmails) {
-                    emailService.sendEmail(email, "ProgWellBeing Created", "A new ProgWellBeing, you can View  it now!");
+                    emailService.sendEmail(email, "ProgWellBeing Created", "A new ProgWellBeing has been created, you can check it now!");
                 }
+
                 loadProgrammes();
-                clearForm();
+
+                txtTitre.clear();
+                cmbType.getSelectionModel().clearSelection();
+                txtDescription.clear();
+
             } catch (Exception e) {
                 e.printStackTrace();
                 showAlert("Erreur", "Erreur lors de l'ajout du programme !");
@@ -148,17 +148,18 @@ public class programmebienetre implements Initializable {
     @FXML
     private void modifierProgramme() {
         int selectedIndex = listViewProgrammes.getSelectionModel().getSelectedIndex();
+
         if (selectedIndex == -1) {
             showAlert("Attention", "Veuillez sélectionner un programme à modifier !");
             return;
         }
 
         Models.programmebienetre selectedProgramme = programmeList.get(selectedIndex);
+
         txtTitre.setText(selectedProgramme.getTitre());
         cmbType.setValue(selectedProgramme.getType());
         txtDescription.setText(selectedProgramme.getDescription());
 
-        isUpdateMode = true;
         btnAjouter.setText("Mettre à jour");
         btnModifier.setDisable(true);
     }
@@ -166,6 +167,7 @@ public class programmebienetre implements Initializable {
     @FXML
     private void supprimerProgramme() {
         int selectedIndex = listViewProgrammes.getSelectionModel().getSelectedIndex();
+
         if (selectedIndex == -1) {
             showAlert("Attention", "Veuillez sélectionner un programme à supprimer !");
             return;
@@ -211,14 +213,8 @@ public class programmebienetre implements Initializable {
             popupStage.showAndWait();
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible d'ouvrir la fenêtre de récompense ! Vérifiez le fichier FXML.");
+            showAlert("Erreur", "Impossible d'ouvrir la fenêtre de récompense !");
         }
-    }
-
-    private void clearForm() {
-        txtTitre.clear();
-        cmbType.getSelectionModel().clearSelection();
-        txtDescription.clear();
     }
 
     private void showAlert(String title, String message) {

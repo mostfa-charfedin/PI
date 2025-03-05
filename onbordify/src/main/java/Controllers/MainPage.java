@@ -1,6 +1,7 @@
 package Controllers;
 
-
+import Models.Role;
+import utils.UserSession;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -20,6 +21,8 @@ public class MainPage {
 
     @FXML
     public void initialize() {
+        UserSession session = UserSession.getInstance();
+        Role roleSession = session.getRole();
         // Charger la page d'accueil par défaut
         loadPage("/fxml/GestionUser.fxml");
 
@@ -27,9 +30,12 @@ public class MainPage {
         btnPage1.setOnAction(e -> loadPage("/fxml/Profile.fxml"));
         btnPage2.setOnAction(e -> loadPage("/fxml/Score.fxml"));
         btnPage3.setOnAction(e -> loadPage("/fxml/GestionUser.fxml"));
-        btnPage5.setOnAction(e -> loadPage("/Avis.fxml"));
-
+        if (roleSession == Role.ADMIN) {
+        btnPage5.setOnAction(e -> loadPage("/Programmebienetre.fxml"));}
+        else {        btnPage5.setOnAction(e -> loadPage("/Avis.fxml"));}
     }
+
+
 
     private void loadPage(String fxmlFile) {
         try {
