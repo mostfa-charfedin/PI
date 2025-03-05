@@ -19,8 +19,6 @@ public class MainFx extends Application {
         primaryStage.setTitle("Onboardfiy");
         primaryStage.setFullScreen(true);
         primaryStage.show();
-
-
     }
 
     public static void main(String[] args) {
