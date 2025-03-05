@@ -42,6 +42,12 @@
         <Slider fx:id="ratingSlider" min="0" max="5" value="0" showTickMarks="true" showTickLabels="true" majorTickUnit="1" blockIncrement="0.1" layoutX="14" layoutY="100" />
     </HBox>
 
+    <!-- Affichage de la Moyenne des notes -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Note Moyenne :" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #555555;" />
+        <Label fx:id="labelMoyenneNote" style="-fx-font-size: 14px; -fx-text-fill: #333333;" />
+    </HBox>
+
     <!-- Bouton pour soumettre la note -->
     <Button fx:id="btnNoter" text="Soumettre la Note" onAction="#noterRessource" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5px; -fx-padding: 10px 20px;" />
 

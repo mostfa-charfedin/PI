@@ -9,18 +9,21 @@ public class Ressource {
     private String type;
     private String description;
     private String lien;
+    private double noteAverage;
     private List<Evaluation> evaluations;
 
     public Ressource() {}
 
-    public Ressource(int idResource, int idUser , String titre, String type, String description, String lien) {
-        this.idUser  = idUser ;
+    public Ressource(int idResource, int idUser, String titre, String type, String description, String lien, double noteAverage) {
+        this.idUser = idUser;
         this.idResource = idResource;
         this.titre = titre;
         this.type = type;
         this.description = description;
         this.lien = lien;
+        this.noteAverage = noteAverage;  // Ajout de la note moyenne
     }
+
     public int getIdResource() {
         return idResource;
     }
@@ -39,8 +42,16 @@ public class Ressource {
         return idUser ;
     }
 
-    public void setId(int idUser ) {
+    public void setidUser(int idUser ) {
         this.idUser  = idUser ;
+    }
+    public void setNoteAverage(double noteAverage) {
+        this.noteAverage = noteAverage;
+    }
+
+    // Méthode pour obtenir la note moyenne
+    public double getNoteAverage() {
+        return noteAverage;
     }
 
     public String getTitre() {
@@ -74,6 +85,19 @@ public class Ressource {
     public void setlien(String url) {
         this.lien = url;
     }
+
+    // Méthode pour obtenir le niveau de satisfaction
+    public String getSatisfaction() {
+        if (noteAverage >= 4.5) {
+            return "Très Satisfaisant";
+        } else if (noteAverage >= 3.5) {
+            return "Satisfaisant";
+        } else if (noteAverage >= 2.5) {
+            return "Moyen";
+        } else {
+            return "Insatisfaisant";
+        }
+    }
     @Override
     public String toString() {
         return "Ressource{" +
@@ -83,6 +107,7 @@ public class Ressource {
                 ", type='" + type + '\'' +
                 ", description='" + description + '\'' +
                 ", lien='" + lien + '\'' +
+                ", noteAverage=" + noteAverage +
                 '}';
     }
 
