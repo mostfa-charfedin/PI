@@ -34,7 +34,7 @@ public class Answersdetails {
     void Remove_answer(ActionEvent event) {
         int selectedIndex = listViewQuiz.getSelectionModel().getSelectedIndex();
         if (selectedIndex < 0) {
-            showAlert("Erreur", "Veuillez sélectionner une réponse à supprimer.");
+            showAlert("Error", "Please select a response to delete.");
             return;
         }
 
@@ -44,9 +44,9 @@ public class Answersdetails {
 
         // Confirmation Alert before deleting
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationAlert.setTitle("Confirmation de suppression");
-        confirmationAlert.setHeaderText("Voulez-vous vraiment supprimer cette réponse ?");
-        confirmationAlert.setContentText("Cette action est irréversible.");
+        confirmationAlert.setTitle("Deletion confirmation");
+        confirmationAlert.setHeaderText("Do you really want to delete this reply?");
+        confirmationAlert.setContentText("This action is irreversible.");
 
         Optional<ButtonType> result = confirmationAlert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -58,9 +58,9 @@ public class Answersdetails {
                 listViewQuiz.getItems().remove(selectedIndex);
                 answers.remove(selectedIndex); // Remove from tracked list
 
-                showAlert("Succès", "Réponse supprimée avec succès.");
+                showAlert("success", "Answer successfully deleted.");
             } catch (SQLException e) {
-                showAlert("Erreur", "Impossible de supprimer la réponse.");
+                showAlert("error", "Unable to delete reply.");
                 e.printStackTrace();
             }
         }
@@ -89,7 +89,7 @@ public class Answersdetails {
         try {
             loadAnswersForQuestion(questionId);
         } catch (SQLException e) {
-            showAlert("Erreur", "Impossible de charger les réponses.");
+            showAlert("Error", "Unable to load responses.");
             e.printStackTrace();
         }
     }
@@ -99,7 +99,7 @@ public class Answersdetails {
 
         answers = answerService.getReponsesByQuestionId(questionId); // Fetch answers once
         if (answers.isEmpty()) {
-            listViewQuiz.getItems().add("Aucune réponse trouvée");
+            listViewQuiz.getItems().add("No answers found");
         } else {
             for (Reponse answer : answers) {
                 String formattedAnswer = answer.getReponse() + " - " + answer.getStatut();

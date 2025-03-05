@@ -1,6 +1,7 @@
 package Controllers;
 
 import Services.QuizService;
+import Services.UserService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -13,6 +14,7 @@ import javafx.scene.control.DateCell;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 public class CreateQuiz {
     private final EmailService emailService = new EmailService();
@@ -29,6 +31,7 @@ public class CreateQuiz {
 
     @FXML
     private Label status;
+     UserService userService = new UserService();
 
     public void setListQuizController(ListQuiz listQuizController) {
         this.ListQuizController = listQuizController;
@@ -64,11 +67,11 @@ public class CreateQuiz {
             return;
         }
         if (!name.matches("^[a-zA-Z]+$")) {
-            status.setText("Le titre ne doit contenir que des lettres (pas de nombres ni d'espaces).");
+            status.setText("The title must contain only letters (no numbers or spaces).");
             return;
         }
         if (localDate.isBefore(LocalDate.now())) {
-            status.setText("La date du quiz ne peut pas être dans le passé !");
+            status.setText("The quiz date cannot be in the past !");
             return;
         }
 
@@ -78,7 +81,15 @@ public class CreateQuiz {
 
         try {
             quizService.create(quiz);
-            emailService.sendEmail("akrimi041@gmail.com", "Quiz Created", "A new quiz has been created, you can take it now!");
+
+            // Get all user emails
+            List<String> allEmails = userService.getAllUserEmails();
+
+            // Send email to each user
+            for (String email : allEmails) {
+                emailService.sendEmail(email, "Quiz Created", "A new quiz has been created, you can take it now!");
+            }
+           // emailService.sendEmail("akrimi041@gmail.com", "Quiz Created", "A new quiz has been created, you can take it now!");
 
             if (ListQuizController != null) {
                 ListQuizController.loadQuiz();

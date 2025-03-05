@@ -10,6 +10,8 @@ import javafx.scene.layout.StackPane;
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;
 import java.io.IOException;
+import Models.Role;
+import utils.UserSession;
 
 public class MainPage {
 
@@ -17,7 +19,7 @@ public class MainPage {
     private StackPane contentPane;  // Zone où afficher les pages
 
     @FXML
-    private Button btnPage1, btnPage2, btnPage3, btnPage4;  // Boutons du menu latéral
+    private Button btnPage1, btnPage2, btnPage3, btnPage4,btnPage6;  // Boutons du menu latéral
 
     @FXML
     public void initialize() {
@@ -34,9 +36,16 @@ public class MainPage {
         } else {
             btnPage4.setOnAction(e -> loadPage("/userprojectvue.fxml"));
         }
+
+        if (roleSession == Role.ADMIN) {
+            btnPage6.setOnAction(e -> loadPage("/views/ListQuiz.fxml"));
+        } else {
+            btnPage6.setOnAction(e -> loadPage("/views/QuizEmployee.fxml"));
+        }
     }
     private void showAccessDenied() {
         System.out.println("Accès refusé : Vous devez être administrateur pour accéder à cette page.");
+
     }
 
     private void loadPage(String fxmlFile) {

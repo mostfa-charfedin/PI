@@ -1,29 +1,37 @@
 package Controllers;
 
-import Models.Quiz;
-import Models.Question;
-import Models.Reponse;
+import Models.*;
 import Services.QuestionService;
 import Services.ReponseService;
+import Services.ScoreService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import utils.MyDb;
+import utils.UserSession;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class QuizPopup {
     private Connection connection;
+    private int score = 0;
+    private int currentQuestionIndex = 0;
+    UserSession session = UserSession.getInstance();
+    int userId = session.getUserId();
+
+    @FXML
+    private Button submit;
     @FXML
     private TextField answer1;
     @FXML
@@ -32,13 +40,12 @@ public class QuizPopup {
     private TextField answer3;
     @FXML
     private TextField answer4;
-
+    @FXML
+    private Label result;
     @FXML
     private AnchorPane mypane;
-
     @FXML
     private ImageView next;
-
     @FXML
     private Label question_field;
     @FXML
@@ -53,28 +60,29 @@ public class QuizPopup {
     private CheckBox toggle4;
 
     private Quiz quiz;
-    private int currentQuestionIndex = 0;
     private List<Question> questions;
     private ReponseService reponse;
+    private ScoreService scoreService;  // Declare ScoreService
 
     public QuizPopup() {
         this.connection = MyDb.getMydb().getConnection();
-        this.reponse = new ReponseService(); // Initialize the ReponseService
+        this.reponse = new ReponseService();
+        // Initialize ScoreService here
+        this.scoreService = new ScoreService();
+        if (this.scoreService == null) {
+            System.out.println("Error: ScoreService is not initialized properly.");
+        } else {
+            System.out.println("ScoreService initialized successfully.");
+        }
     }
 
-    // Set quiz and fetch questions
     public void setQuiz(Quiz quiz) {
         this.quiz = quiz;
-        System.out.println("Quiz ID: " + quiz.getIdQuiz()); // Vérifie l'ID du quiz
-
-        // Set the quiz name in the Quiz_name label
-        Quiz_name.setText("Quiz: " + quiz.getNom()); // Assuming quiz.getNom() returns the quiz name
-
+        Quiz_name.setText("Quiz: " + quiz.getNom());
         this.questions = fetchQuestionsByQuizId(quiz.getIdQuiz());
 
         if (questions != null && !questions.isEmpty()) {
-            System.out.println("Number of questions fetched: " + questions.size());
-            displayQuestion(currentQuestionIndex); // Display the first question
+            displayQuestion(currentQuestionIndex);
         } else {
             System.out.println("No questions found for this quiz.");
         }
@@ -82,71 +90,14 @@ public class QuizPopup {
 
     private List<Question> fetchQuestionsByQuizId(int quizId) {
         List<Question> questionList = new ArrayList<>();
-        QuestionService questionService = new QuestionService(); // Use the QuestionService
+        QuestionService questionService = new QuestionService();
 
         try {
-            // Fetch questions for the given quiz ID using the QuestionService
             questionList = questionService.getQuestionsByQuizId(quizId);
-            System.out.println("Number of questions fetched: " + questionList.size());
-            for (Question question : questionList) {
-                System.out.println("Found question: " + question.getQuestion());
-            }
         } catch (Exception e) {
             System.out.println("Error fetching questions: " + e.getMessage());
         }
-
         return questionList;
-    }
-
-    private List<Reponse> fetchResponsesByQuestionId(int questionId) {
-        List<Reponse> responseList = new ArrayList<>();
-        ReponseService reponseService = new ReponseService(); // Use the ReponseService
-
-        try {
-            // Fetch responses for the given question ID using the ReponseService
-            responseList = reponseService.getReponsesByQuestionId(questionId);
-        } catch (SQLException e) {
-            System.out.println("Error fetching responses: " + e.getMessage());
-        }
-
-        return responseList;
-    }
-
-    // Display question and responses based on the question ID
-    private void displayQuestion(int index) {
-        if (index >= 0 && index < questions.size()) {
-            Question question = questions.get(index);
-
-            // Set the question text
-            question_field.setText(question.getQuestion());
-
-            try {
-                // Fetch the responses for the current question from the database
-                List<Reponse> answers = fetchResponsesByQuestionId(question.getIdQuestion());
-
-                // Set the answers in the TextFields
-                answer1.setText(answers.size() > 0 ? answers.get(0).getReponse() : "");
-                answer2.setText(answers.size() > 1 ? answers.get(1).getReponse() : "");
-                answer3.setText(answers.size() > 2 ? answers.get(2).getReponse() : "");
-                answer4.setText(answers.size() > 3 ? answers.get(3).getReponse() : "");
-
-                // Reset toggle selections based on the answer status
-                toggle1.setSelected(answers.size() > 0 && answers.get(0).getStatut().equals("True"));
-                toggle2.setSelected(answers.size() > 1 && answers.get(1).getStatut().equals("True"));
-                toggle3.setSelected(answers.size() > 2 && answers.get(2).getStatut().equals("True"));
-                toggle4.setSelected(answers.size() > 3 && answers.get(3).getStatut().equals("True"));
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("Error loading answers for the question.");
-            }
-        } else {
-            System.out.println("No more questions to display.");
-        }
-    }
-
-    private void closePopup() {
-        Stage stage = (Stage) mypane.getScene().getWindow();
-        stage.close();
     }
 
     @FXML
@@ -154,43 +105,151 @@ public class QuizPopup {
         if (currentQuestionIndex < questions.size()) {
             Question currentQuestion = questions.get(currentQuestionIndex);
             int questionId = currentQuestion.getIdQuestion();
-
-            int selectedAnswerId = -1;
+            boolean isCorrect = false;
 
             try {
+                // Retrieve the answers for the current question
                 List<Reponse> answers = reponse.getReponsesByQuestionId(questionId);
+                CheckBox[] checkBoxes = {toggle1, toggle2, toggle3, toggle4};
 
-                // Identify the selected response
-                if (toggle1.isSelected() && answers.size() > 0) {
-                    selectedAnswerId = answers.get(0).getIdReponse();
-                } else if (toggle2.isSelected() && answers.size() > 1) {
-                    selectedAnswerId = answers.get(1).getIdReponse();
-                } else if (toggle3.isSelected() && answers.size() > 2) {
-                    selectedAnswerId = answers.get(2).getIdReponse();
-                } else if (toggle4.isSelected() && answers.size() > 3) {
-                    selectedAnswerId = answers.get(3).getIdReponse();
+                // Check if any of the checkboxes are selected and if it's the correct answer
+                for (int i = 0; i < answers.size(); i++) {
+                    if (checkBoxes[i].isSelected()) {
+                        isCorrect = "correct".equalsIgnoreCase(answers.get(i).getStatut());
+                        break;
+                    }
                 }
 
-                // Save response to the database if an answer is selected
-                if (selectedAnswerId != -1) {
-                    reponse.saveUserResponse(selectedAnswerId, questionId);
-                    System.out.println("Response saved successfully!");
-                } else {
-                    System.out.println("No answer selected!");
-                    return;
+                // Update the score if the answer is correct
+                if (isCorrect) {
+                    score++;
                 }
 
-                // Move to the next question
-                if (currentQuestionIndex < questions.size() - 1) {
-                    currentQuestionIndex++;
-                    displayQuestion(currentQuestionIndex); // Display the next question
-                } else {
-                    System.out.println("Quiz completed!");
-                    closePopup();
-                }
+                // Temporarily disable the submit button and change its text to "Next Question"
+                submit.setDisable(true);
+                submit.setText("Next Question");
+
+                // Wait a short period before proceeding to the next question or showing the final score
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(500); // Delay of 500ms to allow user to see the transition
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    // Proceed to the next question or show the final score
+                    javafx.application.Platform.runLater(() -> {
+                        submit.setDisable(false);
+                        if (currentQuestionIndex < questions.size() - 1) {
+                            // Move to the next question
+                            currentQuestionIndex++;
+                            displayQuestion(currentQuestionIndex); // Update the displayed question
+                        } else {
+                            // All questions answered, show final score
+                            showFinalScore();
+                            saveScoreToDatabase(); // Save the score to the database
+                        }
+
+                        // Reset button text to "Submit" for the next question
+                        submit.setText("Submit");
+                    });
+                }).start();
+
             } catch (SQLException e) {
+                System.err.println("Database error: " + e.getMessage());
                 e.printStackTrace();
             }
         }
     }
+
+    // Method to save the score in the database using ScoreService
+    private void saveScoreToDatabase() {
+        try {
+            // Check if scoreService is initialized correctly
+            if (scoreService == null) {
+                System.out.println("Error: ScoreService is not initialized.");
+                return;  // Don't proceed if scoreService is not initialized
+            }
+
+
+            int quizId = quiz.getIdQuiz(); // Get the current quiz's ID
+
+            // Create a Score object to be saved
+            Score scoreObj = new Score();
+            scoreObj.setIdUser(userId);
+            scoreObj.setIdQuiz(quizId);
+            scoreObj.setScore(score);
+
+            // Use the ScoreService to save the score
+            scoreService.create(scoreObj); // Call the create method from ScoreService
+
+        } catch (Exception e) {
+            System.err.println("Error saving score to database: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void displayQuestion(int index) {
+        if (index < questions.size()) {
+            Question question = questions.get(index);
+            question_field.setText(question.getQuestion()); // Set question text in TextField
+
+            try {
+                List<Reponse> answers = reponse.getReponsesByQuestionId(question.getIdQuestion());
+
+                // Store answers in text fields instead of checkboxes
+                TextField[] answerFields = {answer1, answer2, answer3, answer4};
+                CheckBox[] checkBoxes = {toggle1, toggle2, toggle3, toggle4};
+
+                for (int i = 0; i < answerFields.length; i++) {
+                    if (i < answers.size()) {
+                        answerFields[i].setText(answers.get(i).getReponse());
+                        answerFields[i].setVisible(true);
+                        checkBoxes[i].setVisible(true);
+                        checkBoxes[i].setSelected(false);
+                    } else {
+                        answerFields[i].setText("");
+                        answerFields[i].setVisible(false);
+                        checkBoxes[i].setVisible(false);
+                    }
+                }
+            } catch (SQLException e) {
+                System.err.println("Error loading answers: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void showFinalScore() {
+        try {
+            // Load the Result interface
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/result.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller of result.fxml
+            result resultController = loader.getController();
+            resultController.setScore(score); // Pass the score to the ResultController
+
+            // Create a new Stage for the popup
+            Stage stage = new Stage();
+            stage.setTitle("Quiz Result");
+            stage.setScene(new Scene(root, 700, 400));
+            stage.setResizable(false); // Prevent resizing
+            stage.initStyle(javafx.stage.StageStyle.UTILITY); // Optional: Removes minimize/maximize buttons
+            stage.centerOnScreen(); // Center it on the screen
+
+            // Show the popup
+            stage.show();
+
+            // Close the current quiz popup window
+            Stage currentStage = (Stage) submit.getScene().getWindow();
+            currentStage.close();
+
+        } catch (IOException e) {
+            System.err.println("Error loading result.fxml: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
 }
