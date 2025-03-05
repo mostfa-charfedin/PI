@@ -98,4 +98,31 @@ public class programmebienetreService implements CrudInterface<programmebienetre
         }
         return programmes;
     }
+
+
+    // Ajouter un avis
+    public void ajouterAvis(int idProgramme, int idUser, int rating, String commentaire) throws SQLException {
+        String sql = "INSERT INTO avis (idProgramme, idUser, rating, commentaire) " +
+                "VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE rating = VALUES(rating), commentaire = VALUES(commentaire)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idProgramme);
+            stmt.setInt(2, idUser);
+            stmt.setInt(3, rating);
+            stmt.setString(4, commentaire);
+            stmt.executeUpdate();
+            System.out.println("Avis ajouté ou mis à jour.");
+        } catch (SQLException e) {
+            throw new SQLException("Erreur lors de l'ajout ou de la mise à jour de l'avis : " + e.getMessage());
+        }
+    }
+
+    public int getTotalReviews(int idProgramme) {
+
+        return idProgramme;
+    }
+
+    public double getAverageRating(int idProgramme) {
+        return 0;
+    }
 }

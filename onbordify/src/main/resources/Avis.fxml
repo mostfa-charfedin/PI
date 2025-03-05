@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.effect.DropShadow?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1220.0" style="-fx-background-color: linear-gradient(to bottom, #E3F2FD, #bbbcfb);" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="Controller.Avis">
+
+    <!-- Titre Principal avec Icône -->
+    <HBox layoutX="30" layoutY="30" spacing="10" alignment="CENTER_LEFT">
+        <ImageView fitHeight="45" fitWidth="45" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@/assets/mental-health.png" />
+            </image>
+        </ImageView>
+        <Label style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" text="Gestion des Programmes de Bien-Être">
+            <font>
+                <Font name="Arial" size="32" />
+            </font>
+            <effect>
+                <DropShadow color="#34495E" radius="3" spread="0.2" />
+            </effect>
+        </Label>
+    </HBox>
+
+    <!-- Conteneur Principal Responsive -->
+    <VBox layoutX="30" layoutY="100" prefWidth="1160" spacing="20" AnchorPane.topAnchor="100" AnchorPane.bottomAnchor="60" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30">
+        <!-- Titre de la Section -->
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <ImageView fitHeight="32" fitWidth="32" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@/assets/checklist.png" />
+                </image>
+            </ImageView>
+            <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #34495E;" text="Liste des Programmes">
+                <font>
+                    <Font name="Arial" size="24" />
+                </font>
+                <effect>
+                    <DropShadow color="#34495E" radius="2" spread="0.1" />
+                </effect>
+            </Label>
+        </HBox>
+
+        <!-- Liste des Programmes (Responsive) -->
+        <ListView fx:id="listViewProgrammes" style="-fx-background-radius: 12; -fx-border-radius: 12; -fx-background-color: white; -fx-border-color: #D5DBDB; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);" VBox.vgrow="ALWAYS" />
+
+        <!-- Bouton de Rafraîchissement -->
+        <Button fx:id="btnRefresh" text="Rafraîchir la Liste" style="-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px;" />
+    </VBox>
+
+    <!-- Footer Responsive -->
+    <Label layoutX="30" layoutY="670" style="-fx-font-size: 14px; -fx-text-fill: #7F8C8D;" text="© 2023 Gestion des Programmes de Bien-Être. Tous droits réservés." AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="30">
+        <font>
+            <Font name="Arial" size="14" />
+        </font>
+    </Label>
+
+</AnchorPane>
