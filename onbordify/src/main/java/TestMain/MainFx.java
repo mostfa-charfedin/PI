@@ -5,26 +5,26 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.util.Objects;
 
+import java.net.URL;
 
 public class MainFx extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
-        Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/style.css")).toExternalForm());
+        // Load FXML file
+        URL fxmlResource = getClass().getResource("/display_posts.fxml");
+        if (fxmlResource == null) {
+            throw new RuntimeException("Cannot find CreatePublication.fxml");
+        }
+        Parent root = FXMLLoader.load(fxmlResource);
+        // Create scene
+        Scene scene = new Scene(root, 800 , 500);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Onboardfiy");
-        primaryStage.setFullScreen(true);
+        primaryStage.setTitle("FXML Test");
         primaryStage.show();
-
-
     }
 
     public static void main(String[] args) {
         launch(args);
-
     }
 }

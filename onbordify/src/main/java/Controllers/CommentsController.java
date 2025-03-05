@@ -1,4 +1,4 @@
-package controller;
+package Controllers;
 
 import Models.Commentaire;
 import Models.Publication;
@@ -11,7 +11,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import service.CommentaireService;
+import Services.CommentaireService;
+import Services.SpamService;
 
 import java.io.File;
 import java.util.List;
@@ -21,11 +22,12 @@ public class CommentsController {
     @FXML private ListView<HBox> listViewComments;
     @FXML private TextArea commentInput;
     @FXML private TextArea imagePathInput;
+    @FXML private TextField titleInput;
 
-    @FXML
-    private TextField titleInput;
     private final CommentaireService commentaireService = new CommentaireService();
+    private final SpamService spamService = new SpamService();
     private Publication currentPublication;
+    private Commentaire selectedComment;
 
     public void setPublication(Publication publication) {
         this.currentPublication = publication;
@@ -39,32 +41,27 @@ public class CommentsController {
         for (Commentaire comment : comments) {
             HBox commentBox = new HBox(10);
             Label commentLabel = new Label(comment.getTitre() + ": " + comment.getDescription());
-            System.out.println("Image Path: " + comment.getImagePath()); // Debugging
 
             if (comment.getImagePath() != null && !comment.getImagePath().isEmpty()) {
-                try {
-                    File file = new File(comment.getImagePath());
-                    if (file.exists()) {
-                        // Convert to valid file URI
-                        String imageUri = file.toURI().toString();
-                        ImageView imageView = new ImageView(new Image(imageUri, 50, 50, true, true));
-                        commentBox.getChildren().add(imageView);
-                    } else {
-                        System.err.println("Image file not found: " + comment.getImagePath());
-                    }
-                } catch (Exception e) {
-                    System.err.println("Error loading image: " + e.getMessage());
+                File file = new File(comment.getImagePath());
+                if (file.exists()) {
+                    String imageUri = file.toURI().toString();
+                    ImageView imageView = new ImageView(new Image(imageUri, 50, 50, true, true));
+                    commentBox.getChildren().add(imageView);
                 }
             }
-            // Create Delete Button
+
             Button deleteButton = new Button("Delete");
             deleteButton.setOnAction(e -> deleteComment(comment));
 
-            commentBox.getChildren().addAll(commentLabel, deleteButton);
+            Button updateButton = new Button("Update");
+            updateButton.setOnAction(e -> editComment(comment));
+
+            commentBox.getChildren().addAll(commentLabel, updateButton, deleteButton);
             listViewComments.getItems().add(commentBox);
         }
-
     }
+
     private void deleteComment(Commentaire comment) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this comment?", ButtonType.YES, ButtonType.NO);
         alert.setTitle("Confirm Deletion");
@@ -73,11 +70,18 @@ public class CommentsController {
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
                 commentaireService.delete(comment.getIdCommentaire());
-                loadComments(); // Refresh the comment list
+                loadComments();
             }
         });
     }
 
+    private void editComment(Commentaire comment) {
+        // Préparer l'interface pour modifier le commentaire
+        selectedComment = comment;
+        titleInput.setText(comment.getTitre());
+        commentInput.setText(comment.getDescription());
+        imagePathInput.setText(comment.getImagePath());
+    }
 
     @FXML
     private void addComment() {
@@ -85,40 +89,47 @@ public class CommentsController {
         String content = commentInput.getText().trim();
         String imagePath = imagePathInput.getText().trim();
 
-        // Validate title
-        if (title.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Title is required!");
+        if (title.isEmpty() || !title.matches("[a-zA-ZÀ-ÿ\\s]+")) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Title", "The title must contain only letters and spaces.");
             return;
         }
 
-        // Validate comment content
         if (content.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Validation Error", "Comment content cannot be empty!");
             return;
         }
 
-        // Validate image path if provided
+        if (spamService.contientMotsInterdits(content)) {
+            showAlert(Alert.AlertType.ERROR, "Harmful Message", "Your comment contains inappropriate words!");
+            return;
+        }
+
         if (!imagePath.isEmpty() && !isValidImagePath(imagePath)) {
             showAlert(Alert.AlertType.ERROR, "Invalid Image Path", "Please enter a valid image file path.");
             return;
         }
 
-        // Create and add new comment
-        Commentaire newComment = new Commentaire(0, title, content, imagePath, 1, currentPublication.getIdPublication());
-        commentaireService.add(newComment);
+        if (selectedComment != null) {
+            // Mise à jour du commentaire sélectionné
+            selectedComment.setTitre(title);
+            selectedComment.setDescription(content);
+            selectedComment.setImagePath(imagePath);
 
-        // Clear inputs
+            commentaireService.update(selectedComment); // Appeler la méthode d'update
+            selectedComment = null; // Reset selected comment
+        } else {
+            // Ajout d'un nouveau commentaire
+            Commentaire newComment = new Commentaire(0, title, content, imagePath, 1, currentPublication.getIdPublication());
+            commentaireService.add(newComment);
+        }
+
         titleInput.clear();
         commentInput.clear();
         imagePathInput.clear();
 
-        // Refresh the comments list
         loadComments();
     }
 
-    /**
-     * Helper method to display an alert.
-     */
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType, message, ButtonType.OK);
         alert.setTitle(title);
@@ -126,20 +137,9 @@ public class CommentsController {
         alert.showAndWait();
     }
 
-    /**
-     * Validates the image path.
-     * Ensures the file exists and has a valid image extension.
-     */
     private boolean isValidImagePath(String path) {
         File file = new File(path);
-        if (!file.exists() || file.isDirectory()) {
-            return false;
-        }
-
-        // Check for common image file extensions
-        String lowerCasePath = path.toLowerCase();
-        return lowerCasePath.endsWith(".jpg") || lowerCasePath.endsWith(".jpeg") ||
-                lowerCasePath.endsWith(".png") || lowerCasePath.endsWith(".gif");
+        return file.exists() && !file.isDirectory() && path.matches(".*\\.(jpg|jpeg|png|gif)$");
     }
 
     @FXML
@@ -154,10 +154,7 @@ public class CommentsController {
         File selectedFile = fileChooser.showOpenDialog(stage);
 
         if (selectedFile != null) {
-            // Set the image path to the imageTF text field
             imagePathInput.setText(selectedFile.getAbsolutePath());
-        } else {
-            System.out.println("No image selected.");
         }
     }
 }

@@ -1,16 +1,13 @@
-package controller;
+package Controllers;
 
 import Models.Publication;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import service.PublicationService;
-import controller.DisplayPostsController; // Import your main post list controller
+import Services.PublicationService;
 
 import java.sql.Date;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 
 public class AddPostController {
     @FXML

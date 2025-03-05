@@ -1,4 +1,4 @@
-package service;
+package Services;
 
 import Models.Commentaire;
 import utils.MyDb;
@@ -47,6 +47,7 @@ public class CommentaireService {
         }
         return commentaires;
     }
+
     public List<Commentaire> getCommentsByPublication(int publicationId) {
         List<Commentaire> commentaires = new ArrayList<>();
         String query = "SELECT * FROM commentaire WHERE idPublication = ?";

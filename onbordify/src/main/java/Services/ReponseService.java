@@ -10,7 +10,7 @@ public class ReponseService implements CrudInterface<Reponse> {
 
     Connection connection;
   public ReponseService() {
-      this.connection = MyDb.getMydb().getConnection();
+      this.connection = MyDb.getInstance().getConnection();
   }
 
     // CREATE

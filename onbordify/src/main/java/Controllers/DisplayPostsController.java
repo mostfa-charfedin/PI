@@ -1,6 +1,5 @@
-package controller;
+package Controllers;
 
-import Models.Commentaire;
 import Models.Publication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,8 +11,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import service.CommentaireService;
-import service.PublicationService;
+import Services.CommentaireService;
+import Services.PublicationService;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,11 +28,14 @@ public class DisplayPostsController {
 
     @FXML
     public void initialize() {
+        loadPublications();
+    }
+
+    public void loadPublications() {
         List<Publication> publications = publicationService.getAll();
-        listViewPublications.getItems().addAll(publications);
+        ObservableList<Publication> observablePublications = FXCollections.observableArrayList(publications);
+        listViewPublications.setItems(observablePublications);
 
-
-        // Ensure we set a custom cell factory before adding items
         listViewPublications.setCellFactory(param -> new ListCell<>() {
             @Override
             protected void updateItem(Publication publication, boolean empty) {
@@ -42,27 +44,25 @@ public class DisplayPostsController {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    // Create layout
                     HBox hbox = new HBox(10);
                     Text postText = new Text(publication.getContenu());
 
-                    // ✅ Ensure the button is created and added
                     Button viewCommentsButton = new Button("View Comments");
                     viewCommentsButton.setOnAction(event -> displayComments(publication));
 
-                    // ✅ Add both text and button to the HBox
-                    hbox.getChildren().addAll(postText, viewCommentsButton);
+                    Button editButton = new Button("Edit");
+                    editButton.setOnAction(event -> editPost(publication));
 
-                    // ✅ Set the HBox as the cell's graphic
+                    Button deleteButton = new Button("Delete");
+                    deleteButton.setOnAction(event -> deletePost(publication));
+
+                    hbox.getChildren().addAll(postText, viewCommentsButton, editButton, deleteButton);
                     setGraphic(hbox);
                 }
             }
         });
-        // ✅ Add publications after setting the cell factory
-        listViewPublications.getItems().clear();
-        listViewPublications.getItems().addAll(publications);
-
     }
+
     private void displayComments(Publication publication) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/comments_view.fxml"));
@@ -72,33 +72,13 @@ public class DisplayPostsController {
             commentsController.setPublication(publication);
 
             Stage stage = new Stage();
-
             stage.setTitle("Comments");
-            Scene scene = new Scene(root, 800 , 500);
+            Scene scene = new Scene(root, 800, 500);
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void loadPublications() {
-        List<Publication> publications = publicationService.getAll();
-        ObservableList<Publication> observablePublications = FXCollections.observableArrayList(publications);
-        listViewPublications.setItems(observablePublications);
-
-        // Custom cell factory
-        listViewPublications.setCellFactory(param -> new ListCell<>() {
-            @Override
-            protected void updateItem(Publication pub, boolean empty) {
-                super.updateItem(pub, empty);
-                if (empty || pub == null) {
-                    setText(null);
-                } else {
-                    setText("📢 " + pub.getContenu() + "\n📅 " + pub.getDate());
-                }
-            }
-        });
     }
 
     @FXML
@@ -108,7 +88,7 @@ public class DisplayPostsController {
             Parent root = loader.load();
 
             AddPostController addPostController = loader.getController();
-            addPostController.setPostListController(this); // Pass reference for refreshing
+            addPostController.setPostListController(this);
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
@@ -116,21 +96,32 @@ public class DisplayPostsController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-}
-    @FXML
-    private void deleteSelectedPost() {
-        Publication selectedPublication = listViewPublications.getSelectionModel().getSelectedItem();
-        if (selectedPublication != null) {
-            Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this post?", ButtonType.YES, ButtonType.NO);
-            confirmDialog.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.YES) {
-                    publicationService.delete(selectedPublication.getIdPublication());
-                    loadPublications(); // Refresh list after deletion
-                }
-            });
-        } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a post to delete.");
-            alert.showAndWait();
+    }
+
+    private void editPost(Publication publication) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/update_post.fxml"));
+            Parent root = loader.load();
+
+            UpdatePostController updatePostController = loader.getController();
+            updatePostController.setPublication(publication, this);
+
+            Stage stage = new Stage();
+            stage.setTitle("Edit Post");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
+
+    private void deletePost(Publication publication) {
+        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this post?", ButtonType.YES, ButtonType.NO);
+        confirmDialog.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.YES) {
+                publicationService.delete(publication.getIdPublication());
+                loadPublications();
+            }
+        });
     }
 }

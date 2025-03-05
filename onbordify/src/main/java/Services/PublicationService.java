@@ -1,4 +1,4 @@
-package service;
+package Services;
 
 import Models.Commentaire;
 import Models.Publication;
@@ -44,6 +44,7 @@ public class PublicationService {
         }
         return publications;
     }
+
     public void delete(int idPublication) {
         String query = "DELETE FROM publication WHERE idPublication = ?";
         try {

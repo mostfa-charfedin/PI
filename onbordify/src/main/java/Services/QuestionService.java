@@ -11,7 +11,7 @@ public class QuestionService implements CrudInterface<Question> {
 
     Connection connection;
     public QuestionService() {
-        this.connection = MyDb.getMydb().getConnection();
+        this.connection = MyDb.getInstance().getConnection();
     }
     @Override
     public void create(Question obj) throws Exception {

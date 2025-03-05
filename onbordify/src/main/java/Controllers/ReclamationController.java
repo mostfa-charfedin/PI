@@ -1,13 +1,13 @@
-package controller;
+package Controllers;
 
 import Models.Reclamation;
-import service.ReclamationService;
+import Services.ReclamationService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import Services.SpamService;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -24,6 +24,7 @@ public class ReclamationController {
 
     private ReclamationService reclamationService = new ReclamationService();
     private ObservableList<String> reclamationsList = FXCollections.observableArrayList();
+    SpamService spamService = new SpamService();
 
     @FXML
     public void initialize() {
@@ -49,17 +50,25 @@ public class ReclamationController {
             return;
         }
 
-        Reclamation newRec = new Reclamation();
-        newRec.setCommentaire(commentaire);
-        newRec.setDate(date);
-        newRec.setIdUser(1);  // Set the user ID dynamically if needed
-        newRec.setEtat("Pending");
+        // Vérification si la date est dans le passé
+        if (date.isBefore(LocalDate.now())) {
+            showAlert("Error", "The date cannot be in the past.");
+            return;
+        }
 
-        reclamationService.add(newRec);
-        showAlert("Success", "Claim added successfully!");
-        loadReclamations();
-        commentaireField.clear();
-        dateField.setValue(null);
+        if (!spamService.traiterReclamation(commentaire)) {
+            Reclamation newRec = new Reclamation();
+            newRec.setCommentaire(commentaire);
+            newRec.setDate(date);
+            newRec.setIdUser(1);  // Set the user ID dynamically if needed
+            newRec.setEtat("Pending");
+
+            reclamationService.add(newRec);
+            showAlert("Success", "Claim added successfully!");
+            loadReclamations();
+            commentaireField.clear();
+            dateField.setValue(null);
+        }
     }
 
     @FXML

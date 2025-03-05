@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="508.0" stylesheets="css/Style.css" prefWidth="560.0" spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.CommentsController" style="-fx-background-color: linear-gradient(to bottom, #A2C2E4, #E0F1FB);"> <!-- Nuage bleu en dégradé -->
+<VBox alignment="CENTER" prefHeight="508.0" stylesheets="css/style.css" prefWidth="560.0" spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.CommentsController" style="-fx-background-color: linear-gradient(to bottom, #A2C2E4, #E0F1FB);"> <!-- Nuage bleu en dégradé -->
 
     <!-- Title -->
     <Label text="Add Your Comment" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" /> <!-- Bleu foncé pour le texte -->
