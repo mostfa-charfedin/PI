@@ -112,4 +112,18 @@ public class ReponseService implements CrudInterface<Reponse> {
         }
         return reponseList;
     }
+
+    public void saveUserResponse(int selectedAnswerId, int questionId) throws SQLException {
+        String query = "INSERT INTO user_responses (question_id, response_id) VALUES (?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, questionId);
+            stmt.setInt(2, selectedAnswerId);
+            stmt.executeUpdate();
+            System.out.println("Response saved successfully for question ID: " + questionId);
+        } catch (SQLException e) {
+            System.out.println("Error saving response: " + e.getMessage());
+            throw e;
+        }
+    }
 }

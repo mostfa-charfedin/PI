@@ -17,6 +17,7 @@ import javafx.collections.ObservableList;
 
 public class ListQuiz {
 
+
     @FXML
     private Label lblstatus;
 
@@ -31,6 +32,7 @@ public class ListQuiz {
 
     @FXML
     private Label title_label;
+
 
     private QuizService quizService;
     private Quiz selectedQuiz;
@@ -190,7 +192,7 @@ public class ListQuiz {
     }
 
 
-    private void filterRessources(String searchField) {
+   /* private void filterRessources(String searchField) {
         ObservableList<String> filteredRessources = FXCollections.observableArrayList();
         if (searchField == null || searchField.trim().isEmpty()) {
             filteredRessources.addAll(quizItems);
@@ -202,5 +204,28 @@ public class ListQuiz {
             }
         }
         listViewQuiz.setItems(filteredRessources);
-    }
+    }*/
+
+   private void filterRessources(String searchText) {
+       ObservableList<String> filteredQuizzes;
+
+       if (searchText == null || searchText.trim().isEmpty()) {
+           // Trier les quiz par ordre alphabétique
+           filteredQuizzes = FXCollections.observableArrayList(
+                   quizItems.stream()
+                           .sorted(String::compareToIgnoreCase)
+                           .toList()
+           );
+       } else {
+           filteredQuizzes = FXCollections.observableArrayList(
+                   quizItems.stream()
+                           .filter(quiz -> quiz.toLowerCase().contains(searchText.toLowerCase()))
+                           .sorted(String::compareToIgnoreCase) // Trie les résultats filtrés
+                           .toList()
+           );
+       }
+
+       // Mettre à jour la ListView avec les éléments filtrés et triés
+       listViewQuiz.setItems(filteredQuizzes);
+   }
 }
