@@ -14,7 +14,7 @@
             <Button fx:id="btnPage2" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Score list" />
             <Button fx:id="btnPage3" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Gestion Users" />
             <Button fx:id="btnPage4" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Page 2" />
-            <Button fx:id="btnPage5" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Page 2" />
+            <Button fx:id="btnPage5" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Avis" />
             <Button fx:id="btnPage6" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Page 2" />
             <Button fx:id="btnPage7" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Page 2" />
         </VBox>

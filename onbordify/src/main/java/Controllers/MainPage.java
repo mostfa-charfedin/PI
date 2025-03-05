@@ -16,7 +16,7 @@ public class MainPage {
     private StackPane contentPane;  // Zone où afficher les pages
 
     @FXML
-    private Button btnPage1, btnPage2, btnPage3;  // Boutons du menu latéral
+    private Button btnPage1, btnPage2, btnPage3,btnPage5;  // Boutons du menu latéral
 
     @FXML
     public void initialize() {
@@ -27,6 +27,8 @@ public class MainPage {
         btnPage1.setOnAction(e -> loadPage("/fxml/Profile.fxml"));
         btnPage2.setOnAction(e -> loadPage("/fxml/Score.fxml"));
         btnPage3.setOnAction(e -> loadPage("/fxml/GestionUser.fxml"));
+        btnPage5.setOnAction(e -> loadPage("/Avis.fxml"));
+
     }
 
     private void loadPage(String fxmlFile) {

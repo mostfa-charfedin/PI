@@ -29,13 +29,15 @@ public class Avis implements Initializable {
 
     private final programmebienetreService service = new programmebienetreService();
     private final ObservableList<programmebienetre> programmeList = FXCollections.observableArrayList();
-    private int idUtilisateurConnecte = 1; // Remplacez par l'ID de l'utilisateur connecté
+    private int userId;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        loadProgrammes();
-    }// Remplacez par l'ID de l'utilisateur connecté
+        UserSession session = UserSession.getInstance();
+        userId = session.getUserId();
 
+        loadProgrammes();
+    }
 
 
     private void loadProgrammes() {
@@ -191,7 +193,7 @@ public class Avis implements Initializable {
 
     private void soumettreAvis(programmebienetre programme, int rating, String commentaire) {
         try {
-            service.ajouterAvis(programme.getIdProgramme(), idUtilisateurConnecte, rating, commentaire);
+            service.ajouterAvis(programme.getIdProgramme(), userId, rating, commentaire);
             Platform.runLater(() -> {
                 showAlert("Avis ajouté", "Votre avis a été enregistré.", Alert.AlertType.INFORMATION);
                 loadProgrammes(); // Recharger les programmes dans le thread JavaFX
@@ -203,6 +205,7 @@ public class Avis implements Initializable {
             });
         }
     }
+
 
 
     private void showStatistics(programmebienetre programme) throws SQLException {
