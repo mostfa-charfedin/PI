@@ -9,7 +9,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.control.Label?>
 
-<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FavorisController" spacing="20" alignment="TOP_CENTER" style="-fx-background-color: #f0f0f0; -fx-padding: 20;">
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.FavorisController" spacing="20" alignment="TOP_CENTER" style="-fx-background-color: #f0f0f0; -fx-padding: 20;">
 
     <!-- Title Section -->
     <HBox spacing="10" alignment="CENTER">

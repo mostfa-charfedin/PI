@@ -1,6 +1,6 @@
-package controller;
+package Controllers;
 
-import Model.Ressource;
+import Models.Ressource;
 import Services.EvaluationService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;

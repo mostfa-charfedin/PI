@@ -1,9 +1,9 @@
-package controller;
+package Controllers;
 
-import Model.Favoris;
+import Models.Favoris;
 import Services.FavorisService;
 import Services.RessourceService;
-import Model.Ressource;
+import Models.Ressource;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

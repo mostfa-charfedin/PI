@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml" fx:controller="controller.ModifierRessourceController">
+      xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.ModifierRessourceController">
 
     <Label text="Modifier la Ressource"/>
 

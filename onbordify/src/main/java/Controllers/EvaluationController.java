@@ -1,6 +1,6 @@
-package controller;
+package Controllers;
 
-import Model.Ressource;
+import Models.Ressource;
 import Services.RessourceService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 

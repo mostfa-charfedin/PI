@@ -27,7 +27,7 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EvaluationController"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.EvaluationController"
             style="-fx-background-color: linear-gradient(to bottom, #e0f7fa, #80deea); -fx-padding: 20;">
     <!-- Top: MenuBar et barre d'outils -->
     <top>

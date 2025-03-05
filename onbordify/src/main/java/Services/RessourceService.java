@@ -1,8 +1,7 @@
 package Services;
 
-import Model.Ressource;
+import Models.Ressource;
 import utils.MyDb;
-import Services.CrudInterface;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,4 +1,4 @@
-package controller;
+package Controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -14,7 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import Services.FavorisService;
-import Model.Favoris;
+import Models.Favoris;
 
 import java.io.IOException;
 import java.util.List;

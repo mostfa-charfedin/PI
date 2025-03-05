@@ -1,8 +1,7 @@
-package org.example;
+package TestMain;
 
 
-import Model.Ressource;
-import Model.Favoris;
+import Models.Ressource;
 import Services.RessourceService;
 import Services.FavorisService;
 

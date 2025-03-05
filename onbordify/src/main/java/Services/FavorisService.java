@@ -1,7 +1,6 @@
 package Services;
 
-import Model.Favoris;
-import Services.CrudInterface;
+import Models.Favoris;
 import utils.MyDb;
 
 import java.sql.*;
