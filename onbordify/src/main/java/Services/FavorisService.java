@@ -11,7 +11,7 @@ public class FavorisService implements CrudInterface<Favoris> {
     private Connection connection;
 
     public FavorisService() {
-        connection = MyDb.getInstance().getConnection();
+        connection = MyDb.getMydb().getConnection();
     }
 
     public void create(Favoris fav) throws SQLException {

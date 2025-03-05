@@ -51,10 +51,25 @@ public class Projectview {
         }
     }
 
+
     @FXML
     private void handleCreateProject() {
-        openPopup("/projectcreate.fxml", "Create Project");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectcreate.fxml"));
+            Parent root = loader.load();
+
+            Projectcreate createController = loader.getController();
+            createController.setProjectViewController(this); // Pass the current instance
+
+            Stage popupStage = new Stage();
+            popupStage.setScene(new Scene(root));
+            popupStage.setTitle("Create Project");
+            popupStage.show();
+        } catch (IOException e) {
+            lblStatus.setText("Error opening create window: " + e.getMessage());
+        }
     }
+
 
     @FXML
     private void handleEditProject() {

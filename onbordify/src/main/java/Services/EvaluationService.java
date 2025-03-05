@@ -8,7 +8,7 @@ public class EvaluationService {
     private Connection connection;
 
     public EvaluationService() {
-        connection = MyDb.getInstance().getConnection();
+        connection = MyDb.getMydb().getConnection();
     }
 
     // 🟢 1️⃣ Ajouter ou Mettre à Jour une Évaluation

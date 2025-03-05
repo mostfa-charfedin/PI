@@ -14,7 +14,7 @@ public class RessourceService implements CrudInterface<Ressource> {
     private Connection connection;
 
     public RessourceService() {
-        connection = MyDb.getInstance().getConnection();
+        connection = MyDb.getMydb().getConnection();
     }
 
     // CREATE (Utilisation de PreparedStatement pour éviter l'injection SQL)
