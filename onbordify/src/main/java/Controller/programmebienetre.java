@@ -11,7 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+import Services.EmailService;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
@@ -77,6 +77,7 @@ public class programmebienetre implements Initializable {
 
     @FXML
     private void ajouterProgramme() {
+        EmailService emailService = new EmailService();
         String titre = txtTitre.getText();
         String type = cmbType.getValue();
         String description = txtDescription.getText();
@@ -123,6 +124,7 @@ public class programmebienetre implements Initializable {
             Models.programmebienetre programme = new Models.programmebienetre(0, titre, type, description);
             try {
                 service.create(programme);
+                emailService.sendEmail("chedlikilani87@gmail.com","ProgrammeBienEtre Créé","Un nouveau programme a été créé : " + titre);
 
                 loadProgrammes();
 

@@ -108,7 +108,7 @@ public  class QuizService implements CrudInterface<Quiz> {
         } catch (SQLException e) {
             System.err.println("Error fetching quizzes: " + e.getMessage());
             e.printStackTrace();
-            throw e; // إعادة رمي الاستثناء حتى يتم التعامل معه عند الاستدعاء
+            throw e;
         }
 
         return quizList;
