@@ -28,7 +28,7 @@
       <CheckBox fx:id="toggle2" layoutX="444.0" layoutY="267.0" mnemonicParsing="false" />
       <CheckBox fx:id="toggle3" layoutX="444.0" layoutY="303.0" mnemonicParsing="false" />
       <CheckBox fx:id="toggle4" layoutX="444.0" layoutY="344.0" mnemonicParsing="false" />
-      <Button layoutX="444.0" layoutY="435.0" mnemonicParsing="false" onAction="#submit" prefHeight="30.0" prefWidth="114.0" styleClass="button-create-recompense" stylesheets="@../Style.css" text="Submit" />
+      <Button fx:id="submit" layoutX="444.0" layoutY="435.0" mnemonicParsing="false" onAction="#submit" prefHeight="30.0" prefWidth="114.0" styleClass="button-create-recompense" stylesheets="@../Style.css" text="Submit" />
       <Label fx:id="Quiz_name" layoutX="340.0" layoutY="90.0" prefHeight="17.0" prefWidth="128.0" styleClass="header-label" stylesheets="@../Style.css" />
       <Label fx:id="result" layoutX="263.0" layoutY="124.0" />
       <Label fx:id="question_field" layoutX="220.0" layoutY="179.0" />
