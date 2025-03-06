@@ -13,8 +13,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import Services.FavorisService;
-import Models.Favoris;
+import Services.favoirsService;
+import Models.favoirs;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,17 +38,17 @@ public class FavorisController {
 
     private void loadFavoris() {
         // Initialize the service
-        FavorisService favorisService = new FavorisService();
+        favoirsService favorisService = new favoirsService();
 
         try {
             // Get all favoris from the database
-            List<Favoris> favorisList = favorisService.getAll(); // Call the method on the object
+            List<favoirs> favorisList = favorisService.getAll(); // Call the method on the object
 
             // Create an ObservableList to hold the titles of the Favoris
             ObservableList<String> favorisTitles = FXCollections.observableArrayList();
 
             // Loop through the list of Favoris and add the title to the observable list
-            for (Favoris favoris : favorisList) {
+            for (favoirs favoris : favorisList) {
                 favorisTitles.add(favoris.getTitreRessource());
             }
 
@@ -129,15 +129,15 @@ public class FavorisController {
 
     private void handleDeleteFavoris(String favorisTitle) {
         // Initialize the service
-        FavorisService favorisService = new FavorisService();
+        favoirsService favorisService = new favoirsService();
 
         try {
             // Get all favoris and search for the one with the matching title
-            List<Favoris> favorisList = favorisService.getAll();
-            Favoris favorisToDelete = null;
+            List<favoirs> favorisList = favorisService.getAll();
+            favoirs favorisToDelete = null;
 
             // Find the Favoris object that matches the title
-            for (Favoris favoris : favorisList) {
+            for (favoirs favoris : favorisList) {
                 if (favoris.getTitreRessource().equals(favorisTitle)) {
                     favorisToDelete = favoris;
                     break;
@@ -146,7 +146,7 @@ public class FavorisController {
 
             if (favorisToDelete != null) {
                 // Call the delete method with the idFavoris
-                favorisService.delete(favorisToDelete.getIdFavoris());
+                favorisService.delete(favorisToDelete.getidFavoirs());
 
                 // Remove the item from the ListView
                 favorisListView.getItems().remove(favorisTitle);

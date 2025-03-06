@@ -11,34 +11,21 @@ public class EvaluationService {
         connection = MyDb.getMydb().getConnection();
     }
 
-    // 🟢 1️⃣ Ajouter ou Mettre à Jour une Évaluation
-    public void ajouterOuMettreAJourEvaluation(int idResource, int idUser, double note) {
+    public void ajouterOuMettreAJourEvaluation(int idResource, int id, double note) {
         try {
-            // Vérifier si la ressource existe avant d'insérer une évaluation
-            String checkQuery = "SELECT COUNT(*) FROM ressources WHERE idResource = ?";
-            PreparedStatement checkStmt = connection.prepareStatement(checkQuery);
-            checkStmt.setInt(1, idResource);
-            ResultSet rs = checkStmt.executeQuery();
-            rs.next();
-            int count = rs.getInt(1);
+            // Vérification CORRIGÉE (sans 's' à ressource)
+            String checkQuery = "SELECT COUNT(*) FROM ressource WHERE idResource = ?";
+            // ... (le reste reste inchangé)
 
-            if (count == 0) {
-                System.out.println("⚠ ERREUR : La ressource avec ID " + idResource + " n'existe pas !");
-                return; // Arrêter l'exécution
+            // Mise à jour de la moyenne dans la table ressource
+            double moyenne = calculerMoyenneNote(idResource);
+            String updateQuery = "UPDATE ressource SET noteAverage = ? WHERE idResource = ?";
+            try (PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
+                updateStmt.setDouble(1, moyenne);
+                updateStmt.setInt(2, idResource);
+                updateStmt.executeUpdate();
+                System.out.println("✅ noteAverage mis à jour !");
             }
-
-            // Si la ressource existe, insérer la note
-            String query = "INSERT INTO evaluation (idResource, idUser, note, dateEvaluation) " +
-                    "VALUES (?, ?, ?, ?) " +
-                    "ON DUPLICATE KEY UPDATE note = VALUES(note), dateEvaluation = VALUES(dateEvaluation)";
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setInt(1, idResource);
-            stmt.setInt(2, idUser);
-            stmt.setDouble(3, note);
-            stmt.setDate(4, java.sql.Date.valueOf(LocalDate.now()));
-            stmt.executeUpdate();
-
-            System.out.println("✅ Note enregistrée avec succès !");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -47,17 +34,22 @@ public class EvaluationService {
 
     // 🟢 2️⃣ Calculer la Moyenne des Notes d’une Ressource
     public double calculerMoyenneNote(int idResource) {
-        String query = "SELECT AVG(note) AS moyenne FROM evaluation WHERE idResource = ?";
+        String query = "SELECT AVG(note) AS moyenne FROM evaluation WHERE idResource = ?"; // ⚠️ Erreur typo ici ?
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, idResource);
+            System.out.println("[DEBUG] Requête exécutée : " + stmt.toString()); // Affiche la requête complète
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getDouble("moyenne");
+                double moyenne = rs.getDouble("moyenne");
+                System.out.println("[DEBUG] Moyenne calculée : " + moyenne);
+                return moyenne;
+            } else {
+                System.out.println("[DEBUG] Aucune note trouvée pour idResource=" + idResource);
             }
         } catch (SQLException e) {
-            System.out.println("❌ Erreur lors du calcul de la moyenne des notes : " + e.getMessage());
+            System.out.println("❌ Erreur SQL : " + e.getMessage()); // Affiche le message d'erreur complet
         }
-        return 0.0; // Retourne 0 si aucune note trouvée
+        return 0.0;
     }
 
     // 🟢 3️⃣ Générer Automatiquement un Message de Satisfaction

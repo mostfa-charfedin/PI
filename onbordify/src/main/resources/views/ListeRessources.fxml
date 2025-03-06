@@ -7,16 +7,20 @@
 <AnchorPane fx:id="anchorPane"  prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: #F4F4F4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ListeRessources">
 
     <!-- Header with Title -->
-    <HBox spacing="20" alignment="CENTER" style="-fx-background-color: #34495E; -fx-padding: 20px;" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+    <HBox spacing="20" alignment="CENTER_LEFT" style="-fx-background-color: #34495E; -fx-padding: 20px;" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
         <ImageView fitHeight="35" fitWidth="35"/>
-        <Label text="📚 Gestion des Ressources"
+        <Label text="📚 Resource management"
                style="-fx-font-size: 24px; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <Button fx:id="btnRetour" text="Retour" />
+
     </HBox>
+
 
     <!-- Main Content (Search Bar + List of Resources) -->
     <VBox spacing="20" alignment="CENTER" style="-fx-padding: 20px;" AnchorPane.topAnchor="60" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50">
         <!-- Search Bar -->
-        <TextField fx:id="searchField" promptText="🔍 Rechercher une ressource..."
+        <TextField fx:id="searchField" promptText="🔍 Search for resource..."
                    style="-fx-font-size: 14px; -fx-pref-width: 500px;
                           -fx-background-radius: 30px; -fx-padding: 12px;
                           -fx-background-color: #ECF0F1;"/>
@@ -28,7 +32,7 @@
 
     <!-- Action Buttons -->
     <HBox spacing="20" alignment="CENTER" style="-fx-background-color: #F7F7F7; -fx-padding: 15px;" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-        <Button text="➕ Ajouter" fx:id="btnAjouter"
+        <Button text="➕ Add" fx:id="btnAjouter"
                 style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 16px;
                        -fx-font-weight: bold; -fx-padding: 12px 25px; -fx-background-radius: 25px;"/>
 
