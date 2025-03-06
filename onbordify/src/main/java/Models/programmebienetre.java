@@ -12,7 +12,6 @@ public class programmebienetre {
 
     // Constructeur par défaut
     public programmebienetre() {
-        // Initialisation des champs avec des valeurs par défaut
         this.idProgramme = 0;
         this.titre = "";
         this.type = "";
@@ -100,6 +99,8 @@ public class programmebienetre {
         this.email = email;
     }
 
+
+
     @Override
     public String toString() {
         return "ProgrammeBienetre{" +
@@ -111,6 +112,7 @@ public class programmebienetre {
                 ", nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
                 ", email='" + email + '\'' +
+
                 '}';
     }
 }

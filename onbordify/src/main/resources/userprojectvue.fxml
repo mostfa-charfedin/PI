@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to bottom, #E3F2FD, #bbbcfb);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Userprojectvue">
+
+    <children>
+        <!-- Top Bar with Small Logo -->
+        <HBox prefHeight="50" style="-fx-background-color: #1e3a8a; -fx-alignment: CENTER_LEFT; -fx-padding: 5px;" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+            <children>
+                <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@assests/Screenshot%202025-02-20%20092600.png" />
+                    </image>
+                </ImageView>
+            </children>
+        </HBox>
+
+        <!-- Main Content Box -->
+        <VBox layoutX="80.0" layoutY="66.0" spacing="12" style="-fx-background-color: white; -fx-padding: 30; -fx-border-radius: 15; -fx-background-radius: 15; -fx-border-color: rgba(0,0,0,0.1); -fx-border-width: 2px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);" AnchorPane.bottomAnchor="24.399999999999977" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="66.0">
+
+            <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #34495E;" text="📋 project" />
+
+            <!-- ListView to display projects -->
+            <ListView fx:id="projectListView" style="-fx-border-radius: 8px; -fx-background-radius: 8px; -fx-padding: 8px;" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0" VBox.vgrow="ALWAYS" />
+
+            <!-- Status Label -->
+            <Label fx:id="lblStatus" style="-fx-text-fill: red; -fx-font-weight: bold;" text="" AnchorPane.bottomAnchor="5.0" />
+        </VBox>
+    </children>
+</AnchorPane>

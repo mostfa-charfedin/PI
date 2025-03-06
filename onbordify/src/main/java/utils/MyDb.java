@@ -4,10 +4,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 public class MyDb {
     private Connection conn;
-    private final String URL = "jdbc:mysql://localhost:3306/onbordify";
+    private final String URL = "jdbc:mysql://localhost:3306/onboardify";
     private final String USER = "root";
     private final String PASSWORD = "";
-    private static MyDb instance;
+    private static MyDb mydb;
 
     private MyDb() {
         try {
@@ -19,16 +19,21 @@ public class MyDb {
 
     }
 
-    public static MyDb getInstance() {
-        if (instance == null) {
-            instance = new MyDb();
+    public static MyDb getMydb() {
+        if (mydb == null) {
+
+            mydb = new MyDb();
         }
-        return instance;
+        return mydb;
     }
 
-    public Connection getConnection() {
+
+
+    public  Connection getConnection() {
         return conn;
 
     }
+
+
 
 }

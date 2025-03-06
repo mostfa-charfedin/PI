@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.Objects;
 
 public class MainFx extends Application {
     @Override
@@ -14,17 +15,22 @@ public class MainFx extends Application {
         // Load FXML file
         URL fxmlResource = getClass().getResource("/fxml/login.fxml");
         if (fxmlResource == null) {
-            throw new RuntimeException("Cannot find CreatePublication.fxml");
+            throw new RuntimeException("Cannot find projectcreate.fxml");
         }
         Parent root = FXMLLoader.load(fxmlResource);
+
         // Create scene
-        Scene scene = new Scene(root, 800 , 500);
+        Scene scene = new Scene(root, 600, 400);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("FXML Test");
+        primaryStage.setTitle("Onboardfiy");
+        primaryStage.setFullScreen(true);
         primaryStage.show();
+
+
     }
 
     public static void main(String[] args) {
         launch(args);
+
     }
 }

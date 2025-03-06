@@ -1,46 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="800.0" stylesheets="@/css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.EditUser">
+<AnchorPane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: 3498db;" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.EditUser">
    <children>
-      <!-- Left VBox -->
-      <VBox layoutX="80.0" layoutY="48.0" prefHeight="140.0" prefWidth="166.0">
-         <children>
-            <Label text="Nom" />
-            <TextField fx:id="nomMod" />
-            <VBox fx:id="nomErrorBox" /> <!-- Pour afficher les erreurs du nom -->
-            <Label text="Prenom" />
-            <TextField fx:id="prenomMod" />
-            <VBox fx:id="prenomErrorBox" /> <!-- Pour afficher les erreurs du prénom -->
-            <Label text="Email" />
-            <TextField fx:id="emailMod" />
-            <VBox fx:id="emailErrorBox" /> <!-- Pour afficher les erreurs de l'email -->
-         </children>
-      </VBox>
-      <VBox layoutX="325.0" layoutY="48.0" prefHeight="210.0" prefWidth="166.0">
-         <children>
-            <Label text="Cin" />
-            <TextField fx:id="cinMod" />
-            <VBox fx:id="cinErrorBox" /> <!-- Pour afficher les erreurs du Cin -->
-            <Label text="Date de naissance" />
-            <DatePicker fx:id="dateMod" />
-            <VBox fx:id="dateNaissanceErrorBox" />
-            <Label text="Role" />
-            <ComboBox fx:id="roleMod" prefHeight="26.0" prefWidth="166.0" />
-         </children>
-      </VBox>
 
       <!-- Update Button -->
-      <Button fx:id="updateButton" text="Update" onAction="#updateUser" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" />
+      <Button fx:id="updateButton" onAction="#updateUser" text="Update" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" />
 
       <!-- Message Label -->
       <Label fx:id="messageMod" AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="20" />
+
+      <!-- HBox centré -->
+      <HBox alignment="CENTER" spacing="20" style="-fx-padding: 20;" stylesheets="@../css/style.css">
+         <children>
+            <!-- Left VBox -->
+            <VBox fx:id="vboxLeft" alignment="CENTER" prefHeight="237.0" prefWidth="280.0" spacing="10">
+               <children>
+                  <Label text="First name" />
+                  <TextField fx:id="nomMod" prefHeight="30.0" prefWidth="200.0" />
+                  <VBox fx:id="nomErrorBox" /> <!-- Pour afficher les erreurs du nom -->
+                  <Label text="Last name" />
+                  <TextField fx:id="prenomMod" prefHeight="30.0" prefWidth="200.0" />
+                  <VBox fx:id="prenomErrorBox" /> <!-- Pour afficher les erreurs du prénom -->
+                  <Label text="Email" />
+                  <TextField fx:id="emailMod" prefHeight="30.0" prefWidth="200.0" />
+                  <VBox fx:id="emailErrorBox" /> <!-- Pour afficher les erreurs de l'email -->
+               </children>
+               <HBox.margin>
+                  <Insets left="50.0" right="50.0" />
+               </HBox.margin>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="145.0" prefWidth="280.0" spacing="10">
+               <children>
+                  <Label text="Cin" />
+                  <TextField fx:id="cinMod" prefHeight="30.0" prefWidth="200.0" />
+                  <VBox fx:id="cinErrorBox" /> <!-- Pour afficher les erreurs du Cin -->
+                  <Label text="Birthday" />
+                  <DatePicker fx:id="dateMod" prefHeight="30.0" prefWidth="267.0" />
+                  <VBox fx:id="dateNaissanceErrorBox" />
+                  <Label text="Role" />
+                  <ComboBox fx:id="roleMod" prefHeight="30.0" prefWidth="279.0" />
+                  <Label prefHeight="20.0" prefWidth="113.0" text="Account Status" />
+                  <ComboBox fx:id="StatusCompte" prefHeight="31.0" prefWidth="278.0" />
+               </children>
+               <HBox.margin>
+                  <Insets right="50.0" />
+               </HBox.margin>
+            </VBox>
+         </children>
+      </HBox>
+
    </children>
 </AnchorPane>

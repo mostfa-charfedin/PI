@@ -98,4 +98,73 @@ public class programmebienetreService implements CrudInterface<programmebienetre
         }
         return programmes;
     }
+
+
+    // Ajouter un avis
+    public void ajouterAvis(int idProgramme, int idUser, int rating, String commentaire) throws SQLException {
+        String sql = "INSERT INTO avis (idProgramme, idUser, rating, commentaire) " +
+                "VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE rating = VALUES(rating), commentaire = VALUES(commentaire)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idProgramme);
+            stmt.setInt(2, idUser);
+            stmt.setInt(3, rating);
+            stmt.setString(4, commentaire);
+            stmt.executeUpdate();
+            System.out.println("Avis ajouté ou mis à jour.");
+        } catch (SQLException e) {
+            throw new SQLException("Erreur lors de l'ajout ou de la mise à jour de l'avis : " + e.getMessage());
+        }
+    }
+    public int getTotalReviews(int idProgramme) throws SQLException {
+        String sql = "SELECT COUNT(*) AS total FROM avis WHERE idProgramme = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idProgramme);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total");
+                }
+            }
+        }
+        return 0; // Retourne 0 si aucune donnée n'est trouvée
+    }
+
+    public double getAverageRating(int idProgramme) throws SQLException {
+        String sql = "SELECT AVG(rating) AS average FROM avis WHERE idProgramme = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idProgramme);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("average");
+                }
+            }
+        }
+        return 0.0; // Retourne 0.0 si aucune donnée n'est trouvée
+    }
+
+public int getReviewCountByRating(int rating) throws SQLException {
+    String query = "SELECT COUNT(*) FROM avis WHERE rating = ?";
+    try (PreparedStatement statement = conn.prepareStatement(query)) {
+        statement.setInt(1, rating);
+        try (ResultSet resultSet = statement.executeQuery()) {
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        }
+    }
+    return 0;
+}
+    public int getReviewCountByRatingForProgramme(int idProgramme, int rating) throws SQLException {
+        String query = "SELECT COUNT(*) FROM avis WHERE idProgramme = ? AND rating = ?";
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setInt(1, idProgramme);
+            statement.setInt(2, rating);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
 }

@@ -47,6 +47,17 @@ public class Recompense implements Initializable {
         initializeProgrammes();
         initializeStatut();
         initializeListView();
+        // Blocage des dates passées dans le DatePicker
+        dateAttribution.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                if (date.isBefore(LocalDate.now())) {
+                    setDisable(true);  // Désactiver les dates passées
+                    setStyle("-fx-background-color: #ffc0cb;"); // Optionnel : couleur pour les dates désactivées
+                }
+            }
+        });
     }
 
     // Initialiser la ComboBox des programmes

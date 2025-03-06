@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: #f4f7f9;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.TaskDetailController">
+
+    <children>
+        <VBox alignment="CENTER" spacing="12" style="-fx-padding: 20px;" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+            <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #007acc;" text="Task Details" />
+            <Label fx:id="lblTaskTitle" style="-fx-font-size: 16px;" text="Title: " />
+            <Label fx:id="lblTaskDescription" text="Description: " />
+            <Label fx:id="lblTaskProject" text="Project: " />
+            <Label fx:id="lblTaskStatus" text="Status: " />
+            <Button fx:id="btnCompleteTask" onAction="#handleCompleteTask" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10px 20px;" text="Done" />
+        </VBox>
+    </children>
+</AnchorPane>

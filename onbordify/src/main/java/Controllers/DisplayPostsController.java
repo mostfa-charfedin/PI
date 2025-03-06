@@ -68,7 +68,7 @@ public class DisplayPostsController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/comments_view.fxml"));
             Parent root = loader.load();
 
-            CommentsController commentsController = loader.getController();
+            Controllers.CommentsController commentsController = loader.getController();
             commentsController.setPublication(publication);
 
             Stage stage = new Stage();

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PublicationService {
-    static Connection conn = MyDb.getInstance().getConnection();
+    static Connection conn = MyDb.getMydb().getConnection();
 
     public void add(Publication publication) {
         String query = "INSERT INTO publication (contenu, date, idUser) VALUES (?, ?, ?)";

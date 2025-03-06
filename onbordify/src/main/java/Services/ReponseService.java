@@ -37,7 +37,7 @@ public class ReponseService implements CrudInterface<Reponse> {
             throw new SQLException("L'objet Reponse ne peut pas être null.");
         }
 
-        String query = "UPDATE reponse SET reponse = ?, statut = ?, idQuestion = ? WHERE idReponse = ?";
+        String query = "UPDATE reponse SET Response = ?, status = ?, idQuestion = ? WHERE idReponse = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, obj.getReponse());
             stmt.setString(2, obj.getStatut());
@@ -72,7 +72,7 @@ public class ReponseService implements CrudInterface<Reponse> {
     @Override
     public List<Reponse> getAll() throws SQLException {
         List<Reponse> reponseList = new ArrayList<>();
-        String query = "SELECT idReponse, reponse, statut, idQuestion FROM reponse";
+        String query = "SELECT idReponse, Response, status, idQuestion FROM reponse";
 
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
@@ -111,5 +111,19 @@ public class ReponseService implements CrudInterface<Reponse> {
             throw new SQLException("Erreur lors de la récupération des réponses pour la question ID " + questionId, e);
         }
         return reponseList;
+    }
+
+    public void saveUserResponse(int selectedAnswerId, int questionId) throws SQLException {
+        String query = "INSERT INTO user_responses (question_id, response_id) VALUES (?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, questionId);
+            stmt.setInt(2, selectedAnswerId);
+            stmt.executeUpdate();
+            System.out.println("Response saved successfully for question ID: " + questionId);
+        } catch (SQLException e) {
+            System.out.println("Error saving response: " + e.getMessage());
+            throw e;
+        }
     }
 }

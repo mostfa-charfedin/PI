@@ -205,7 +205,7 @@ public class QuestionService implements CrudInterface<Question> {
 
 
     public void deleteQuestionByText(String selectedQuestion, int selectedQuizId) {
-        String query = "DELETE FROM question WHERE Question = ? AND id_Quiz = ?";
+        String query = "DELETE FROM question WHERE Question = ? AND idQuiz = ?";
 
         try (
              PreparedStatement pstmt = connection.prepareStatement(query)) {
