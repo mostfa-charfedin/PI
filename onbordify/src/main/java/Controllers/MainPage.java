@@ -22,7 +22,7 @@ public class MainPage {
     private StackPane contentPane;  // Zone où afficher les pages
 
     @FXML
-    private Button btnPage1, btnPage2, btnPage3, btnPage4,btnPage6;  // Boutons du menu latéral
+    private Button btnPage1, btnPage2, btnPage3, btnPage4,btnPage6, btnPage5, btnPage7;  // Boutons du menu latéral
 public UserSession session = UserSession.getInstance();
     @FXML
     public void initialize() {
@@ -50,13 +50,25 @@ public UserSession session = UserSession.getInstance();
         } else {
             btnPage4.setOnAction(e -> loadPage("/userprojectvue.fxml"));
         }
+        if (roleSession == Role.ADMIN) {
+            btnPage5.setOnAction(e -> loadPage("/programmebienetre.fxml"));
+        } else {
+            btnPage5.setOnAction(e -> loadPage("/Avis.fxml"));
+        }
 
         if (roleSession == Role.ADMIN) {
             btnPage6.setOnAction(e -> loadPage("/views/ListQuiz.fxml"));
         } else {
             btnPage6.setOnAction(e -> loadPage("/views/QuizEmployee.fxml"));
         }
+        if (roleSession == Role.ADMIN) {
+            btnPage7.setOnAction(e -> loadPage("/views/evaluation.fxml"));
+        } else {
+            btnPage7.setOnAction(e -> loadPage("/views/ListeRessources.fxml"));
+        }
+
     }
+
     private void showAccessDenied() {
         System.out.println("Accès refusé : Vous devez être administrateur pour accéder à cette page.");
 

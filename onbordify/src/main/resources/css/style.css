@@ -63,6 +63,7 @@
 
 .button-create-recompense {
     -fx-background-color: #3498DB;
+}
 /* General styling for the VBox container */
 .vbox-container {
     -fx-background-color: #f4f4f9;
@@ -75,6 +76,7 @@
 /* Title Label for Display Posts */
 .title-label {
     -fx-font-size: 24px;
+}
 /* List section styles */
 .list-vbox {
     -fx-background-color: white;
@@ -151,6 +153,7 @@
     -fx-background-color: #3498db;
     -fx-text-fill: white;
     -fx-padding: 12 20;
+}
 /* Style pour les Labels */
 .label {
     -fx-font-size: 14px;
@@ -180,6 +183,7 @@
 /* Title Label */
 .header-label {
     -fx-font-size: 24px;
+}
 /* Style pour les Buttons */
 .button {
     -fx-font-size: 14px;
@@ -213,7 +217,7 @@
 }
 
 /* Input field label styling */
-.input-label {
+
 #updateButton:hover {
     -fx-background-color: #1976D2; /* Bleu plus foncé */
 }
@@ -241,8 +245,7 @@
 }
 
 /* General input field styling */
-.input-field {
-/* Style pour les Buttons */
+
 .button {
     -fx-font-size: 14px;
     -fx-padding: 8;
@@ -290,13 +293,13 @@
 
 .input-field:focused {
     -fx-border-color: #3498db;
+}
 #loginButton:hover {
     -fx-background-color: #1976D2;
 }
 
 /* Styling for ListView */
-.list-view {
-/* Style pour les messages d'erreur */
+
 .error-message {
     -fx-font-size: 12px;
     -fx-text-fill: #ff0000;
@@ -347,18 +350,20 @@
     -fx-padding: 10;
     -fx-border-width: 0 0 1 0;
     -fx-border-color: #ecf0f1;
+}
 .sidebar{
     -fx-background-color: #82c2e3;
 }
 
 .list-view .cell:hover {
     -fx-background-color: #ecf0f1;
+}
 .root {
     -fx-background-color: linear-gradient(to bottom, #E3F2FD, #bbbcfb);
 }
 
 /* Button styling for the image upload */
-.button-upload-image {
+
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-border: none;
@@ -384,6 +389,7 @@
     -fx-background-color: rgba(255, 255, 255, 0.8);
     -fx-padding: 20px;
     -fx-background-radius: 10px;
+}
 .button-add-comment:pressed {
     -fx-background-color: #1c5980;
 }

@@ -19,7 +19,7 @@ public class EvaluationService {
 
             // Mise à jour de la moyenne dans la table ressource
             double moyenne = calculerMoyenneNote(idResource);
-            String updateQuery = "UPDATE ressource SET noteAverage = ? WHERE idResource = ?";
+            String updateQuery = "UPDATE ressources SET noteAverage = ? WHERE idResource = ?";
             try (PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
                 updateStmt.setDouble(1, moyenne);
                 updateStmt.setInt(2, idResource);

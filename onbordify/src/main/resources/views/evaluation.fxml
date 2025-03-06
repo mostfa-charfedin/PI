@@ -77,7 +77,7 @@
                             </columns>
                         </TableView>
                         <!-- Graphique des évaluations (BarChart) -->
-                        <PieChart fx:id="ratingDistributionChart" prefHeight="400" prefWidth="600" />
+
 
 
 
