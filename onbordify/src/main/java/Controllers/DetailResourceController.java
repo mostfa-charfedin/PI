@@ -56,7 +56,7 @@ public class DetailResourceController {
 
         double note = ratingSlider.getValue();
         int idResource = ressource.getIdResource();
-        int idUser = 1; // TODO: Remplacer par l'utilisateur connecté
+        int id = 1; // TODO: Remplacer par l'utilisateur connecté
 
         if (note < 0 || note > 5) {
             showAlert("Erreur", "La note doit être entre 0 et 5.");
@@ -64,7 +64,7 @@ public class DetailResourceController {
         }
 
         try {
-            evaluationService.ajouterOuMettreAJourEvaluation(idResource, idUser, note);
+            evaluationService.ajouterOuMettreAJourEvaluation(idResource, id, note);
             showAlert("Succès", "Votre évaluation a été enregistrée avec succès !");
         } catch (Exception e) {
             e.printStackTrace();

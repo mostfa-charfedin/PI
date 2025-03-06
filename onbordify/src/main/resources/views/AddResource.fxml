@@ -11,12 +11,12 @@
 <AnchorPane fx:id="anchorPane" prefHeight="450.0" prefWidth="700.0" style="-fx-background-color: #F4F4F4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AddResourceController">
 
     <!-- Form Title -->
-    <Label layoutX="219.0" layoutY="14.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="➕ Ajouter une Ressource" AnchorPane.leftAnchor="219.0" AnchorPane.topAnchor="14.0" />
+    <Label layoutX="219.0" layoutY="14.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="➕ Add a Resource" AnchorPane.leftAnchor="219.0" AnchorPane.topAnchor="14.0" />
 
     <!-- Title Input -->
     <HBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="50">
         <Label style="-fx-font-size: 14px;" text="📖 Titre:" />
-        <TextField fx:id="titleField" promptText="Entrez le titre" />
+        <TextField fx:id="titleField" promptText="enter the title" />
     </HBox>
 
     <!-- Type Selection (Populate in Controller) -->
@@ -28,7 +28,7 @@
     <!-- Description Input -->
     <HBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="150">
         <Label style="-fx-font-size: 14px;" text="📝 Description:" />
-        <TextArea fx:id="descriptionField" promptText="Entrez une description" wrapText="true" />
+        <TextArea fx:id="descriptionField" promptText="type a description" wrapText="true" />
     </HBox>
 
     <!-- Link Input -->
@@ -39,6 +39,6 @@
      <Button fx:id="btnCancel" layoutX="371.0" layoutY="408.0" style="-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-weight: bold;" text="❌ Annuler" />
      <Button fx:id="btnSave" layoutX="263.0" layoutY="408.0" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-weight: bold;" text="✅ Ajouter" />
      <TextField fx:id="linkField" layoutX="86.0" layoutY="372.0" promptText="https://..." />
-     <Label layoutX="23.0" layoutY="375.0" style="-fx-font-size: 14px;" text="🔗 Lien:" />
+     <Label layoutX="23.0" layoutY="375.0" style="-fx-font-size: 14px;" text="🔗 Link:" />
 
 </AnchorPane>

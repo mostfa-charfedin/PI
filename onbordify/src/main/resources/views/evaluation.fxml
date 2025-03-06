@@ -1,67 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.EvaluationController"
-            style="-fx-background-color: linear-gradient(to bottom, #e0f7fa, #80deea); -fx-padding: 20;">
+<BorderPane style="-fx-background-color: linear-gradient(to bottom, #e0f7fa, #80deea); -fx-padding: 20;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="Controllers.EvaluationController">
     <!-- Top: MenuBar et barre d'outils -->
     <top>
         <VBox spacing="5">
-            <MenuBar style="-fx-background-color: #004d40;">
+            <MenuBar style="-fx-background-color: #32b59e;">
                 <menus>
-                    <Menu text="Fichier" style="-fx-text-fill: white;">
+                    <Menu style="-fx-text-fill: white;" text="Fichier">
                         <items>
-                            <MenuItem text="Nouveau"/>
-                            <MenuItem text="Ouvrir"/>
-                            <MenuItem text="Enregistrer"/>
+                            <MenuItem text="Nouveau" />
+                            <MenuItem text="Ouvrir" />
+                            <MenuItem text="Enregistrer" />
 
-                            <MenuItem text="Quitter"/>
+                            <MenuItem text="Quitter" />
                         </items>
                     </Menu>
-                    <Menu text="Édition" style="-fx-text-fill: white;">
+                    <Menu style="-fx-text-fill: white;" text="Édition">
                         <items>
-                            <MenuItem text="Copier"/>
-                            <MenuItem text="Coller"/>
+                            <MenuItem text="Copier" />
+                            <MenuItem text="Coller" />
                         </items>
                     </Menu>
-                    <Menu text="Aide" style="-fx-text-fill: white;">
+                    <Menu style="-fx-text-fill: white;" text="Aide">
                         <items>
-                            <MenuItem text="À propos"/>
+                            <MenuItem text="À propos" />
                         </items>
                     </Menu>
                 </menus>
             </MenuBar>
-            <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: #00695c; -fx-padding: 15; -fx-background-radius: 10;">
-                <Label text="Dashboard d'Évaluation Avancé" style="-fx-font-size: 42px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: #E3F2FD; -fx-padding: 15; -fx-background-radius: 10;">
+                <Label alignment="CENTER" style="-fx-font-size: 42px; -fx-font-weight: bold; -fx-text-fill: black;" text="Advanced Assessment Dashboard" />
                 <HBox alignment="CENTER_RIGHT" spacing="10" HBox.hgrow="ALWAYS">
-                    <Button text="Accueil" style="-fx-font-size: 14px; -fx-background-color: transparent; -fx-text-fill: white;"/>
-                    <Button text="Paramètres" style="-fx-font-size: 14px; -fx-background-color: transparent; -fx-text-fill: white;"/>
-                    <Button text="Déconnexion" style="-fx-font-size: 14px; -fx-background-color: transparent; -fx-text-fill: white;"/>
+                    <Button style="-fx-font-size: 14px; -fx-background-color: transparent; -fx-text-fill: #090808;" text="Home" />
+                    <Button style="-fx-font-size: 14px; -fx-background-color: transparent; -fx-text-fill: #090808;" text="Settings" />
+                    <Button style="-fx-font-size: 14px; -fx-background-color: transparent; -fx-text-fill: #090808;" text="Disconnect" />
                 </HBox>
             </HBox>
         </VBox>
@@ -73,45 +63,43 @@
 
     <!-- Center: Contenu principal avec TabPane -->
     <center>
-        <TabPane tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: transparent;">
+        <TabPane style="-fx-background-color: transparent;" tabClosingPolicy="UNAVAILABLE">
             <!-- Onglet Tableau de Bord -->
             <Tab text="Tableau de Bord">
                 <VBox spacing="30" style="-fx-padding: 20;">
                     <HBox spacing="30">
                         <!-- Tableau de ressources -->
-                        <TableView fx:id="resourcesTable" prefWidth="600" prefHeight="350"
-                                   style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 12, 0.5, 3, 3);">
+                        <TableView fx:id="resourcesTable" prefHeight="350" prefWidth="600" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 12, 0.5, 3, 3);">
                             <columns>
-                                <TableColumn text="Ressource" fx:id="titreColumn" prefWidth="250"
-                                             style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
-                                <TableColumn text="Note" fx:id="noteColumn" prefWidth="150"
-                                             style="-fx-font-size: 14px;"/>
-                                <TableColumn text="Satisfaction" fx:id="satisfactionColumn" prefWidth="200"
-                                             style="-fx-font-size: 14px;"/>
+                                <TableColumn fx:id="titreColumn" prefWidth="250" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Ressource" />
+                                <TableColumn fx:id="noteColumn" prefWidth="150" style="-fx-font-size: 14px;" text="Rate" />
+                                <TableColumn fx:id="satisfactionColumn" prefWidth="200" style="-fx-font-size: 14px;" text="Satisfaction" />
                             </columns>
                         </TableView>
                         <!-- Graphique des évaluations (BarChart) -->
+                        <PieChart fx:id="ratingDistributionChart" prefHeight="400" prefWidth="600" />
+
 
 
 
 
                     </HBox>
                     <HBox spacing="30">
-                        <VBox spacing="15" prefWidth="600" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 12, 0.5, 3, 3);">
-                            <Label text="Top Ressources" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;"/>
+                        <VBox prefWidth="600" spacing="15" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 12, 0.5, 3, 3);">
+                            <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" text="Top Ressources" />
                             <TableView fx:id="bestRatedTable" prefHeight="200" style="-fx-background-color: white; -fx-background-radius: 10;">
                                 <columns>
-                                    <TableColumn text="Titre" fx:id="bestRatedTitleColumn" prefWidth="250" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
-                                    <TableColumn text="Note" fx:id="bestRatedNoteColumn" prefWidth="150" style="-fx-font-size: 14px;"/>
+                                    <TableColumn fx:id="bestRatedTitleColumn" prefWidth="250" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Titre" />
+                                    <TableColumn fx:id="bestRatedNoteColumn" prefWidth="150" style="-fx-font-size: 14px;" text="Note" />
                                 </columns>
                             </TableView>
                         </VBox>
-                        <VBox spacing="15" prefWidth="600" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 12, 0.5, 3, 3);">
-                            <Label text="Ressources à Améliorer" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #d32f2f;"/>
+                        <VBox prefWidth="600" spacing="15" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 12, 0.5, 3, 3);">
+                            <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #d32f2f;" text="Resources to improve" />
                             <TableView fx:id="resourcesToImproveTable" prefHeight="200" style="-fx-background-color: white; -fx-background-radius: 10;">
                                 <columns>
-                                    <TableColumn text="Titre" fx:id="resourcesToImproveTitleColumn" prefWidth="250" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
-                                    <TableColumn text="Note" fx:id="resourcesToImproveNoteColumn" prefWidth="150" style="-fx-font-size: 14px;"/>
+                                    <TableColumn fx:id="resourcesToImproveTitleColumn" prefWidth="250" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Titre" />
+                                    <TableColumn fx:id="resourcesToImproveNoteColumn" prefWidth="150" style="-fx-font-size: 14px;" text="Note" />
                                 </columns>
                             </TableView>
                         </VBox>
@@ -121,23 +109,21 @@
 
             <!-- Onglet Schémas et Tendances -->
             <Tab text="Schémas">
-                <VBox spacing="30" alignment="CENTER" style="-fx-padding: 20;">
-                    <Label text="Schéma de Satisfaction" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #424242;"/>
-                    <HBox spacing="30" alignment="CENTER">
+                <VBox alignment="CENTER" spacing="30" style="-fx-padding: 20;">
+                    <Label style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #424242;" text="Satisfaction Pattern" />
+                    <HBox alignment="CENTER" spacing="30">
                         <!-- Diagramme circulaire (PieChart) -->
-                        <StackPane prefWidth="400" prefHeight="400"
-                                   style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 12, 0.5, 3, 3);">
-                            <PieChart fx:id="satisfactionPieChart"/>
+                        <StackPane prefHeight="400" prefWidth="400" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 12, 0.5, 3, 3);">
+                            <PieChart fx:id="satisfactionPieChart" />
                         </StackPane>
                         <!-- Graphique en ligne (LineChart) pour la tendance -->
-                        <StackPane prefWidth="400" prefHeight="400"
-                                   style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 12, 0.5, 3, 3);">
+                        <StackPane prefHeight="400" prefWidth="400" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 12, 0.5, 3, 3);">
                             <LineChart fx:id="trendLineChart">
                                 <xAxis>
-                                    <CategoryAxis fx:id="lineChartXAxis"/>
+                                    <CategoryAxis fx:id="lineChartXAxis" />
                                 </xAxis>
                                 <yAxis>
-                                    <NumberAxis fx:id="lineChartYAxis" label="Satisfaction"/>
+                                    <NumberAxis fx:id="lineChartYAxis" label="Satisfaction" />
                                 </yAxis>
                             </LineChart>
                         </StackPane>
@@ -150,8 +136,8 @@
     <!-- Bottom: Pied de page / Statut -->
     <bottom>
         <HBox alignment="CENTER" spacing="20" style="-fx-padding: 20; -fx-background-color: #e0f7fa; -fx-background-radius: 10;">
-            <Label text="© 2025 Mon Application" style="-fx-font-size: 14px; -fx-text-fill: #424242;"/>
-            <Label text="Version 1.0" style="-fx-font-size: 14px; -fx-text-fill: #424242;"/>
+            <Label style="-fx-font-size: 14px; -fx-text-fill: #424242;" text="© 2025 My Application" />
+            <Label style="-fx-font-size: 14px; -fx-text-fill: #424242;" text="Version 1.0" />
         </HBox>
     </bottom>
 </BorderPane>

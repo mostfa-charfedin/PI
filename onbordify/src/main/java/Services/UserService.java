@@ -171,6 +171,22 @@ public class UserService implements CrudInterface<User> {
         }
         return users;
     }
+    public  List<String> getAllUserEmails() {
+        List<String> emails = new ArrayList<>();
+        String query = "SELECT email FROM user"; // Adjust "users" if your table name is different
+
+        try (PreparedStatement statement = con.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                emails.add(resultSet.getString("email"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return emails;
+    }
 
 
     public User findUserByEmail(String email) throws SQLException {

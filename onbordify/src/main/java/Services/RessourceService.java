@@ -3,10 +3,7 @@ package Services;
 import Models.Ressource;
 import utils.MyDb;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +11,7 @@ public class RessourceService implements CrudInterface<Ressource> {
     private Connection connection;
 
     public RessourceService() {
-        connection = MyDb.getInstance().getConnection();
+        connection = MyDb.getMydb().getConnection();
     }
 
     // CREATE (Utilisation de PreparedStatement pour éviter l'injection SQL)
@@ -58,6 +55,23 @@ public class RessourceService implements CrudInterface<Ressource> {
             stmt.executeUpdate();
         }
     }
+    // Méthode pour récupérer la note d'une ressource depuis la table 'evaluation'
+    public double getNoteFromEvaluation(int idResource) {
+        String query = "SELECT note FROM evaluation WHERE idResource = ?"; // Interroger la table 'evaluation' pour la note
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, idResource);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("note");  // Récupérer la note
+            } else {
+                return 0.0;  // Si aucune note n'est trouvée
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0.0;  // Retourner 0 en cas d'erreur
+        }
+    }
+
 
     // READ
     @Override
@@ -110,6 +124,7 @@ public class RessourceService implements CrudInterface<Ressource> {
         }
         return resourcesList;
     }
+
 
     // GET RESOURCES WITH LOW AVERAGE NOTE
     public List<Ressource> getResourcesWithLowAverageNote() throws Exception {

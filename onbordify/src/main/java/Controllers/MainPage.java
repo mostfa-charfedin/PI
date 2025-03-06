@@ -9,6 +9,9 @@ import javafx.scene.layout.StackPane;
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;
 import java.io.IOException;
+import utils.UserSession ;
+import Models.Role ;
+
 
 public class MainPage {
 
@@ -17,12 +20,14 @@ public class MainPage {
 
     @FXML
     private Button btnPage1, btnPage2, btnPage3
-            , btnPage7;  // Boutons du menu latéral
+            , btnPage7 , btnPage8;  // Boutons du menu latéral
 
     @FXML
     public void initialize() {
         // Charger la page d'accueil par défaut
         loadPage("/fxml/GestionUser.fxml");
+        UserSession session = UserSession.getInstance();
+        Role roleSession = session.getRole();
 
         // Gestion des clics sur les boutons
         btnPage1.setOnAction(e -> loadPage("/fxml/Profile.fxml"));
@@ -30,6 +35,12 @@ public class MainPage {
         btnPage3.setOnAction(e -> loadPage("/fxml/GestionUser.fxml"));
 
         btnPage7.setOnAction(e -> loadPage("/fxml/ModuleFormation.fxml"));
+        if (roleSession == Role.ADMIN) {
+            btnPage8.setOnAction(e -> loadPage("/views/evaluation.fxml"));
+        } else {
+            btnPage8.setOnAction(e -> loadPage("/views/ListeRessources.fxml"));
+        }
+
     }
 
     private void loadPage(String fxmlFile) {

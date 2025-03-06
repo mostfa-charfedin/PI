@@ -1,11 +1,16 @@
 package Controllers;
 
 import Models.Ressource;
+import Services.EmailService;
 import Services.RessourceService;
+import Services.UserService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import utils.UserSession;
+
+import java.util.List;
 
 public class AddResourceController {
     @FXML private TextField titleField, linkField;
@@ -13,12 +18,17 @@ public class AddResourceController {
     @FXML private ComboBox<String> typeComboBox;
     @FXML private Button btnSave, btnCancel;
 
+    private int userId ;
+
     private RessourceService ressourceService;
     private ListeRessources parentController; // Reference to refresh the list
 
     public void setParentController(ListeRessources parent) {
         this.parentController = parent;
     }
+
+    private EmailService EmailService = new EmailService();
+    private UserService UserService = new UserService();
 
     @FXML
     public void initialize() {
@@ -32,9 +42,16 @@ public class AddResourceController {
 
         // Event: Close window
         btnCancel.setOnAction(event -> closeWindow());
+
+        UserSession session = UserSession.getInstance();
+
+
+
+        userId = session.getUserId();
     }
 
     private void saveResource() {
+        EmailService emailService = new EmailService();
         // Validate fields
         if (titleField.getText().isEmpty() || typeComboBox.getValue() == null || linkField.getText().isEmpty() || descriptionField.getText().isEmpty()) {
             showAlert("Veuillez remplir tous les champs obligatoires !");
@@ -67,6 +84,14 @@ public class AddResourceController {
             ressourceService.create(newRessource);
 
 
+            List<String> allEmails = UserService.getAllUserEmails();
+
+            // Send email to each user
+            for (String email : allEmails) {
+                EmailService.sendEmail(email, "Ressources Created", "A new Ressource has been created, you can take it now!");
+            }
+
+
 
             // Close the popup
             closeWindow();
@@ -74,6 +99,8 @@ public class AddResourceController {
             e.printStackTrace();
             showAlert("Erreur lors de l'ajout !");
         }
+
+
     }
 
     private boolean isValidTitle(String title) {
@@ -97,4 +124,7 @@ public class AddResourceController {
         Alert alert = new Alert(Alert.AlertType.WARNING, message, ButtonType.OK);
         alert.showAndWait();
     }
+
+
+
 }

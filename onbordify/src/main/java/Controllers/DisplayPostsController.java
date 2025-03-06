@@ -1,4 +1,4 @@
-package controller;
+package Controllers;
 
 import Models.Commentaire;
 import Models.Publication;
@@ -13,7 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import service.CommentaireService;
-import service.PublicationService;
+import Services.PublicationService;
 
 import java.io.IOException;
 import java.util.List;
@@ -107,7 +107,7 @@ public class DisplayPostsController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/add_post.fxml"));
             Parent root = loader.load();
 
-            AddPostController addPostController = loader.getController();
+            controller.AddPostController addPostController = loader.getController();
             addPostController.setPostListController(this); // Pass reference for refreshing
 
             Stage stage = new Stage();

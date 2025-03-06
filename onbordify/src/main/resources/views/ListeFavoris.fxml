@@ -22,7 +22,7 @@
 
     <!-- Button Section to return to the previous screen -->
     <HBox spacing="10" alignment="CENTER">
-        <Button text="Retour" fx:id="btnRetour" onAction="#handleRetour" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5;" />
+        <Button text="Return" fx:id="btnRetour" onAction="#handleRetour" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5;" />
     </HBox>
 </VBox>
 

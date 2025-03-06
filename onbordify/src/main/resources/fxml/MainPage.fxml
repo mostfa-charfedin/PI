@@ -17,6 +17,7 @@
             <Button fx:id="btnPage5" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Page 2" />
             <Button fx:id="btnPage6" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Page 2" />
             <Button fx:id="btnPage7" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Page 2" />
+            <Button fx:id="btnPage8" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Page 8" />
         </VBox>
     </left>
 
