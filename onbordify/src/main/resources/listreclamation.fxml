@@ -6,25 +6,29 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane prefHeight="400.0" prefWidth="800.0"
+            stylesheets="@/css/style.css"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.ListreclamationController">
+    <VBox prefHeight="494.0" prefWidth="502.0" spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" >
+        <!-- Title -->
+        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1D3D6D; -fx-effect: dropshadow(gaussian, #3e5bb2, 10, 0.5, 2, 2); -fx-padding: 10;" text="List of Claims" />
 
-<VBox prefHeight="494.0" prefWidth="502.0" spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.listreclamationController" style="-fx-background-color: linear-gradient(to bottom, #A9C9FF, #E8F2FF); -fx-padding: 20;">
+        <!-- Filters -->
+        <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: #F7F9FB; -fx-border-radius: 10px; -fx-padding: 12; -fx-effect: dropshadow(gaussian, #BDC3C7, 8, 0.5, 0, 2);">
+            <Label style="-fx-font-size: 16px; -fx-text-fill: #1850F8; -fx-font-weight: bold;" text="Select Status:" />
+            <ComboBox fx:id="statusComboBox" promptText="Select status" style="-fx-background-color: white; -fx-border-color: #3e5bb2; -fx-border-radius: 8px; -fx-font-size: 14px; -fx-padding: 5; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.3, 0, 2);"/>
+        </HBox>
 
-    <!-- Title -->
-    <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1D3D6D; -fx-effect: dropshadow(gaussian, #3e5bb2, 10, 0.5, 2, 2); -fx-padding: 10;" text="List of Claims" />
+        <!-- List of claims -->
+        <ListView fx:id="reclamationListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250" prefWidth="449.0" style="-fx-background-color: white; -fx-border-radius: 15px; -fx-border-color: #3498DB; -fx-border-width: 2px; -fx-font-size: 14px; -fx-padding: 10; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.5, 0, 2);">
+            <items>
+                <!-- The ListView items will be set programmatically in the Controllers -->
+            </items>
+        </ListView>
 
-    <!-- Filters -->
-    <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: #F7F9FB; -fx-border-radius: 10px; -fx-padding: 12; -fx-effect: dropshadow(gaussian, #BDC3C7, 8, 0.5, 0, 2);">
-        <Label style="-fx-font-size: 16px; -fx-text-fill: #1850F8; -fx-font-weight: bold;" text="Select Status:" />
-        <ComboBox fx:id="statusComboBox" promptText="Select status" style="-fx-background-color: white; -fx-border-color: #3e5bb2; -fx-border-radius: 8px; -fx-font-size: 14px; -fx-padding: 5; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.3, 0, 2);"/>
-    </HBox>
-
-    <!-- List of claims -->
-    <ListView fx:id="reclamationListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250" prefWidth="449.0" style="-fx-background-color: white; -fx-border-radius: 15px; -fx-border-color: #3498DB; -fx-border-width: 2px; -fx-font-size: 14px; -fx-padding: 10; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.5, 0, 2);">
-        <items>
-            <!-- The ListView items will be set programmatically in the Controllers -->
-        </items>
-    </ListView>
-
-    <!-- Update Status Button -->
-    <Button fx:id="updateStatusButton" onAction="#handleUpdateStatus" text="Update Status" style="-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px; -fx-padding: 10 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0.5, 2, 2);"/>
-</VBox>
+        <!-- Update Status Button -->
+        <Button fx:id="updateStatusButton" onAction="#handleUpdateStatus" text="Update Status" style="-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px; -fx-padding: 10 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0.5, 2, 2);"/>
+    </VBox></AnchorPane>

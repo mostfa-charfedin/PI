@@ -1,6 +1,7 @@
 package Controllers;
 
 import Models.Reclamation;
+import Services.ReclamationService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,11 +12,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
 import javafx.scene.paint.Color;
-import Services.ReclamationService;
+
 
 import java.util.List;
 
-public class listreclamationController {
+public class ListreclamationController {
 
     @FXML
     private ListView<String> reclamationListView;

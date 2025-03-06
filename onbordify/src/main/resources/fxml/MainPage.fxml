@@ -13,10 +13,12 @@
             <Button fx:id="btnPage1" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Profil" />
             <Button fx:id="btnPage2" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Score list" />
             <Button fx:id="btnPage3" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Gestion Users" />
-            <Button fx:id="btnPage4" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Page 2" />
+            <Button fx:id="btnPage4" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="page 2" />
             <Button fx:id="btnPage5" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Page 2" />
             <Button fx:id="btnPage6" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Page 2" />
-            <Button fx:id="btnPage7" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Page 2" />
+            <Button fx:id="btnPage7" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Add Réclamation" />
+            <Button fx:id="btnPage8" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Update Réclamation" visible="false" />
+            <Button fx:id="btnPage9" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Management Post" />
         </VBox>
     </left>
 

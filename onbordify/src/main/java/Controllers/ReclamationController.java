@@ -29,6 +29,13 @@ public class ReclamationController {
     @FXML
     public void initialize() {
         loadReclamations();
+        dateField.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(date.isAfter(LocalDate.now())); // Empêche la sélection de dates futures
+            }
+        });
     }
 
     private void loadReclamations() {
@@ -50,9 +57,9 @@ public class ReclamationController {
             return;
         }
 
-        // Vérification si la date est dans le passé
-        if (date.isBefore(LocalDate.now())) {
-            showAlert("Error", "The date cannot be in the past.");
+        // Vérification si la date est dans le futur
+        if (date.isAfter(LocalDate.now())) {
+            showAlert("Error", "The date cannot be in the future.");
             return;
         }
 

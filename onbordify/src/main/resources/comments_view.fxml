@@ -9,8 +9,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<VBox alignment="CENTER" prefHeight="508.0" stylesheets="css/style.css" prefWidth="560.0" spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.CommentsController" style="-fx-background-color: linear-gradient(to bottom, #A2C2E4, #E0F1FB);"> <!-- Nuage bleu en dégradé -->
+<AnchorPane fx:id="anchorPane" prefHeight="648.0" prefWidth="1220.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.CommentsController" style="-fx-background-color: linear-gradient(to bottom, #A2C2E4, #E0F1FB);">
+<VBox alignment="CENTER" prefHeight="508.0" stylesheets="css/style.css" prefWidth="560.0" spacing="20"> <!-- Nuage bleu en dégradé -->
 
     <!-- Title -->
     <Label text="Add Your Comment" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" /> <!-- Bleu foncé pour le texte -->
@@ -33,20 +35,12 @@
     <!-- Image Path Input with Upload Button -->
     <HBox spacing="10" alignment="CENTER">
         <Label text="Image Path:" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #5C6D7E;" />
-        <TextArea fx:id="imagePathInput" prefHeight="38" prefWidth="350" promptText="Enter image URL..." style="-fx-background-color: #FFFFFF; -fx-border-color: #5C8DBD; -fx-border-radius: 8px; -fx-font-size: 14px; -fx-text-fill: #34495E;" />
-
-        <!-- Upload Button with Icon -->
-        <Button fx:id="uploadImageButton" onAction="#chooseImageFile" style="-fx-background-color: linear-gradient(to bottom, #1E88E5, #1565C0); -fx-text-fill: white; -fx-background-radius: 8px; -fx-font-size: 14px; -fx-padding: 5 10;">
-            <graphic>
-                <ImageView fitHeight="20" fitWidth="20">
-                    <image>
-                        <Image url="@../../../../../." />
-                    </image>
-                </ImageView>
-            </graphic>
-        </Button>
+        <TextArea fx:id="imagePathInput" promptText="Enter image path..." />
+        <Button fx:id="uploadImageButton" onAction="#chooseImageFile" text="Upload Image" />
+        <ImageView fx:id="uploadedImageView" fitHeight="100" fitWidth="100" />
     </HBox>
 
     <!-- Add Comment Button (Vert) -->
     <Button onAction="#addComment" text="Add Comment" style="-fx-background-color: linear-gradient(to bottom, #4CAF50, #388E3C); -fx-text-fill: white; -fx-background-radius: 8px; -fx-font-size: 14px; -fx-padding: 10 20;"/>
 </VBox>
+</AnchorPane>
