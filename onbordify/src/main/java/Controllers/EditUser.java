@@ -227,6 +227,9 @@ public class EditUser {
         if (roleMod.getItems().isEmpty()) {
             roleMod.setItems(FXCollections.observableArrayList(Role.values()));
         }
+        if (StatusCompte.getItems().isEmpty()) {
+            StatusCompte.setItems(FXCollections.observableArrayList(Statut.values()));
+        }
         roleMod.setValue(user.getRole());
 
         StatusCompte.setValue(user.getStatus());

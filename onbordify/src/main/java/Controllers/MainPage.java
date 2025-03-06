@@ -31,9 +31,19 @@ public UserSession session = UserSession.getInstance();
         UserSession session = UserSession.getInstance();
         Role roleSession = session.getRole();
         // Gestion des clics sur les boutons
+
         btnPage1.setOnAction(e -> loadPage("/fxml/Profile.fxml"));
-        btnPage2.setOnAction(e -> loadPage("/fxml/Score.fxml"));
-        btnPage3.setOnAction(e -> loadPage("/fxml/GestionUser.fxml"));
+        if (roleSession != null && roleSession.equals(Role.ADMIN)) {
+            btnPage2.setVisible(true);
+            btnPage3.setVisible(true);
+
+            btnPage2.setOnAction(e -> loadPage("/fxml/Score.fxml"));
+            btnPage3.setOnAction(e -> loadPage("/fxml/GestionUser.fxml"));
+        } else {
+            btnPage2.setVisible(false);
+            btnPage3.setVisible(false);
+        }
+
         if (roleSession == Role.ADMIN) {
             btnPage4.setOnAction(e -> loadPage("/projectvue.fxml"));
         } else {

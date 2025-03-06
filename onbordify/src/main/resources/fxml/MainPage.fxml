@@ -21,12 +21,12 @@
                 </image>
             </ImageView>
 
-            <!-- Navigation Buttons -->
-            <Button fx:id="btnPage1" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Profil" />
+            <Button fx:id="btnPage3" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Gestion Users" />
 
             <Button fx:id="btnPage2" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Score List" />
 
-            <Button fx:id="btnPage3" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Gestion Users" />
+            <!-- Navigation Buttons -->
+            <Button fx:id="btnPage1" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Profil" />
 
             <Button fx:id="btnPage4" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Projet" />
 
@@ -40,7 +40,7 @@
             <Pane VBox.vgrow="ALWAYS" />
 
             <!-- Logout Button -->
-            <Button fx:id="btnLogout" style="-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Logout" />
+            <Button fx:id="btnLogout" onAction="#logout" style="-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Logout" />
         </VBox>
     </left>
 
