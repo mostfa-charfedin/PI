@@ -63,7 +63,7 @@ public class ReclamationListController {
             Parent root = loader.load();
 
             // Set the selected reclamation in the update form
-            UpdateReclamationStatusController controller = loader.getController();
+            Controllers.UpdateReclamationStatusController controller = loader.getController();
             controller.setReclamation(reclamation);
 
             // Show the window

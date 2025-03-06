@@ -42,13 +42,6 @@ public class configuration {
             "profiteur", "pleurnichard", "victimiste", "capricieux", "manipulateur", "jalousard", "odieux",
             "toxique", "envahisseur", "dragueur lourdingue", "infidèle", "poltron", "lâche", "vulgaire", "blasphémateur",
 
-            // Mots à connotation sexuelle et grossière
-            "baiser", "sucer", "branler", "gicler", "sodomie", "bite", "queue", "couilles", "chatte", "nichons",
-            "seins", "tétons", "cul", "anus", "fellation", "gode", "vagin", "clito", "érection", "éjaculation",
-            "pornographique", "hardcore", "masturbation", "pénétration", "cocu", "orgasme", "partouze", "putain de merde",
-            "grosse salope", "plan cul", "boobs", "sperme", "juter", "téma", "coït", "défoncer", "fornication",
-            "échangisme", "prostitution", "camionneuse", "salope de luxe", "escort", "plan à trois", "pornstar",
-            "culotte", "string", "sextape", "strip-tease", "porno", "vidéo X", "cybersexe", "voyeur", "exhibitionniste",
 
             // Insultes sur l'intelligence et le physique
             "gros porc", "grosse truie", "vieux débris", "laid", "moches", "dégueu", "tronche", "gueule", "poilu",

@@ -27,8 +27,7 @@ public class QuizEmployee {
     @FXML
     private Button pass_quiz;
 
-    @FXML
-    private TextField search_field;
+
 
     @FXML
     private Label title_label;
@@ -42,8 +41,6 @@ public class QuizEmployee {
     public void initialize() {
         quizTitles = FXCollections.observableArrayList();
 
-        // Listen for text changes in the search field to trigger filtering
-        search_field.textProperty().addListener((observable, oldValue, newValue) -> filterRessources(newValue));
 
         listViewQuiz.setOnMouseClicked(event -> {
             int selectedIndex = listViewQuiz.getSelectionModel().getSelectedIndex();
@@ -131,27 +128,5 @@ public class QuizEmployee {
         stage.close();
     }
 
-    private void filterRessources(String searchText) {
-        ObservableList<String> filteredQuizzes;
 
-        if (searchText == null || searchText.trim().isEmpty()) {
-            // If the search field is empty, show all quizzes, sorted alphabetically
-            filteredQuizzes = FXCollections.observableArrayList(
-                    quizTitles.stream()
-                            .sorted(String::compareToIgnoreCase)
-                            .toList()
-            );
-        } else {
-            // Filter the quizzes based on the search text
-            filteredQuizzes = FXCollections.observableArrayList(
-                    quizTitles.stream()
-                            .filter(quiz -> quiz.toLowerCase().contains(searchText.toLowerCase())) // Case-insensitive filter
-                            .sorted(String::compareToIgnoreCase) // Sort the filtered results
-                            .toList()
-            );
-        }
-
-        // Update the ListView with the filtered and sorted quizzes
-        listViewQuiz.setItems(filteredQuizzes);
-    }
 }
