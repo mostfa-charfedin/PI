@@ -10,7 +10,7 @@ public  class QuizService implements CrudInterface<Quiz> {
 
     Connection connection;
     public QuizService() {
-        this.connection = MyDb.getInstance().getConnection();
+        this.connection = MyDb.getMydb().getConnection();
     }
 
     @Override

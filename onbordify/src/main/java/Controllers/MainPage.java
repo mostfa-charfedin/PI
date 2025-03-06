@@ -22,7 +22,7 @@ public class MainPage {
     private StackPane contentPane;  // Zone où afficher les pages
 
     @FXML
-    private Button btnPage1, btnPage2, btnPage3, btnPage4,btnPage6, btnPage5, btnPage7;  // Boutons du menu latéral
+    private Button btnPage1, btnPage2, btnPage3, btnPage4,btnPage6, btnPage5, btnPage7,btnPage61,btnPage62;  // Boutons du menu latéral
 public UserSession session = UserSession.getInstance();
     @FXML
     public void initialize() {
@@ -66,6 +66,12 @@ public UserSession session = UserSession.getInstance();
         } else {
             btnPage7.setOnAction(e -> loadPage("/views/ListeRessources.fxml"));
         }
+        if (roleSession == Role.ADMIN) {
+            btnPage61.setOnAction(e -> loadPage("/listreclamation.fxml"));
+        } else {
+            btnPage61.setOnAction(e -> loadPage("/reclamation.fxml"));
+        }
+        btnPage62.setOnAction(e -> loadPage("/display_posts.fxml"));
 
     }
 

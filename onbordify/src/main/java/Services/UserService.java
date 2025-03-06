@@ -25,7 +25,7 @@ public class UserService implements CrudInterface<User> {
     String nonHashedPassword;
 
     public UserService() {
-        this.con = MyDb.getInstance().getConnection();
+        this.con = MyDb.getMydb().getConnection();
     }
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

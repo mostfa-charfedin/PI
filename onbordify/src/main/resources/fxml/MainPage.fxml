@@ -17,7 +17,7 @@
             <!-- Logo or Profile Picture -->
             <ImageView fx:id="logo" fitHeight="100" fitWidth="100" pickOnBounds="true" preserveRatio="true">
                 <image>
-                    <Image url="@../assests/logo.png" />
+                    <Image url="@../../../../../../../PI/onbordify/src/main/resources/assests/logo.png" />
                 </image>
             </ImageView>
 
@@ -32,14 +32,14 @@
 
             <Button fx:id="btnPage5" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Program BE" />
 
-            <Button fx:id="btnPage7" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="fedi" />
+            <Button fx:id="btnPage7" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Ressources" />
+         <Button fx:id="btnPage61" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Complaint" />
+         <Button fx:id="btnPage62" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Post" />
+
+            <Button fx:id="btnPage6" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Quiz" />
 
             <!-- Spacer to push logout button down -->
             <Pane VBox.vgrow="ALWAYS" />
-         <Button fx:id="btnPage61" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="souhir" />
-         <Button fx:id="btnPage62" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="souhir" />
-
-            <Button fx:id="btnPage6" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Quiz" />
 
             <!-- Logout Button -->
             <Button fx:id="btnLogout" onAction="#logout" style="-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Logout" />

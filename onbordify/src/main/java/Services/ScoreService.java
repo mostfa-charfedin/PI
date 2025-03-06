@@ -16,7 +16,7 @@ public class ScoreService implements CrudInterface<Score> {
     String nonHashedPassword;
 
     public ScoreService() {
-        this.con = MyDb.getInstance().getConnection();
+        this.con = MyDb.getMydb().getConnection();
     }
 
 
