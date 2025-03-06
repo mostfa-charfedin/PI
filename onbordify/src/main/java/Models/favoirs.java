@@ -2,28 +2,28 @@ package Models;
 
 import java.util.Date;
 
-public class Favoris {
-    private int idFavoris;
+public class favoirs {
+    private int idFavoirs;
     private int idRessource;
     private String TitreRessource;
     private int note;
 
-    public Favoris() {}
+    public favoirs() {}
 
-    public Favoris(int idFavoris, int idRessource, Date dateAjout, String commentaire, int note) {
-        this.idFavoris = idFavoris;
+    public favoirs(int idFavoirs, int idRessource, Date dateAjout, String commentaire, int note) {
+        this.idFavoirs = idFavoirs;
         this.idRessource = idRessource;
         this.TitreRessource = TitreRessource;
         this.note = note;
     }
 
     // Getters et Setters
-    public int getIdFavoris() {
-        return idFavoris;
+    public int getidFavoirs() {
+        return idFavoirs;
     }
 
-    public void setIdFavoris(int idFavoris) {
-        this.idFavoris = idFavoris;
+    public void setidFavoirs(int idFavoirs) {
+        this.idFavoirs = idFavoirs;
     }
 
     public int getIdRessource() {
@@ -55,7 +55,7 @@ public class Favoris {
     @Override
     public String toString() {
         return "Favoris{" +
-                "idFavoris=" + idFavoris +
+                "idFavoirs=" + idFavoirs +
                 ", idRessource=" + idRessource +
                 ", TitreRessource ='" + TitreRessource + '\'' +
                 ", note=" + note +

@@ -6,10 +6,10 @@
 <VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.ModifierRessourceController">
 
-    <Label text="Modifier la Ressource"/>
+    <Label text="modify the resource"/>
 
     <TextField fx:id="titreField" promptText="Titre"/>
     <TextField fx:id="descriptionField" promptText="Description"/>
 
-    <Button fx:id="btnEnregistrer" text="Enregistrer" onAction="#handleSaveAction"/>
+    <Button fx:id="btnEnregistrer" text="Save" onAction="#handleSaveAction"/>
 </VBox>

@@ -1,9 +1,10 @@
 package Controllers;
 
-import Models.Favoris;
-import Services.FavorisService;
+import Models.favoirs;
+import Services.favoirsService;
 import Services.RessourceService;
 import Models.Ressource;
+import Services.favoirsService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -38,6 +39,9 @@ public class ListeRessources {
         // Action pour ajouter une nouvelle ressource
         btnAjouter.setOnAction(event -> ouvrirAjouterRessource());
 
+
+
+
         // Action pour ouvrir la liste des favoris
         btnFavoris.setOnAction(event -> {
             System.out.println("Button clicked, trying to load the next scene...");
@@ -54,6 +58,8 @@ public class ListeRessources {
                 showAlert("Erreur lors de la navigation vers la liste des favoris.");
             }
         });
+        // Action for back button
+
 
         // Ajouter un ContextMenu pour consulter une ressource
         ContextMenu contextMenu = new ContextMenu();
@@ -219,16 +225,19 @@ public class ListeRessources {
     private void ajouterAuxFavoris(Ressource ressource) {
         try {
             // Créer un objet Favoris sans l'attribut idResource
-            Favoris favoris = new Favoris();
+            favoirs favoris = new favoirs();
+            /*
 
             // Set the title of the Ressource as the commentaire
-            favoris.setTitreRessource(ressource.getTitre()); // Assuming 'getTitle()' is the method to get the title of the resource
+            favoirs.setTitreRessource(ressource.getTitre()); // Assuming 'getTitle()' is the method to get the title of the resource
 
-            favoris.setNote(0); // Optionnel : note par défaut à 0
+            favoirs.setNote(0); // Optionnel : note par défaut à 0
 
             // Appel à un service pour sauvegarder le favori
-            FavorisService favorisService = new FavorisService();
-            favorisService.create(favoris);
+            favoirsService favoirsService = new favoirsService();
+            favoirsService.create(favoirs);
+
+             */
 
             // Afficher une alerte pour indiquer que la ressource a été ajoutée aux favoris
             showAlert("Ressource ajoutée aux favoris !");

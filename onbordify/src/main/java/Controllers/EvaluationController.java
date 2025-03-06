@@ -8,8 +8,10 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import utils.UserSession;
 
 import java.util.List;
 
@@ -77,12 +79,16 @@ public class EvaluationController {
 
     @FXML
     private Button resetButton;
+/*
+    private int userId ; */
 
 
 
 
     // Service pour obtenir les ressources avec leur note moyenne
     private RessourceService ressourceService;
+    private PieChart ratingDistributionChart; // Déclarez votre PieChart ici
+
 
     // Constructeur
     public EvaluationController() {
@@ -95,6 +101,9 @@ public class EvaluationController {
         // Configurer les colonnes du TableView pour les meilleures ressources
         bestRatedTitleColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
         bestRatedNoteColumn.setCellValueFactory(new PropertyValueFactory<>("noteAverage"));
+        // Configurer la colonne "Rate" dans le TableView pour afficher la note de 'evaluation'
+        noteColumn.setCellValueFactory(new PropertyValueFactory<>("noteAverage"));
+
 
         // Configurer les colonnes du TableView pour les ressources à améliorer
         resourcesToImproveTitleColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
@@ -104,6 +113,9 @@ public class EvaluationController {
         titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
         noteColumn.setCellValueFactory(new PropertyValueFactory<>("noteAverage"));
         satisfactionColumn.setCellValueFactory(new PropertyValueFactory<>("satisfaction"));
+        UserSession session = UserSession.getInstance();
+        /*
+        userId = session.getUserId(); */
 
         // Charger les ressources dans les TableView
         loadResourcesWithAverageNote();
@@ -148,13 +160,21 @@ public class EvaluationController {
     }
 
     // Méthode pour charger les ressources dans le tableau "resourcesTable"
+    // Méthode pour charger les ressources dans le tableau "resourcesTable"
     private void loadResourcesForTable() {
         try {
             // Appeler le service pour récupérer toutes les ressources
             List<Ressource> resources = ressourceService.getAll();
 
-            // Convertir la liste en ObservableList pour lier au TableView
-            ObservableList<Ressource> observableList = FXCollections.observableArrayList(resources);
+            // Créer une liste d'ObservableList pour lier au TableView
+            ObservableList<Ressource> observableList = FXCollections.observableArrayList();
+
+            // Pour chaque ressource, récupérer sa note dans la table 'evaluation'
+            for (Ressource ressource : resources) {
+                double note = ressourceService.getNoteFromEvaluation(ressource.getIdResource());  // Ajoutez cette méthode pour récupérer la note de 'evaluation'
+                ressource.setNoteAverage(note); // Mettre à jour l'objet Ressource avec la note obtenue
+                observableList.add(ressource);
+            }
 
             // Associer l'ObservableList au TableView
             resourcesTable.setItems(observableList);
@@ -164,6 +184,8 @@ public class EvaluationController {
             // Ici, tu peux afficher un message d'erreur si quelque chose se passe mal
         }
     }
+
+
 
 
 }
