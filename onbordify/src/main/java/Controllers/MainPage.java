@@ -26,10 +26,11 @@ public class MainPage {
 public UserSession session = UserSession.getInstance();
     @FXML
     public void initialize() {
-        // Charger la page d'accueil par défaut
-        loadPage("/fxml/GestionUser.fxml");
         UserSession session = UserSession.getInstance();
         Role roleSession = session.getRole();
+        // Charger la page d'accueil par défaut
+        loadPage("/fxml/GestionUser.fxml");
+
         // Gestion des clics sur les boutons
 
         btnPage1.setOnAction(e -> loadPage("/fxml/Profile.fxml"));
@@ -60,6 +61,8 @@ public UserSession session = UserSession.getInstance();
         System.out.println("Accès refusé : Vous devez être administrateur pour accéder à cette page.");
 
     }
+
+
 
     private void loadPage(String fxmlFile) {
         try {

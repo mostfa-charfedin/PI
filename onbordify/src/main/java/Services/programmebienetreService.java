@@ -116,13 +116,55 @@ public class programmebienetreService implements CrudInterface<programmebienetre
             throw new SQLException("Erreur lors de l'ajout ou de la mise à jour de l'avis : " + e.getMessage());
         }
     }
-
-    public int getTotalReviews(int idProgramme) {
-
-        return idProgramme;
+    public int getTotalReviews(int idProgramme) throws SQLException {
+        String sql = "SELECT COUNT(*) AS total FROM avis WHERE idProgramme = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idProgramme);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total");
+                }
+            }
+        }
+        return 0; // Retourne 0 si aucune donnée n'est trouvée
     }
 
-    public double getAverageRating(int idProgramme) {
+    public double getAverageRating(int idProgramme) throws SQLException {
+        String sql = "SELECT AVG(rating) AS average FROM avis WHERE idProgramme = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idProgramme);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("average");
+                }
+            }
+        }
+        return 0.0; // Retourne 0.0 si aucune donnée n'est trouvée
+    }
+
+public int getReviewCountByRating(int rating) throws SQLException {
+    String query = "SELECT COUNT(*) FROM avis WHERE rating = ?";
+    try (PreparedStatement statement = conn.prepareStatement(query)) {
+        statement.setInt(1, rating);
+        try (ResultSet resultSet = statement.executeQuery()) {
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        }
+    }
+    return 0;
+}
+    public int getReviewCountByRatingForProgramme(int idProgramme, int rating) throws SQLException {
+        String query = "SELECT COUNT(*) FROM avis WHERE idProgramme = ? AND rating = ?";
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setInt(1, idProgramme);
+            statement.setInt(2, rating);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1);
+                }
+            }
+        }
         return 0;
     }
 }
