@@ -1,7 +1,10 @@
 package Services;
 
 import Models.Role;
+import Models.Statut;
 import Models.User;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,6 +12,7 @@ import utils.MyDb;
 import utils.UserSession;
 
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,9 +94,9 @@ public class UserService implements CrudInterface<User> {
             stmt.setString(8, defaultImageUrl);
 
             stmt.executeUpdate();
-            String emailBody = "Hello " + obj.getNom() + "." + " " + " </br> " + " " + " Account created successfully."
-                    + " " + " </br> " + " " + "Email : " + obj.getEmail() + " " + " </br> " + " " +
-                    " " + " </br> " + " " + "Password : " + nonHashedPassword + " " + " </br> " + " ";
+            String emailBody = "Hello " + obj.getNom() + "\n" + " Account created successfully."
+                    + "\n" + "Email : " + obj.getEmail() + "\n"+
+                     "Password : " + nonHashedPassword + "\n" ;
             String subject = "Welcome email";
             emailService.sendEmail(obj.getEmail(), emailBody, subject);
         } catch (SQLException e) {
@@ -105,7 +109,7 @@ public class UserService implements CrudInterface<User> {
 
     @Override
     public void update(User obj) throws SQLException {
-        String sql = "UPDATE user SET nom = ?, prenom = ?, email = ?, cin = ?, dateNaissance = ?, role = ?, image_url = ? WHERE id = ?";
+        String sql = "UPDATE user SET nom = ?, prenom = ?, email = ?, cin = ?, dateNaissance = ?, role = ?, image_url = ? , status = ? WHERE id = ?";
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, obj.getNom());
             stmt.setString(2, obj.getPrenom());
@@ -122,11 +126,11 @@ public class UserService implements CrudInterface<User> {
             // Si l'image est fournie, utiliser l'URL de l'image sinon une image par défaut
             String imageUrl = obj.getImage_url() != null ? obj.getImage_url() : "/assets/logo.png";
             stmt.setString(7, imageUrl);
-
-            stmt.setInt(8, obj.getId());
+            stmt.setString(8, obj.getStatus().toString());
+            stmt.setInt(9, obj.getId());
 
             int rowsUpdated = stmt.executeUpdate();
-            System.out.println(rowsUpdated + " user updated.");
+            System.out.println(obj);
         } catch (SQLException e) {
             System.err.println("Error updating user: " + e.getMessage());
             throw e; // Propager l'erreur pour gestion ultérieure
@@ -167,6 +171,7 @@ public class UserService implements CrudInterface<User> {
             user.setCin(rs.getInt("cin"));
             user.setDateNaissance(rs.getDate("dateNaissance"));
             user.setRole(Role.valueOf(rs.getObject("role").toString()));
+            user.setStatus(Statut.valueOf(rs.getObject("status").toString()));
             users.add(user);
         }
         return users;
@@ -188,6 +193,7 @@ public class UserService implements CrudInterface<User> {
             user.setCin(rs.getInt("cin"));
             user.setDateNaissance(rs.getDate("dateNaissance"));
             user.setRole(Role.valueOf(rs.getObject("role").toString()));
+            user.setStatus(Statut.valueOf(rs.getObject("status").toString()));
         }
         return user;
     }
@@ -222,6 +228,7 @@ public class UserService implements CrudInterface<User> {
                 user.setDateNaissance(rs.getDate("dateNaissance"));
                 user.setRole(Role.valueOf(rs.getObject("role").toString()));
                 user.setImage_url(rs.getString("image_url"));
+                user.setStatus(Statut.valueOf(rs.getObject("status").toString()));
             }
             return user;
         } catch (SQLException e) {
@@ -260,5 +267,18 @@ public class UserService implements CrudInterface<User> {
         alert.showAndWait();
 
     }
+
+public void logout(){
+        userSession.destroySession();
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+
+    try {
+        Parent root = loader.load();
+        emailField.getScene().setRoot(root);
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
+
+}
 
 }

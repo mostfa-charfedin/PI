@@ -1,4 +1,4 @@
-package controller;
+package Controllers;
 
 import Models.Commentaire;
 import Models.Publication;
@@ -11,7 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import service.CommentaireService;
+import Services.CommentaireService;
 
 import java.io.File;
 import java.util.List;

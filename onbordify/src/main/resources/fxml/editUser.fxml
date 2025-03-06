@@ -20,10 +20,10 @@
       <Label fx:id="messageMod" AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="20" />
 
       <!-- HBox centré -->
-      <HBox layoutX="50.0" layoutY="90.0" prefHeight="290.0" prefWidth="701.0" spacing="30" AnchorPane.bottomAnchor="170.8" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.799999999999955" AnchorPane.topAnchor="90.0">
+      <HBox alignment="CENTER" spacing="20" style="-fx-padding: 20;" stylesheets="@../css/style.css">
          <children>
             <!-- Left VBox -->
-            <VBox fx:id="vboxLeft" alignment="CENTER" prefHeight="400.0" prefWidth="280.0" spacing="10">
+            <VBox fx:id="vboxLeft" alignment="CENTER" prefHeight="237.0" prefWidth="280.0" spacing="10">
                <children>
                   <Label text="First name" />
                   <TextField fx:id="nomMod" prefHeight="30.0" prefWidth="200.0" />
@@ -39,7 +39,7 @@
                   <Insets left="50.0" right="50.0" />
                </HBox.margin>
             </VBox>
-            <VBox alignment="CENTER" prefHeight="197.0" prefWidth="280.0" spacing="10">
+            <VBox alignment="CENTER" prefHeight="145.0" prefWidth="280.0" spacing="10">
                <children>
                   <Label text="Cin" />
                   <TextField fx:id="cinMod" prefHeight="30.0" prefWidth="200.0" />
@@ -49,6 +49,8 @@
                   <VBox fx:id="dateNaissanceErrorBox" />
                   <Label text="Role" />
                   <ComboBox fx:id="roleMod" prefHeight="30.0" prefWidth="279.0" />
+                  <Label prefHeight="20.0" prefWidth="113.0" text="Account Status" />
+                  <ComboBox fx:id="StatusCompte" prefHeight="31.0" prefWidth="278.0" />
                </children>
                <HBox.margin>
                   <Insets right="50.0" />

@@ -59,7 +59,6 @@ public class Question {
         this.question = question;
     }
 
-
     public int getIdQuiz() {
         return idQuiz;
     }

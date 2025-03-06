@@ -1,8 +1,10 @@
 package Controllers;
 
 import Models.Role;
+import Models.Statut;
 import Models.User;
 import Services.UserService;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,6 +12,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.ToggleButton;
+import jdk.jshell.Snippet;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -55,6 +59,10 @@ public class EditUser {
 
     @FXML
     private VBox emailErrorBox;
+    @FXML
+    private ToggleButton status;
+    @FXML
+    private ComboBox<Statut> StatusCompte;
 
     private User selectedUser;
 
@@ -62,6 +70,8 @@ public class EditUser {
 
     @FXML
     public void initialize() {
+
+
         // Contrôle de saisie pour le CIn (uniquement des nombres)
         cinMod.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) { // Seuls les chiffres sont autorisés
@@ -136,12 +146,19 @@ public class EditUser {
     private void clearError(VBox errorBox) {
         errorBox.getChildren().clear();
     }
+    private void updateToggleButtonText(boolean isActive) {
+        status.textProperty().unbind(); // Unbind before setting text manually
+        if (isActive) {
+            status.setText("Block User");
+        } else {
+            status.setText("Unblock User");
+        }
+    }
 
 
     @FXML
     void updateUser(ActionEvent event) {
         try {
-            // Vérifier que tous les champs sont valides avant de mettre à jour
             if (cinMod.getText().isEmpty() || nomMod.getText().isEmpty() || prenomMod.getText().isEmpty() || emailMod.getText().isEmpty() || dateMod.getValue() == null || roleMod.getValue() == null) {
                 messageMod.setText("Please fill in all fields.");
                 return;
@@ -152,23 +169,31 @@ public class EditUser {
                 return;
             }
 
-            // Créer un nouvel utilisateur avec les données du formulaire
-            User Newuser = new User(
-                    this.nomMod.getText(),
-                    this.prenomMod.getText(),
-                    this.emailMod.getText(),
-                    Integer.parseInt(this.cinMod.getText()),
-                    java.sql.Date.valueOf(this.dateMod.getValue()), // LocalDate
-                    this.roleMod.getValue()
-
-            );
-            Newuser.setId(selectedUser.getId()); // Définir l'ID de l'utilisateur sélectionné
+            User Newuser = new User();
+            Newuser.setDateNaissance(java.sql.Date.valueOf(this.dateMod.getValue()));
+            Newuser.setCin(Integer.parseInt(this.cinMod.getText()));
+            Newuser.setPrenom(this.prenomMod.getText());
+            Newuser.setEmail(this.emailMod.getText());
+            Newuser.setEmail(this.emailMod.getText());
+            Newuser.setNom( this.nomMod.getText());
+            Newuser.setRole(this.roleMod.getValue());
+            Newuser.setImage_url(selectedUser.getImage_url());
+            Newuser.setId(selectedUser.getId());
+            Newuser.setStatus(StatusCompte.getValue());
             this.userservice.update(Newuser);
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success");
             alert.setContentText("User updated successfully");
             alert.showAndWait();
+
             reset();
+
+            // Refresh user list in GestionUser
+            if (gestionUserController != null) {
+                gestionUserController.loadUsers(null);
+            }
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainPage.fxml"));
             Parent root = loader.load();
             nomMod.getScene().setRoot(root);
@@ -184,11 +209,11 @@ public class EditUser {
 
     public void setUserData(User user) {
         this.selectedUser = user;
+
         nomMod.setText(user.getNom());
         prenomMod.setText(user.getPrenom());
         emailMod.setText(user.getEmail());
         cinMod.setText(String.valueOf(user.getCin()));
-
 
         if (user.getDateNaissance() != null) {
             java.util.Date utilDate = new java.util.Date(user.getDateNaissance().getTime());
@@ -199,16 +224,21 @@ public class EditUser {
             dateMod.setValue(null);
         }
 
-        // Initialiser la ComboBox des rôles
         if (roleMod.getItems().isEmpty()) {
             roleMod.setItems(FXCollections.observableArrayList(Role.values()));
         }
         roleMod.setValue(user.getRole());
+
+        StatusCompte.setValue(user.getStatus());
     }
 
-    public LocalDate convertSqlDateToLocalDate(Date sqlDate) {
-        Instant instant = sqlDate.toInstant();
-        return instant.atZone(ZoneId.systemDefault()).toLocalDate();
+
+
+
+    private GestionUser gestionUserController;
+
+    public void setGestionUserController(GestionUser gestionUserController) {
+        this.gestionUserController = gestionUserController;
     }
 
     void reset() {
@@ -218,6 +248,7 @@ public class EditUser {
         this.cinMod.clear();
         this.dateMod.setValue(null);
         this.roleMod.setItems(null);
+        this.StatusCompte.setItems(null);
         this.selectedUser= null;
     }
 }

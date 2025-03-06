@@ -1,5 +1,7 @@
 package Controllers;
 
+import Models.Statut;
+import Models.User;
 import Services.EmailService;
 import Services.UserService;
 import javafx.fxml.FXML;
@@ -70,22 +72,35 @@ public class login {
         }
 
         try {
-            boolean isAuthenticated = userService.login(emailField.getText(), passwordField.getText());
+            boolean isAuthenticated = userService.login(email, password);
 
-            if (isAuthenticated) {
-                showAlert("Success", "Connected successfuly !");
-
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainPage.fxml"));
-                Parent root = loader.load();
-                emailField.getScene().setRoot(root);
-            } else {
+            if (!isAuthenticated) {
                 errorMessage.setText("Incorrect email or password!");
+                return;
             }
+
+            // Fetch the user only if login is successful
+            User user = userService.findUserByEmail(email);
+            System.out.println(user);
+            // Check if the user is blocked
+            if (user.getStatus() == Statut.BLOCKED) {  // assuming UserStatus is an enum
+                showAlert("Error", "Your account is blocked!");
+                return;  // Stop further execution
+            }
+
+            // Successful login
+            showAlert("Success", "Connected successfully!");
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainPage.fxml"));
+            Parent root = loader.load();
+            emailField.getScene().setRoot(root);
+
         } catch (Exception e) {
-            showAlert("Erreur", "Server connection problem!");
+            showAlert("Error", "Server connection problem!");
             System.out.println(e.getMessage());
         }
     }
+
 
 
 

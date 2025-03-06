@@ -22,7 +22,7 @@
 
     <!-- Contenu dynamique, qui prendra toute la place disponible -->
     <center>
-        <StackPane fx:id="contentPane" styleClass="anchor-pane" stylesheets="@../css/style.css">
+        <StackPane fx:id="contentPane" styleClass="anchor-pane" stylesheets="/css/style.css">
         </StackPane>
     </center>
 

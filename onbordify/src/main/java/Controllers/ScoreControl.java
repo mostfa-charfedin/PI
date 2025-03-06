@@ -163,12 +163,6 @@ public class ScoreControl {
 
     }
 
-    @FXML
-    void goToGestion(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainPage.fxml"));
-        Parent root = loader.load();
-        messagelist.getScene().setRoot(root);
-    }
 
 
 }

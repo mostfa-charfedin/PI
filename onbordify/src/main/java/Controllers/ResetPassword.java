@@ -94,5 +94,11 @@ public class ResetPassword {
         alert.showAndWait();
     }
 
+    @FXML
+    void Backtologin() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+        Parent root = loader.load();
+        emailReset.getScene().setRoot(root);
+    }
 
 }
