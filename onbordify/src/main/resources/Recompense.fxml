@@ -17,20 +17,20 @@
     <!-- Section Formulaire -->
     <VBox fx:id="formPane" layoutX="20.0" layoutY="50.0" prefWidth="360.0" spacing="20" style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-padding: 30; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 12, 0, 0, 0);">
 
-        <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1E88E5;" text="Créer une Récompense" />
+        <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1E88E5;" text="Add Reward" />
 
         <VBox spacing="10">
-            <Label style="-fx-font-size: 16px;" text="Type de Récompense:" />
+            <Label style="-fx-font-size: 16px;" text="Type :" />
             <TextField fx:id="txtType" promptText="Entrez le type" style="-fx-font-size: 14px; -fx-background-radius: 8px; -fx-border-radius: 8px; -fx-border-color: #90CAF9;" />
         </VBox>
 
         <VBox spacing="10">
-            <Label style="-fx-font-size: 16px;" text="Date d'Attribution:" />
+            <Label style="-fx-font-size: 16px;" text="Date :" />
             <DatePicker fx:id="dateAttribution" style="-fx-font-size: 14px; -fx-background-radius: 8px; -fx-border-radius: 8px; -fx-border-color: #90CAF9;" />
         </VBox>
 
         <VBox spacing="10">
-            <Label style="-fx-font-size: 16px;" text="Statut de la Récompense:" />
+            <Label style="-fx-font-size: 16px;" text="Status:" />
             <ComboBox fx:id="cmbStatut" style="-fx-font-size: 14px; -fx-background-radius: 8px; -fx-border-radius: 8px; -fx-border-color: #90CAF9;">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
@@ -43,14 +43,14 @@
         </VBox>
 
         <VBox spacing="10">
-            <Label style="-fx-font-size: 16px;" text="Programme associé:" />
+            <Label style="-fx-font-size: 16px;" text=" associated program:" />
             <ComboBox fx:id="cmbProgrammes" style="-fx-font-size: 14px; -fx-background-radius: 8px; -fx-border-radius: 8px; -fx-border-color: #90CAF9;" />
         </VBox>
 
         <HBox alignment="CENTER" spacing="20">
-            <Button fx:id="btnAjouter" onAction="#creer" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8px ; " text="➕ Ajouter" />
-            <Button fx:id="btnModifier" onAction="#ModifierRecompense" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8px;" text="✏️ Modifier" />
-            <Button fx:id="btnSupprimer" onAction="#supprimerRecompense" style="-fx-background-color: #F44336; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8px;" text="Supprimer" />
+            <Button fx:id="btnAjouter" onAction="#creer" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8px ; " text="➕ Add" />
+            <Button fx:id="btnModifier" onAction="#ModifierRecompense" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8px;" text="✏️ Edit" />
+            <Button fx:id="btnSupprimer" onAction="#supprimerRecompense" style="-fx-background-color: #F44336; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8px;" text="Delete" />
         </HBox>
 
     </VBox>

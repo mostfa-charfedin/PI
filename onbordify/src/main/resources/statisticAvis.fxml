@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controller.statisticAvis"
+      spacing="20"
+      style="-fx-background-color: linear-gradient(to bottom, #E3F2FD, #bbbcfb); -fx-padding: 20;">
+
+    <Label text="Statistiques des Avis"
+           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-alignment: center;"/>
+
+    <HBox spacing="20" alignment="CENTER">
+        <Label fx:id="totalReviewsLabel"
+               style="-fx-font-size: 16px; -fx-text-fill: #34495e;"/>
+
+        <Label fx:id="averageRatingLabel"
+               style="-fx-font-size: 16px; -fx-text-fill: #34495e;"/>
+    </HBox>
+
+    <VBox fx:id="chartContainer"
+          spacing="20"
+          style="-fx-background-color: white;
+                 -fx-background-radius: 10;
+                 -fx-padding: 20;
+                 -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+        <!-- Les graphiques seront ajoutés dynamiquement ici -->
+    </VBox>
+</VBox>
