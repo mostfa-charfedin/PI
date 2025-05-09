@@ -8,11 +8,24 @@ public class User {
     private String prenom ;
     private String email ;
     private int cin;
-    private Date dateNaissance ;
+    private Date dateNaissance;
     private String password ;
     private Role role ;
     private String image_url;
+    private Statut status;
+    private String num_phone;
     public User(){}
+
+    public User(String nom,String prenom, String email,  int cin, Date dateNaissance, Role role, String image_url, Statut status) {
+        this.nom = nom;
+        this.email = email;
+        this.prenom = prenom;
+        this.cin = cin;
+        this.dateNaissance = dateNaissance;
+        this.role = role;
+        this.image_url = image_url;
+        this.status = status;
+    }
 
     public User(int id, String nom, String prenom, String email, int cin, Date dateNaissance, String password, Role role) {
         this.id = id;
@@ -59,6 +72,14 @@ public class User {
         this.dateNaissance = dateNaissance;
         this.password = password;
         this.role = role;
+    }
+
+    public Statut getStatus() {
+        return status;
+    }
+
+    public void setStatus(Statut status) {
+        this.status = status;
     }
 
     public int getId() {
@@ -133,7 +154,6 @@ public class User {
         this.image_url = image_url;
     }
 
-    @Override
     public String toString() {
         return "User{" +
                 "firstName='" + nom + '\'' +
@@ -142,14 +162,11 @@ public class User {
                 ", cin='" + cin + '\'' +
                 ", dateNaissance='" + dateNaissance + '\'' +
                 ", role='" + role + '\'' +
-                ", password='" + password + '\'' +
+                ", image_url='" + image_url + '\'' +
+                ", id=" + id +
+                ", status=" + status + // Make sure this is included
                 '}';
     }
 
 
-    @Override
-    public int hashCode() {
-
-        return super.hashCode();
-    }
 }

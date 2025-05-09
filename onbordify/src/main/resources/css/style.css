@@ -64,7 +64,19 @@
 .button-create-recompense {
     -fx-background-color: #3498DB;
 }
+/* General styling for the VBox container */
+.vbox-container {
+    -fx-background-color: #f4f4f9;
+    -fx-padding: 20;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 2);
+}
 
+/* Title Label for Display Posts */
+.title-label {
+    -fx-font-size: 24px;
+}
 /* List section styles */
 .list-vbox {
     -fx-background-color: white;
@@ -76,9 +88,13 @@
 .list-label {
     -fx-font-size: 15px;
     -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 10 0 20 0;
+    -fx-font-family: "Arial", sans-serif;
     -fx-text-fill: #34495E;
 }
 
+/* Styling for ListView */
 .list-view {
     -fx-border-radius: 8px;
     -fx-background-radius: 8px;
@@ -104,24 +120,70 @@
     -fx-font-size: 14px;
     -fx-pref-height: 30px;
     -fx-background-color: #ffffff;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-padding: 10;
+    -fx-selection-bar: #3498db;
+    -fx-scroll-bar-width: 12;
     -fx-border-color: #cccccc;
     -fx-border-radius: 5px;
 }
 
 .text-field, .date-picker, .combo-box {
     -fx-font-size: 14px;
+    -fx-font-family: "Verdana", sans-serif;
+}
+
+.list-view .cell {
+    -fx-padding: 10;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #ecf0f1;
+}
+
+.list-view .cell:hover {
+    -fx-background-color: #ecf0f1;
     -fx-background-color: #ffffff;
     -fx-border-color: #cccccc;
     -fx-border-radius: 5px;
 }
 
+/* Button for Adding a Post */
+.button-add-post {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-padding: 12 20;
+}
 /* Style pour les Labels */
 .label {
     -fx-font-size: 14px;
+    -fx-border-radius: 8;
+    -fx-cursor: hand;
     -fx-font-weight: bold;
+}
+
+.button-add-post:hover {
+    -fx-background-color: #2980b9;
+}
+
+.button-add-post:pressed {
+    -fx-background-color: #1c5980;
     -fx-text-fill: #333333;
 }
 
+/* General styling for the VBox container */
+.vbox-container {
+    -fx-background-color: #f4f4f9;
+    -fx-padding: 20;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 2);
+}
+
+/* Title Label */
+.header-label {
+    -fx-font-size: 24px;
+}
 /* Style pour les Buttons */
 .button {
     -fx-font-size: 14px;
@@ -149,7 +211,12 @@
 
 #updateButton {
     -fx-background-color: #2196F3; /* Bleu */
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 10 0 20 0;
+    -fx-font-family: "Arial", sans-serif;
 }
+
+/* Input field label styling */
 
 #updateButton:hover {
     -fx-background-color: #1976D2; /* Bleu plus foncé */
@@ -173,12 +240,16 @@
 .label {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
     -fx-text-fill: #333333;
 }
 
-/* Style pour les Buttons */
+/* General input field styling */
+
 .button {
     -fx-font-size: 14px;
+    -fx-padding: 8;
+    -fx-border-radius: 8;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
     -fx-background-color:#4770E8;
@@ -206,6 +277,10 @@
     -fx-pref-width: 200px;
     -fx-pref-height: 30px;
     -fx-background-color: #ffffff;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 1;
+    -fx-font-family: "Verdana", sans-serif;
+    -fx-pref-width: 200px;
     -fx-border-color: #cccccc;
     -fx-border-radius: 5px;
 }
@@ -216,11 +291,15 @@
     -fx-pref-width: 100px;
 }
 
+.input-field:focused {
+    -fx-border-color: #3498db;
+}
 #loginButton:hover {
     -fx-background-color: #1976D2;
 }
 
-/* Style pour les messages d'erreur */
+/* Styling for ListView */
+
 .error-message {
     -fx-font-size: 12px;
     -fx-text-fill: #ff0000;
@@ -252,13 +331,65 @@
     -fx-pref-width: 300px; /* Largeur fixe */
     -fx-pref-height: 30px;
     -fx-background-color: #ffffff;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-padding: 10;
+    -fx-selection-bar: #3498db;
+    -fx-scroll-bar-width: 12;
     -fx-border-color: #cccccc;
     -fx-border-radius: 5px;
 }
 .Cancelbutton {
     -fx-font-size: 14px;
+    -fx-font-family: "Verdana", sans-serif;
     -fx-background-color: orange;
+}
+
+.list-view .cell {
+    -fx-padding: 10;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #ecf0f1;
 }
 .sidebar{
     -fx-background-color: #82c2e3;
+}
+
+.list-view .cell:hover {
+    -fx-background-color: #ecf0f1;
+}
+.root {
+    -fx-background-color: linear-gradient(to bottom, #E3F2FD, #bbbcfb);
+}
+
+/* Button styling for the image upload */
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border: none;
+    -fx-cursor: hand;
+}
+
+/* Button for adding a comment */
+.button-add-comment {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-padding: 12 20;
+    -fx-font-size: 14px;
+    -fx-border-radius: 8;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+.button-add-comment:hover {
+    -fx-background-color: #2980b9;
+}
+
+.vbox-container {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-padding: 20px;
+    -fx-background-radius: 10px;
+}
+.button-add-comment:pressed {
+    -fx-background-color: #1c5980;
 }

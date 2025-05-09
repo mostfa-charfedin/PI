@@ -7,6 +7,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import Models.User;
 
 public class EmailService {
 
@@ -59,4 +60,5 @@ public class EmailService {
             return null;
         }
     }
+    
 }

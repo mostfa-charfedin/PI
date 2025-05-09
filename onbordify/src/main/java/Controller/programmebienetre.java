@@ -11,13 +11,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+import Services.EmailService;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import Services.UserService;
 
 public class programmebienetre implements Initializable {
+
 
     @FXML
     private TextField txtTitre;
@@ -41,6 +43,8 @@ public class programmebienetre implements Initializable {
     private Button btnCreateRecompense;
 
     private programmebienetreService service = new programmebienetreService();
+    private EmailService emailService = new EmailService(); // Initialisation de EmailService
+    private UserService userService = new UserService(); // Initialisation de UserService
     private ObservableList<Models.programmebienetre> programmeList = FXCollections.observableArrayList();
 
     @Override
@@ -123,6 +127,10 @@ public class programmebienetre implements Initializable {
             Models.programmebienetre programme = new Models.programmebienetre(0, titre, type, description);
             try {
                 service.create(programme);
+                List<String> allEmails = userService.getAllUserEmails(); // Appel sur l'instance de UserService
+                for (String email : allEmails) {
+                    emailService.sendEmail(email, "ProgWellBeing Created", "A new ProgWellBeing has been created, you can check it now!");
+                }
 
                 loadProgrammes();
 
@@ -207,6 +215,7 @@ public class programmebienetre implements Initializable {
             e.printStackTrace();
             showAlert("Erreur", "Impossible d'ouvrir la fenêtre de récompense !");
         }
+
     }
 
     private void showAlert(String title, String message) {

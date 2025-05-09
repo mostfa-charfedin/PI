@@ -46,7 +46,7 @@ public class UserSession {
                 '}';
     }
 
-    public static void destroySession() {
+    public  void destroySession() {
         instance = null;
     }
 

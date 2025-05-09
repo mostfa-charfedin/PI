@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.Button?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.UpdatePostController" spacing="20" alignment="CENTER"
+      style="-fx-background-color: linear-gradient(to bottom, #A0D8EF, #F7F8FA); -fx-padding: 20;">
+
+    <!-- Title -->
+    <Label text="Edit Post"
+           style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2C3E50; -fx-padding: 10; -fx-effect: dropshadow(gaussian, #3e5bb2, 10, 0.5, 2, 2);"/>
+
+    <!-- TextArea for editing post content with rounded border and background -->
+    <TextArea fx:id="postContent" prefWidth="400" prefHeight="150" promptText="Edit the content of your post..."
+              style="-fx-background-color: #FFFFFF; -fx-border-radius: 10px; -fx-border-color: #3498DB; -fx-border-width: 2px; -fx-font-size: 14px; -fx-padding: 10; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0.5, 2, 2);"/>
+
+    <!-- Save Changes Button with modern design -->
+    <Button text="Save Changes" onAction="#saveChanges"
+            style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-border-radius: 12px; -fx-padding: 10 20; -fx-effect: dropshadow(gaussian, #28a745, 15, 0.5, 0, 2);"/>
+</VBox>

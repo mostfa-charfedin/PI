@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -7,18 +8,22 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Details">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Questionsdetails">
     <children>
-        <Label id="title_label" fx:id="title_label" layoutX="59.0" layoutY="4.0" prefHeight="62.0" prefWidth="206.0" text="Quiz's questions " textFill="INDIANRED">
+        <Label id="title_label" fx:id="title_label" layoutX="50.0" layoutY="8.0" prefHeight="44.0" prefWidth="298.0" styleClass="title-label" stylesheets="@../css/Style.css" text="Quiz's questions " textFill="INDIANRED">
             <font>
                 <Font name="Candara" size="15.0" />
             </font></Label>
-        <Pane fx:id="panel_l" layoutX="26.0" layoutY="67.0" prefHeight="318.0" prefWidth="556.0" styleClass="panel_l" stylesheets="@../Css/style.css">
+        <Pane fx:id="panel_l" layoutX="26.0" layoutY="67.0" prefHeight="318.0" prefWidth="556.0" styleClass="panel_l" stylesheets="@../css/Style.css">
             <children>
                 <ListView fx:id="listViewQuiz" layoutX="14.0" layoutY="21.0" prefHeight="276.0" prefWidth="522.0" />
             </children>
         </Pane>
-        <Button layoutX="499.0" layoutY="17.0" mnemonicParsing="false" onAction="#cancel_button" styleClass="cancel_button" stylesheets="@../Css/style.css" text="Cancel" />
-      <Button layoutX="413.0" layoutY="17.0" mnemonicParsing="false" onAction="#remove_button" stylesheets="@../Css/style.css" text="Remove" />
+        <Button layoutX="499.0" layoutY="17.0" mnemonicParsing="false" onAction="#cancel_button" stylesheets="@../css/Style.css" text="Cancel">
+         <styleClass>
+            <String fx:value="cancel_button" />
+            <String fx:value="danger-button" />
+         </styleClass></Button>
+      <Button layoutX="413.0" layoutY="17.0" mnemonicParsing="false" onAction="#Remove_question" styleClass="action-button" stylesheets="@../css/Style.css" text="Remove" />
     </children>
 </AnchorPane>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="15" alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controllers.DetailResourceController" style="-fx-background-color: #f4f4f9; -fx-padding: 20px; -fx-border-radius: 10px;">
+
+    <!-- Titre principal -->
+    <Label text="Resource details" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #333333;" />
+
+    <!-- Affichage du Titre -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Title :" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #555555;" />
+        <Label fx:id="labelTitre" style="-fx-font-size: 14px; -fx-text-fill: #333333;" />
+    </HBox>
+
+    <!-- Affichage du Type -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Type :" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #555555;" />
+        <Label fx:id="labelType" style="-fx-font-size: 14px; -fx-text-fill: #333333;" />
+    </HBox>
+
+    <!-- Affichage de la Description -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Description :" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #555555;" />
+        <Label fx:id="labelDescription" wrapText="true" style="-fx-font-size: 14px; -fx-text-fill: #333333;" />
+    </HBox>
+
+    <!-- Affichage du Lien -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Link :" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #555555;" />
+        <Label fx:id="labelLien" style="-fx-font-size: 14px; -fx-text-fill: blue; -fx-underline: true;" />
+    </HBox>
+
+    <!-- Section de notation -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Rate this resource :" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #555555;" />
+        <!-- Slider pour la note (0 à 5) -->
+        <Slider fx:id="ratingSlider" min="0" max="5" value="0" showTickMarks="true" showTickLabels="true" majorTickUnit="1" blockIncrement="0.1" layoutX="14" layoutY="100" />
+    </HBox>
+
+    <!-- Affichage de la Moyenne des notes -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Average rating :" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #555555;" />
+        <Label fx:id="labelMoyenneNote" style="-fx-font-size: 14px; -fx-text-fill: #333333;" />
+    </HBox>
+
+    <!-- Bouton pour soumettre la note -->
+    <Button fx:id="btnNoter" text="Submit Note" onAction="#noterRessource" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5px; -fx-padding: 10px 20px;" />
+
+    <!-- Bouton Fermer -->
+    <Button text="Close" onAction="#fermerFenetre" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5px; -fx-padding: 10px 20px;"/>
+</VBox>

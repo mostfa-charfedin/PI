@@ -78,6 +78,7 @@ private FilteredList<String> filteredList;
 
     @FXML
     public void initialize() {
+
         role.setItems(FXCollections.observableArrayList(Role.values()));
         ObservableList<Role> roles = FXCollections.observableArrayList(Role.values());
         roleFilter.setItems(roles);
@@ -195,7 +196,7 @@ private FilteredList<String> filteredList;
                     .collect(Collectors.toList());
 
             userList.setAll(filteredUsers.stream()
-                    .map(user -> user.getNom() + " | " + user.getPrenom() + " | " + user.getCin())
+                    .map(user -> user.getNom() + " | " + user.getPrenom() + " | " + user.getCin() + " | " + user.getEmail())
                     .collect(Collectors.toList()));
 
             if (filteredList == null) {
@@ -305,19 +306,15 @@ private FilteredList<String> filteredList;
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editUser.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/EditUser.fxml"));
             Parent root = loader.load();
-            EditUser editController = loader.getController();
-            editController.setUserData(selectedUser);
-            nom.getScene().setRoot(root);
 
-        } catch (Exception e) {
-            messagelist.setText("Error opening edit window: " + e.getMessage());
+            EditUser editUserController = loader.getController();
+            editUserController.setUserData(selectedUser);
+            editUserController.setGestionUserController(this); // Pass GestionUser instance
+            nom.getScene().setRoot(root);
+        } catch (IOException e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText("Error opening edit window: " + e.getMessage());
-            alert.showAndWait();
         }
     }
 
