@@ -13,6 +13,7 @@ public class User {
     private Role role ;
     private String image_url;
     private Statut status;
+    private String num_phone;
     public User(){}
 
     public User(String nom,String prenom, String email,  int cin, Date dateNaissance, Role role, String image_url, Statut status) {

@@ -1,6 +1,7 @@
 package Controllers;
 
 import Services.EmailService;
+import Services.SMSService;
 import Services.UserService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,7 +28,7 @@ public class ResetPassword {
 
     EmailService emailService = new EmailService();
     UserService userService = new UserService();
-
+SMSService smsService = new SMSService();
     @FXML
     public void initialize() {
 
@@ -61,7 +62,7 @@ public class ResetPassword {
         try {
         boolean emailSent = sendResetEmail(email);
         if (emailSent) {
-
+            smsService.sendSMS("+21652148247", "test service sms");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/verifierCode.fxml"));
                 Parent root = loader.load();
             messageLabel.getScene().setRoot(root);
