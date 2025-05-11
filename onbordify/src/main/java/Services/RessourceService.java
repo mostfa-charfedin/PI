@@ -1,11 +1,15 @@
 package Services;
 
-import Models.Ressource;
-import utils.MyDb;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import Models.Ressource;
+import utils.MyDb;
 
 public class RessourceService implements CrudInterface<Ressource> {
     private Connection connection;
@@ -132,8 +136,9 @@ public class RessourceService implements CrudInterface<Ressource> {
                 "FROM onboardify.ressources r " +
                 "LEFT JOIN onboardify.evaluation e ON r.idResource = e.idResource " +
                 "GROUP BY r.idResource " +
-                "ORDER BY avgNote ASC " +
-                "LIMIT 5";
+                "HAVING avgNote > 0 " +  // Only include resources that have been rated
+                "ORDER BY avgNote ASC " +  // Sort by lowest notes first
+                "LIMIT 5";  // Show only the 5 worst-rated resources
 
         List<Ressource> resourcesList = new ArrayList<>();
 

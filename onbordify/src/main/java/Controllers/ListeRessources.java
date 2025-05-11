@@ -24,6 +24,8 @@ public class ListeRessources {
     @FXML private Button btnAjouter;
     @FXML private Button btnFavoris;
     @FXML private TextField searchField;
+    @FXML
+    private Button btnRetour;
 
     private RessourceService ressourceService;
     private List<Ressource> ressources = new ArrayList<>();
@@ -38,6 +40,22 @@ public class ListeRessources {
 
         // Action pour ajouter une nouvelle ressource
         btnAjouter.setOnAction(event -> ouvrirAjouterRessource());
+
+        btnRetour.setOnAction(event -> {
+            try {
+                // Charger la vue précédente (Evaluation.fxml) [[2]][[7]]
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Evaluation.fxml"));
+                Parent root = loader.load();
+
+                // Récupérer la fenêtre actuelle et changer de scène [[5]]
+                Stage stage = (Stage) btnRetour.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert("Erreur lors du retour à la page précédente."); // [[6]]
+            }
+        });
 
 
 

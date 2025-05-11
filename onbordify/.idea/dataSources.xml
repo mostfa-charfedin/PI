@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="onboardify" uuid="fc8be30f-2245-43ea-8395-a3b1af465f9c">
+    <data-source source="LOCAL" name="onboardify" uuid="c2a3f37b-db75-41f2-8afe-44f5df97e12a">
       <driver-ref>mysql_aurora</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>

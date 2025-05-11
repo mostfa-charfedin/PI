@@ -3,6 +3,7 @@ package Controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -46,22 +47,25 @@ public class MainPage {
     private void loadPage(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
-            AnchorPane newPage = loader.load();
+            Parent newPage = loader.load(); // Use Parent instead of AnchorPane
 
-            // Ajuster la taille pour qu'elle prenne tout l'espace disponible
+            // Create a container AnchorPane to hold the loaded content
+            AnchorPane container = new AnchorPane(newPage);
+
+            // Make the loaded content fill the container
             AnchorPane.setTopAnchor(newPage, 0.0);
             AnchorPane.setBottomAnchor(newPage, 0.0);
             AnchorPane.setLeftAnchor(newPage, 0.0);
             AnchorPane.setRightAnchor(newPage, 0.0);
 
             // Animation de transition fluide
-            FadeTransition fade = new FadeTransition(Duration.millis(500), newPage);
+            FadeTransition fade = new FadeTransition(Duration.millis(500), container);
             fade.setFromValue(0);
             fade.setToValue(1);
             fade.play();
 
             // Remplacer le contenu actuel
-            contentPane.getChildren().setAll(newPage);
+            contentPane.getChildren().setAll(container);
         } catch (IOException e) {
             e.printStackTrace();
         }
