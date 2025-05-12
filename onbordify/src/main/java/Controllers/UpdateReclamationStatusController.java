@@ -1,17 +1,16 @@
 package Controllers;
 
 import Models.Reclamation;
-import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
 import Services.ReclamationService;
-import javafx.event.ActionEvent;
-import javafx.stage.Stage;
-import javafx.scene.paint.Color;
-import javafx.scene.control.ListCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import javafx.scene.control.ListCell;
+import javafx.stage.Stage;
+import utils.UserSession;
 
 public class UpdateReclamationStatusController {
 
@@ -20,19 +19,21 @@ public class UpdateReclamationStatusController {
     @FXML
     private ComboBox<String> statusComboBox;
     @FXML
+    private TextArea responseField;
+    @FXML
     private Button saveButton;
     @FXML
     private Button cancelButton;
 
     private ReclamationService reclamationService;
     private Reclamation reclamation;
+    private UserSession session = UserSession.getInstance();
 
-    // This method is called when the window is opened
     public void initialize() {
         reclamationService = new ReclamationService();
 
         // Add statuses to ComboBox
-        ObservableList<String> statusList = FXCollections.observableArrayList("Pending", "Resolved", "Rejected");
+        ObservableList<String> statusList = FXCollections.observableArrayList("PENDING", "RESOLVED", "REJECTED");
         statusComboBox.setItems(statusList);
 
         // Customize ComboBox with colors for statuses
@@ -46,12 +47,12 @@ public class UpdateReclamationStatusController {
                 } else {
                     setText(item);
                     // Apply colors based on status
-                    if (item.equals("Pending")) {
-                        setTextFill(Color.ORANGE);  // Color orange for "Pending"
-                    } else if (item.equals("Resolved")) {
-                        setTextFill(Color.GREEN);  // Color green for "Resolved"
-                    } else if (item.equals("Rejected")) {
-                        setTextFill(Color.RED);  // Color red for "Rejected"
+                    if (item.equals("PENDING")) {
+                        setTextFill(Color.ORANGE);
+                    } else if (item.equals("RESOLVED")) {
+                        setTextFill(Color.GREEN);
+                    } else if (item.equals("REJECTED")) {
+                        setTextFill(Color.RED);
                     }
                 }
             }
@@ -60,45 +61,82 @@ public class UpdateReclamationStatusController {
         // Apply the same color for the selected item in ComboBox
         statusComboBox.setButtonCell(statusComboBox.getCellFactory().call(null));
 
-        // You can modify the reclamation's ID and status from the previous window
+        // Set initial values if reclamation is provided
         if (reclamation != null) {
-            reclamationIdField.setText(String.valueOf(reclamation.getIdReclamation()));
-        }
-    }
+            reclamationIdField.setText(String.valueOf(reclamation.getId()));
+            responseField.setText(reclamation.getResponse() != null ? reclamation.getResponse() : "");
 
-    // Called to set the reclamation object to be edited
-    public void setReclamation(Reclamation reclamation) {
-        this.reclamation = reclamation;
-    }
-
-    // Method to save the updated status
-    @FXML
-    private void saveStatus(ActionEvent event) {
-        if (reclamation != null && statusComboBox.getValue() != null) {
-            try {
-                // Update the reclamation status based on ComboBox selection
-                String newStatus = statusComboBox.getValue();
-                reclamation.setEtat(newStatus);  // Set the new status to the reclamation
-
-                // Call the service to update the reclamation in the database
-                reclamationService.update(reclamation);
-
-                // Show success message (you can use an alert or other UI components)
-                System.out.println("Status updated successfully!");
-
-                // Close the current window
-                Stage stage = (Stage) saveButton.getScene().getWindow();
-                stage.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+            // Set current status in ComboBox
+            if (reclamation.getStatus() == null) {
+                statusComboBox.setValue("PENDING");
+            } else if (reclamation.getStatus()) {
+                statusComboBox.setValue("RESOLVED");
+            } else {
+                statusComboBox.setValue("REJECTED");
             }
         }
     }
 
-    // Method to cancel the update
+    public void setReclamation(Reclamation reclamation) {
+        this.reclamation = reclamation;
+    }
+
+    @FXML
+    private void saveStatus(ActionEvent event) {
+        if (reclamation != null && statusComboBox.getValue() != null && !responseField.getText().isEmpty()) {
+            try {
+                String selectedStatus = statusComboBox.getValue();
+                Boolean statusValue = null;
+
+                switch (selectedStatus) {
+                    case "RESOLVED":
+                        statusValue = true;
+                        break;
+                    case "REJECTED":
+                        statusValue = false;
+                        break;
+                    case "PENDING":
+                        statusValue = null;
+                        break;
+                }
+
+                // Update the reclamation status and response
+                reclamationService.updateStatus(
+                        reclamation.getId(),
+                        statusValue,
+                        responseField.getText(),
+                        session.getUserId()
+                );
+
+                // Show success message
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Success");
+                alert.setHeaderText(null);
+                alert.setContentText("Complaint status updated successfully!");
+                alert.showAndWait();
+
+                // Close the window
+                Stage stage = (Stage) saveButton.getScene().getWindow();
+                stage.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Failed to update complaint status: " + e.getMessage());
+                alert.showAndWait();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a status and provide a response");
+            alert.showAndWait();
+        }
+    }
+
     @FXML
     private void cancelUpdate(ActionEvent event) {
-        // Close the current window without saving
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }

@@ -2,31 +2,23 @@ package Controllers;
 
 import Models.Commentaire;
 import Models.Publication;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import Services.CommentaireService;
 import Services.SpamService;
 import utils.UserSession;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class CommentsController {
-
-    @FXML private ListView<HBox> listViewComments;
+    @FXML private ListView<VBox> listViewComments;
     @FXML private TextArea commentInput;
-    @FXML private TextArea imagePathInput;
-    @FXML private TextField titleInput;
-    @FXML private ImageView uploadedImageView; // Make sure this is linked in FXML
+    @FXML private Label postTitleLabel;
+    @FXML private Label postContentLabel;
 
     private final CommentaireService commentaireService = new CommentaireService();
     private final SpamService spamService = new SpamService();
@@ -35,45 +27,66 @@ public class CommentsController {
 
     public void setPublication(Publication publication) {
         this.currentPublication = publication;
+        displayPostDetails();
         loadComments();
+    }
+
+    private void displayPostDetails() {
+        postTitleLabel.setText("Post: " + currentPublication.getTitle());
+        postContentLabel.setText(currentPublication.getContenu());
     }
 
     private void loadComments() {
         listViewComments.getItems().clear();
-        List<Commentaire> comments = commentaireService.getCommentsByPublication(currentPublication.getIdPublication());
+        List<Commentaire> comments = commentaireService.getCommentsByPublication(currentPublication.getId());
 
         for (Commentaire comment : comments) {
-            HBox commentBox = new HBox(10);
-            Label commentLabel = new Label(comment.getTitre() + ": " + comment.getDescription());
+            VBox commentBox = new VBox(5);
+            // Ajoutez le nom de l'utilisateur
+            Label userLabel = new Label(comment.getUserPrenom() + " " + comment.getUserNom());
+            userLabel.setStyle("-fx-font-weight: bold;");
+            HBox contentBox = new HBox(10);
 
-            if (comment.getImagePath() != null && !comment.getImagePath().isEmpty()) {
-                File file = new File(comment.getImagePath());
-                if (file.exists()) {
-                    String imageUri = file.toURI().toString();
-                    ImageView imageView = new ImageView(new Image(imageUri, 50, 50, true, true));
-                    commentBox.getChildren().add(imageView);
-                }
+            Text contentText = new Text(comment.getContenu());
+            contentText.setWrappingWidth(400);
+
+            Label timestampLabel = new Label(comment.getCreatedAt().toString());
+            timestampLabel.setStyle("-fx-font-size: 10; -fx-text-fill: gray;");
+
+            contentBox.getChildren().addAll(contentText, timestampLabel);
+
+            // Ajouter d'abord le userLabel au commentBox
+            commentBox.getChildren().add(userLabel); // <-- Cette ligne était manquante
+            commentBox.getChildren().add(contentBox);
+
+            UserSession session = UserSession.getInstance();
+            if (session != null && session.getUserId() == comment.getUserId()) {
+                HBox buttonBox = new HBox(10);
+                Button updateButton = new Button("Edit");
+                updateButton.setOnAction(e -> editComment(comment));
+
+                Button deleteButton = new Button("Delete");
+                deleteButton.setOnAction(e -> deleteComment(comment));
+
+                buttonBox.getChildren().addAll(updateButton, deleteButton);
+                commentBox.getChildren().add(buttonBox);
             }
+            // else n'est plus nécessaire car contentBox est déjà ajouté
 
-            Button deleteButton = new Button("Delete");
-            deleteButton.setOnAction(e -> deleteComment(comment));
-
-            Button updateButton = new Button("Update");
-            updateButton.setOnAction(e -> editComment(comment));
-
-            commentBox.getChildren().addAll(commentLabel, updateButton, deleteButton);
             listViewComments.getItems().add(commentBox);
         }
     }
 
     private void deleteComment(Commentaire comment) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this comment?", ButtonType.YES, ButtonType.NO);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                "Are you sure you want to delete this comment?",
+                ButtonType.YES, ButtonType.NO);
         alert.setTitle("Confirm Deletion");
         alert.setHeaderText(null);
 
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
-                commentaireService.delete(comment.getIdCommentaire());
+                commentaireService.delete(comment.getId());
                 loadComments();
             }
         });
@@ -81,31 +94,12 @@ public class CommentsController {
 
     private void editComment(Commentaire comment) {
         selectedComment = comment;
-        titleInput.setText(comment.getTitre());
-        commentInput.setText(comment.getDescription());
-        imagePathInput.setText(comment.getImagePath());
-
-        // Load the existing image if available
-        if (comment.getImagePath() != null && !comment.getImagePath().isEmpty()) {
-            File imgFile = new File(comment.getImagePath());
-            if (imgFile.exists()) {
-                uploadedImageView.setImage(new Image(imgFile.toURI().toString()));
-            }
-        } else {
-            uploadedImageView.setImage(null); // Clear the image view if no image
-        }
+        commentInput.setText(comment.getContenu());
     }
 
     @FXML
     private void addComment() {
-        String title = titleInput.getText().trim();
         String content = commentInput.getText().trim();
-        String imagePath = imagePathInput.getText().trim();
-
-        if (title.isEmpty() || !title.matches("[a-zA-ZÀ-ÿ\\s]+")) {
-            showAlert(Alert.AlertType.ERROR, "Invalid Title", "The title must contain only letters and spaces.");
-            return;
-        }
 
         if (content.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Validation Error", "Comment content cannot be empty!");
@@ -117,32 +111,25 @@ public class CommentsController {
             return;
         }
 
-        if (!imagePath.isEmpty() && !isValidImagePath(imagePath)) {
-            showAlert(Alert.AlertType.ERROR, "Invalid Image Path", "Please enter a valid image file path.");
+        UserSession session = UserSession.getInstance();
+        if (session == null) {
+            showAlert(Alert.AlertType.ERROR, "Session Error", "No active session. Please log in.");
             return;
         }
 
+        Commentaire comment = selectedComment != null ? selectedComment : new Commentaire();
+        comment.setContenu(content);
+        comment.setUserId(session.getUserId());
+        comment.setPosteId(currentPublication.getId());
+
         if (selectedComment != null) {
-            selectedComment.setTitre(title);
-            selectedComment.setDescription(content);
-            selectedComment.setImagePath(imagePath);
-            commentaireService.update(selectedComment);
+            commentaireService.update(comment);
             selectedComment = null;
         } else {
-            UserSession session = UserSession.getInstance();
-            if (session == null) {
-                showAlert(Alert.AlertType.ERROR, "Session Error", "No active session. Please log in.");
-                return;
-            }
-
-            Commentaire newComment = new Commentaire(0, title, content, imagePath, session.getUserId(), currentPublication.getIdPublication());
-            commentaireService.add(newComment);
+            commentaireService.add(comment);
         }
 
-        titleInput.clear();
         commentInput.clear();
-        imagePathInput.clear();
-        uploadedImageView.setImage(null); // Clear the uploaded image view
         loadComments();
     }
 
@@ -151,47 +138,5 @@ public class CommentsController {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.showAndWait();
-    }
-
-    private boolean isValidImagePath(String path) {
-        File file = new File(path);
-        return file.exists() && !file.isDirectory() && path.matches(".*\\.(jpg|jpeg|png|gif)$");
-    }
-
-    @FXML
-    void chooseImageFile(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose Image File");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
-        );
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        File selectedFile = fileChooser.showOpenDialog(stage);
-
-        if (selectedFile != null) {
-            // Use the original path for the uploads directory
-            File uploadsDir = new File("src/main/resources/uploads");
-            if (!uploadsDir.exists()) {
-                uploadsDir.mkdirs(); // Create the directory if it doesn't exist
-            }
-
-            // Use the absolute path for the input field
-            String originalPath = selectedFile.getAbsolutePath();
-            imagePathInput.setText(originalPath); // Set the original path for display
-
-            // Create the destination file in the uploads directory
-            File destinationFile = new File(uploadsDir, selectedFile.getName());
-
-            try {
-                // Copy the selected file to the destination
-                Files.copy(selectedFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-                // Display the uploaded image in the ImageView
-                uploadedImageView.setImage(new Image(destinationFile.toURI().toString()));
-            } catch (Exception e) {
-                showAlert(Alert.AlertType.ERROR, "Upload Failed", "Failed to upload image: " + e.getMessage());
-            }
-        }
     }
 }

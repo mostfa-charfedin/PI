@@ -6,7 +6,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -44,9 +46,22 @@ public class DisplayPostsController {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    HBox hbox = new HBox(10);
-                    Text postText = new Text(publication.getContenu());
+                    // Create a VBox to hold all post information
+                    VBox vbox = new VBox(5);
 
+                    // Add title
+                    Text titleText = new Text("Title: " + publication.getTitle());
+                    titleText.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+
+                    // Add content
+                    Text contentText = new Text(publication.getContenu());
+
+                    // Add categories (parsed from JSON)
+                    Text categoriesText = new Text("Categories: " + formatCategoriesForDisplay(publication.getCategories()));
+                    categoriesText.setStyle("-fx-font-style: italic;");
+
+                    // Create button container
+                    HBox buttonBox = new HBox(10);
                     Button viewCommentsButton = new Button("View Comments");
                     viewCommentsButton.setOnAction(event -> displayComments(publication));
 
@@ -56,11 +71,19 @@ public class DisplayPostsController {
                     Button deleteButton = new Button("Delete");
                     deleteButton.setOnAction(event -> deletePost(publication));
 
-                    hbox.getChildren().addAll(postText, viewCommentsButton, editButton, deleteButton);
-                    setGraphic(hbox);
+                    buttonBox.getChildren().addAll(viewCommentsButton, editButton, deleteButton);
+
+                    // Add all elements to VBox
+                    vbox.getChildren().addAll(titleText, contentText, categoriesText, buttonBox);
+                    setGraphic(vbox);
                 }
             }
         });
+    }
+
+    private String formatCategoriesForDisplay(String categoriesJson) {
+        // Simple formatting - remove brackets and quotes from JSON array
+        return categoriesJson.replaceAll("[\\[\\]\"]", "");
     }
 
     private void displayComments(Publication publication) {
@@ -68,11 +91,11 @@ public class DisplayPostsController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/comments_view.fxml"));
             Parent root = loader.load();
 
-            Controllers.CommentsController commentsController = loader.getController();
+            CommentsController commentsController = loader.getController();
             commentsController.setPublication(publication);
 
             Stage stage = new Stage();
-            stage.setTitle("Comments");
+            stage.setTitle("Comments for: " + publication.getTitle());
             Scene scene = new Scene(root, 800, 500);
             stage.setScene(scene);
             stage.show();
@@ -91,6 +114,7 @@ public class DisplayPostsController {
             addPostController.setPostListController(this);
 
             Stage stage = new Stage();
+            stage.setTitle("Add New Post");
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
@@ -107,7 +131,7 @@ public class DisplayPostsController {
             updatePostController.setPublication(publication, this);
 
             Stage stage = new Stage();
-            stage.setTitle("Edit Post");
+            stage.setTitle("Edit Post: " + publication.getTitle());
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
@@ -116,10 +140,12 @@ public class DisplayPostsController {
     }
 
     private void deletePost(Publication publication) {
-        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this post?", ButtonType.YES, ButtonType.NO);
+        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION,
+                "Are you sure you want to delete this post: '" + publication.getTitle() + "'?",
+                ButtonType.YES, ButtonType.NO);
         confirmDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
-                publicationService.delete(publication.getIdPublication());
+                publicationService.delete(publication.getId());
                 loadPublications();
             }
         });

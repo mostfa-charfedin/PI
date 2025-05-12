@@ -9,14 +9,14 @@ public class configuration {
     public static final List<String> MOTS_INTERDITS = new ArrayList<>(Arrays.asList(
             // Insultes courantes
             "idiot", "imbécile", "abruti", "crétin", "débile", "incapable", "minable", "raté", "médiocre",
-             "badword1", "badword2", "badword3", "badword4", "badword5", "badword6",
+            "badword1", "badword2", "badword3", "badword4", "badword5", "badword6",
             // Mots vulgaires et obscènes
 
             // Termes discriminatoires
             "raciste", "nazi",
             // Mots liés à la violence et au crime
             "criminel", "violeur", "pédophile", "meurtrier", "assassin", "tueur", "casseur", "terroriste"
-                ));
+    ));
 
     // Méthode pour ajouter un mot interdit dynamiquement
     public static void ajouterMotInterdit(String mot) {

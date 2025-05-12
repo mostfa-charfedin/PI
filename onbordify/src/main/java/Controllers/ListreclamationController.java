@@ -12,7 +12,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
 import javafx.scene.paint.Color;
-
+import utils.UserSession;
 
 import java.util.List;
 
@@ -29,13 +29,17 @@ public class ListreclamationController {
 
     private ReclamationService reclamationService = new ReclamationService();
     private ObservableList<String> reclamationList = FXCollections.observableArrayList();
+    private UserSession session = UserSession.getInstance();
 
     @FXML
     public void initialize() {
-        loadReclamations();
-        statusComboBox.setItems(FXCollections.observableArrayList("PENDING", "Rejected", "RESOLVED"));
+        // Initialiser la ComboBox avec les statuts possibles
+        statusComboBox.setItems(FXCollections.observableArrayList("PENDING", "REJECTED", "RESOLVED"));
 
-        // Apply color to the status text
+        // Charger les réclamations
+        loadReclamations();
+
+        // Configurer le rendu des cellules avec les couleurs
         reclamationListView.setCellFactory(lv -> new ListCell<String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -43,36 +47,56 @@ public class ListreclamationController {
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    // Set the text for the item
                     setText(item);
 
-                    // Check if the status is "Pending", "Resolved", or "Rejected" and apply color
-                    if (item.contains("Pending")) {
-                        setTextFill(Color.ORANGE);  // Orange color for "Pending"
-                    } else if (item.contains("Resolved")) {
-                        setTextFill(Color.GREEN);   // Green color for "Resolved"
-                    } else if (item.contains("Rejected")) {
-                        setTextFill(Color.RED);     // Red color for "Rejected"
+                    // Appliquer la couleur selon le statut
+                    if (item.contains("PENDING")) {
+                        setTextFill(Color.ORANGE);
+                    } else if (item.contains("RESOLVED")) {
+                        setTextFill(Color.GREEN);
+                    } else if (item.contains("REJECTED")) {
+                        setTextFill(Color.RED);
                     } else {
-                        setTextFill(Color.BLACK);   // Default color if no status is matched
+                        setTextFill(Color.BLACK);
                     }
                 }
             }
         });
+
+        // Activer/désactiver le bouton selon la sélection
+        reclamationListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            updateButtonState();
+        });
+
+        statusComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            updateButtonState();
+        });
     }
 
     private void loadReclamations() {
-        // Fetch the list of reclamations from the service
         List<Reclamation> reclamations = reclamationService.getAll();
         reclamationList.clear();
 
         for (Reclamation rec : reclamations) {
-            // Format the item text with ID, Commentaire, and Status
-            String reclamationItem = "ID: " + rec.getIdReclamation() + " | " + rec.getCommentaire() + " | Status: " + rec.getEtat();
+            String status;
+            if (rec.getStatus() == null) {
+                status = "PENDING";
+            } else if (rec.getStatus()) {
+                status = "RESOLVED";
+            } else {
+                status = "REJECTED";
+            }
+
+            // Format d'affichage avec l'ID inclus
+            String reclamationItem = String.format("ID: %d | Subject: %s | Content: %s | Status: %s",
+                    rec.getId(),
+                    rec.getSubject(),
+                    rec.getContent(),
+                    status);
+
             reclamationList.add(reclamationItem);
         }
 
-        // Set the list of items to the ListView
         reclamationListView.setItems(reclamationList);
     }
 
@@ -82,16 +106,54 @@ public class ListreclamationController {
         String selectedStatus = statusComboBox.getValue();
 
         if (selectedIndex >= 0 && selectedStatus != null) {
-            String selectedItem = reclamationListView.getSelectionModel().getSelectedItem();
-            int id = Integer.parseInt(selectedItem.split("\\|")[0].replace("ID: ", "").trim());
+            try {
+                String selectedItem = reclamationListView.getSelectionModel().getSelectedItem();
 
-            // Update the status in the service
-            reclamationService.updateStatus(id, selectedStatus);
-            showAlert("Success", "Claim status updated successfully!");
-            loadReclamations();
+                // Vérifier que l'item contient bien un ID
+                if (!selectedItem.contains("ID:")) {
+                    showAlert("Error", "Invalid complaint format. Please contact support.");
+                    return;
+                }
+
+                // Extraire l'ID
+                int id = Integer.parseInt(selectedItem.split("\\|")[0].replace("ID:", "").trim());
+
+                Boolean statusValue = null;
+                // Modification ici - utilisez une méthode disponible dans UserSession
+                String response = "Status updated by user ID: " + session.getUserId();
+
+                switch (selectedStatus) {
+                    case "RESOLVED":
+                        statusValue = true;
+                        break;
+                    case "REJECTED":
+                        statusValue = false;
+                        break;
+                    case "PENDING":
+                        statusValue = null;
+                        break;
+                }
+
+                // Mettre à jour le statut
+                reclamationService.updateStatus(id, statusValue, response, session.getUserId());
+
+                showAlert("Success", "Complaint status updated successfully!");
+                loadReclamations(); // Rafraîchir la liste
+            } catch (NumberFormatException e) {
+                showAlert("Error", "Could not parse complaint ID: " + e.getMessage());
+            } catch (Exception e) {
+                showAlert("Error", "An error occurred: " + e.getMessage());
+                e.printStackTrace();
+            }
         } else {
-            showAlert("Error", "Please select a claim and a new status.");
+            showAlert("Error", "Please select a complaint and a new status.");
         }
+    }
+
+    private void updateButtonState() {
+        boolean isSelected = reclamationListView.getSelectionModel().getSelectedIndex() >= 0;
+        boolean hasStatus = statusComboBox.getValue() != null;
+        updateStatusButton.setDisable(!isSelected || !hasStatus);
     }
 
     private void showAlert(String title, String message) {

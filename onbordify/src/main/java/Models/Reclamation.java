@@ -1,85 +1,99 @@
 package Models;
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 
 public class Reclamation {
-    // Attributs (champs)
-    private int idReclamation;
-    private String commentaire;
-    private LocalDate date;
-    private int idUser;
-    private String etat; // Changed to String to match ENUM values
+    private int id;
+    private int userId;
+    private Integer respondedById;
+    private String subject;
+    private String content;
+    private Boolean status; // true=resolved, false=rejected, null=pending
+    private String response;
+    private LocalDateTime createdAt;
 
-    // Constructeur par défaut
     public Reclamation() {}
 
-    public Reclamation( int idUser, LocalDate date, String commentaire,String etat) {
-
-        this.idUser = idUser;
-        this.date = date;
-        this.commentaire = commentaire;
-        this.etat = etat; // Added this line to initialize the etat field to the provided value.
+    public Reclamation(int userId, String subject, String content) {
+        this.userId = userId;
+        this.subject = subject;
+        this.content = content;
+        this.createdAt = LocalDateTime.now();
     }
 
-    // Constructeur avec paramètres
-    public Reclamation(int idReclamation, String commentaire, LocalDate date, int idUser) {
-        this.idReclamation = idReclamation;
-        this.commentaire = commentaire;
-        this.date = date;
-        this.idUser = idUser;
-        this.etat = etat;
+    // Getters and Setters
+    public int getId() {
+        return id;
     }
 
-    // Getters et Setters
-    public int getIdReclamation() {
-        return idReclamation;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setIdReclamation(int idReclamation) {
-        this.idReclamation = idReclamation;
+    public int getUserId() {
+        return userId;
     }
 
-    public String getCommentaire() {
-        return commentaire;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public void setCommentaire(String commentaire) {
-        this.commentaire = commentaire;
+    public Integer getRespondedById() {
+        return respondedById;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public void setRespondedById(Integer respondedById) {
+        this.respondedById = respondedById;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public String getSubject() {
+        return subject;
     }
 
-    public int getIdUser() {
-        return idUser;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public String getContent() {
+        return content;
     }
 
-    public String getEtat() { return etat; }
-    public void setEtat(String etat) {
-        if (etat.equals("Resolved") || etat.equals("Pending") || etat.equals("Rejected")) {
-            this.etat = etat;
-        } else {
-            throw new IllegalArgumentException("Invalid status: " + etat);
-        }
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    // Méthode toString pour afficher l'objet
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public String toString() {
         return "Reclamation{" +
-                "idReclamation=" + idReclamation +
-                ", commentaire='" + commentaire + '\'' +
-                ", date=" + date +
-                ", idUser=" + idUser +
-                ", etat=" + etat +
+                "id=" + id +
+                ", userId=" + userId +
+                ", subject='" + subject + '\'' +
+                ", status=" + status +
+                ", createdAt=" + createdAt +
                 '}';
     }
 }

@@ -2,14 +2,13 @@ package Controllers;
 
 import Models.Reclamation;
 import Services.ReclamationService;
+import Services.SpamService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import Services.SpamService;
-
-import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
+import utils.UserSession;
 
 public class ReclamationController {
 
@@ -17,64 +16,110 @@ public class ReclamationController {
     private ListView<String> listView;
 
     @FXML
-    private TextField commentaireField;
+    private TextField subjectField;
 
     @FXML
-    private DatePicker dateField;
+    private TextArea contentField;
 
     private ReclamationService reclamationService = new ReclamationService();
-    private ObservableList<String> reclamationsList = FXCollections.observableArrayList();
-    SpamService spamService = new SpamService();
+    private ObservableList<String> complaintsList = FXCollections.observableArrayList();
+    private SpamService spamService = new SpamService();
+    private UserSession session = UserSession.getInstance();
+    private int selectedComplaintId = -1;
 
     @FXML
     public void initialize() {
-        loadReclamations();
-        dateField.setDayCellFactory(picker -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                setDisable(date.isAfter(LocalDate.now())); // Empêche la sélection de dates futures
+        loadComplaints();
+        listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                handleComplaintSelection();
             }
         });
     }
 
-    private void loadReclamations() {
-        List<Reclamation> reclamations = reclamationService.getAll();
-        reclamationsList.clear();
-        for (Reclamation rec : reclamations) {
-            reclamationsList.add("ID: " + rec.getIdReclamation() + " | " + rec.getCommentaire() + " | " + rec.getDate());
+    private void handleComplaintSelection() {
+        String selectedItem = listView.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            selectedComplaintId = Integer.parseInt(selectedItem.split("\\|")[0].replace("ID: ", "").trim());
+            Reclamation selectedComplaint = reclamationService.getById(selectedComplaintId);
+            if (selectedComplaint != null) {
+                subjectField.setText(selectedComplaint.getSubject());
+                contentField.setText(selectedComplaint.getContent());
+            }
         }
-        listView.setItems(reclamationsList);
+    }
+
+    private void loadComplaints() {
+        complaintsList.clear();
+        reclamationService.getAll().forEach(complaint -> {
+            String status;
+            if (complaint.getStatus() == null) {
+                status = "Pending";
+            } else if (complaint.getStatus()) {
+                status = "Resolved";
+            } else {
+                status = "Rejected";
+            }
+
+            complaintsList.add(String.format("ID: %d | Subject: %s | Status: %s | Date: %s",
+                    complaint.getId(),
+                    complaint.getSubject(),
+                    status,
+                    complaint.getCreatedAt().toString()));
+        });
+        listView.setItems(complaintsList);
     }
 
     @FXML
     private void ajouterReclamation() {
-        String commentaire = commentaireField.getText();
-        LocalDate date = dateField.getValue();
+        String subject = subjectField.getText();
+        String content = contentField.getText();
 
-        if (commentaire.isEmpty() || date == null) {
-            showAlert("Error", "Please enter a comment and select a date.");
+        if (subject.isEmpty() || content.isEmpty()) {
+            showAlert("Error", "Please enter both subject and content.");
             return;
         }
 
-        // Vérification si la date est dans le futur
-        if (date.isAfter(LocalDate.now())) {
-            showAlert("Error", "The date cannot be in the future.");
+        if (!spamService.traiterReclamation(content)) {
+            Reclamation newComplaint = new Reclamation();
+            newComplaint.setUserId(session.getUserId());
+            newComplaint.setSubject(subject);
+            newComplaint.setContent(content);
+            newComplaint.setCreatedAt(LocalDateTime.now());
+
+            reclamationService.add(newComplaint);
+            showAlert("Success", "Complaint added successfully!");
+            loadComplaints();
+            clearFields();
+        }
+    }
+
+    @FXML
+    private void updateReclamation() {
+        if (selectedComplaintId == -1) {
+            showAlert("Error", "Please select a complaint to update.");
             return;
         }
 
-        if (!spamService.traiterReclamation(commentaire)) {
-            Reclamation newRec = new Reclamation();
-            newRec.setCommentaire(commentaire);
-            newRec.setDate(date);
-            newRec.setIdUser(1);  // Set the user ID dynamically if needed
-            newRec.setEtat("Pending");
+        String subject = subjectField.getText();
+        String content = contentField.getText();
 
-            reclamationService.add(newRec);
-            showAlert("Success", "Claim added successfully!");
-            loadReclamations();
-            commentaireField.clear();
-            dateField.setValue(null);
+        if (subject.isEmpty() || content.isEmpty()) {
+            showAlert("Error", "Please enter both subject and content.");
+            return;
+        }
+
+        if (!spamService.traiterReclamation(content)) {
+            Reclamation updatedComplaint = reclamationService.getById(selectedComplaintId);
+            if (updatedComplaint != null) {
+                updatedComplaint.setSubject(subject);
+                updatedComplaint.setContent(content);
+                reclamationService.update(updatedComplaint);
+                showAlert("Success", "Complaint updated successfully!");
+                loadComplaints();
+                clearFields();
+                selectedComplaintId = -1;
+            }
         }
     }
 
@@ -85,12 +130,19 @@ public class ReclamationController {
             String selectedItem = listView.getSelectionModel().getSelectedItem();
             int id = Integer.parseInt(selectedItem.split("\\|")[0].replace("ID: ", "").trim());
 
-            reclamationService.delete2(id);
-            showAlert("Success", "Claim deleted successfully!");
-            loadReclamations();
+            reclamationService.delete(id);
+            showAlert("Success", "Complaint deleted successfully!");
+            loadComplaints();
+            clearFields();
+            selectedComplaintId = -1;
         } else {
-            showAlert("Error", "Please select a claim to delete.");
+            showAlert("Error", "Please select a complaint to delete.");
         }
+    }
+
+    private void clearFields() {
+        subjectField.clear();
+        contentField.clear();
     }
 
     private void showAlert(String title, String message) {
