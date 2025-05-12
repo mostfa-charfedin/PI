@@ -1,11 +1,17 @@
 package Services;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import Models.Ressource;
 import utils.MyDb;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RessourceService implements CrudInterface<Ressource> {
     private Connection connection;
@@ -14,9 +20,8 @@ public class RessourceService implements CrudInterface<Ressource> {
         connection = MyDb.getMydb().getConnection();
     }
 
-    // CREATE (Utilisation de PreparedStatement pour éviter l'injection SQL)
+    // CREATE
     @Override
-
     public void create(Ressource res) throws Exception {
         String sql = "INSERT INTO onboardify.ressources (titre, type, description, lien, noteAverage) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -24,11 +29,10 @@ public class RessourceService implements CrudInterface<Ressource> {
             stmt.setString(2, res.getType());
             stmt.setString(3, res.getDescription());
             stmt.setString(4, res.getlien());
-            stmt.setDouble(5, res.getNoteAverage()); // Ajout de la note moyenne
+            stmt.setDouble(5, res.getNoteAverage());
             stmt.executeUpdate();
         }
     }
-
 
     // UPDATE
     @Override
@@ -39,12 +43,11 @@ public class RessourceService implements CrudInterface<Ressource> {
             stmt.setString(2, res.getType());
             stmt.setString(3, res.getDescription());
             stmt.setString(4, res.getlien());
-            stmt.setDouble(5, res.getNoteAverage()); // Ajout de la note moyenne
+            stmt.setDouble(5, res.getNoteAverage());
             stmt.setInt(6, res.getIdResource());
             stmt.executeUpdate();
         }
     }
-
 
     // DELETE
     @Override
@@ -55,25 +58,38 @@ public class RessourceService implements CrudInterface<Ressource> {
             stmt.executeUpdate();
         }
     }
-    // Méthode pour récupérer la note d'une ressource depuis la table 'evaluation'
+
+    // GET NOTE AVERAGE FROM EVALUATION
     public double getNoteFromEvaluation(int idResource) {
-        String query = "SELECT note FROM evaluation WHERE idResource = ?"; // Interroger la table 'evaluation' pour la note
+        String query = "SELECT AVG(note) AS avgNote FROM onboardify.evaluation WHERE idResource = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, idResource);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getDouble("note");  // Récupérer la note
-            } else {
-                return 0.0;  // Si aucune note n'est trouvée
+                return rs.getDouble("avgNote");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return 0.0;  // Retourner 0 en cas d'erreur
         }
+        return 0.0;
     }
 
+    // GET EVALUATION COUNT
+    public int getEvaluationCount(int resourceId) {
+        String sql = "SELECT COUNT(*) AS voteCount FROM onboardify.evaluation WHERE idResource = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, resourceId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("voteCount");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
-    // READ
+    // READ ALL RESOURCES
     @Override
     public List<Ressource> getAll() throws Exception {
         String sql = "SELECT * FROM onboardify.ressources";
@@ -95,7 +111,7 @@ public class RessourceService implements CrudInterface<Ressource> {
         return list;
     }
 
-    // GET RESOURCES WITH HIGH AVERAGE NOTE
+    // TOP 5 HIGH AVERAGE NOTE RESOURCES
     public List<Ressource> getResourcesWithHighAverageNote() throws Exception {
         String sql = "SELECT r.idResource, r.titre, COALESCE(AVG(e.note), 0) AS avgNote " +
                 "FROM onboardify.ressources r " +
@@ -105,10 +121,8 @@ public class RessourceService implements CrudInterface<Ressource> {
                 "LIMIT 5";
 
         List<Ressource> resourcesList = new ArrayList<>();
-
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-
             while (rs.next()) {
                 Ressource ressource = new Ressource(
                         rs.getInt("idResource"),
@@ -125,21 +139,19 @@ public class RessourceService implements CrudInterface<Ressource> {
         return resourcesList;
     }
 
-
-    // GET RESOURCES WITH LOW AVERAGE NOTE
+    // TOP 5 LOW AVERAGE NOTE RESOURCES
     public List<Ressource> getResourcesWithLowAverageNote() throws Exception {
         String sql = "SELECT r.idResource, r.titre, COALESCE(AVG(e.note), 0) AS avgNote " +
                 "FROM onboardify.ressources r " +
                 "LEFT JOIN onboardify.evaluation e ON r.idResource = e.idResource " +
                 "GROUP BY r.idResource " +
+                "HAVING avgNote > 0 " +
                 "ORDER BY avgNote ASC " +
                 "LIMIT 5";
 
         List<Ressource> resourcesList = new ArrayList<>();
-
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-
             while (rs.next()) {
                 Ressource ressource = new Ressource(
                         rs.getInt("idResource"),
@@ -155,7 +167,8 @@ public class RessourceService implements CrudInterface<Ressource> {
         }
         return resourcesList;
     }
-    // NEW: GET RESOURCES WITH AVERAGE NOTE (without filtering by high/low)
+
+    // RESOURCES WITH AVERAGE NOTE
     public List<Ressource> getResourcesWithAverageNote() throws Exception {
         String sql = "SELECT r.idResource, r.titre, COALESCE(AVG(e.note), 0) AS avgNote " +
                 "FROM onboardify.ressources r " +
@@ -163,10 +176,8 @@ public class RessourceService implements CrudInterface<Ressource> {
                 "GROUP BY r.idResource";
 
         List<Ressource> resourcesList = new ArrayList<>();
-
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-
             while (rs.next()) {
                 Ressource ressource = new Ressource(
                         rs.getInt("idResource"),
@@ -181,5 +192,39 @@ public class RessourceService implements CrudInterface<Ressource> {
             }
         }
         return resourcesList;
+    }
+
+    // TYPE DISTRIBUTION
+    public Map<String, Integer> getResourceTypeDistribution() throws Exception {
+        String sql = "SELECT type, COUNT(*) as count FROM onboardify.ressources GROUP BY type";
+        Map<String, Integer> typeDistribution = new HashMap<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                String type = rs.getString("type");
+                int count = rs.getInt("count");
+                typeDistribution.put(type, count);
+            }
+        }
+        return typeDistribution;
+    }
+
+    // AVERAGE SCORE FOR TYPE
+    public double getAverageScoreForType(String type) throws Exception {
+        String sql = "SELECT COALESCE(AVG(e.note), 0) as avgScore " +
+                "FROM onboardify.ressources r " +
+                "LEFT JOIN onboardify.evaluation e ON r.idResource = e.idResource " +
+                "WHERE r.type = ? " +
+                "GROUP BY r.type";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, type);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("avgScore");
+            }
+        }
+        return 0.0;
     }
 }
