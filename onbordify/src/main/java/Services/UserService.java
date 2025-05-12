@@ -75,7 +75,7 @@ public class UserService implements CrudInterface<User> {
 
     @Override
     public void create(User obj) throws SQLException {
-        String sql = "INSERT INTO user (nom, prenom, email, cin, dateNaissance, role, password, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO user (nom, prenom, email, cin, dateNaissance, role, password, image_url,num_phone) VALUES (?, ?, ?, ?, ?, ?, ?,?, ?)";
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, obj.getNom());
             stmt.setString(2, obj.getPrenom());
@@ -93,11 +93,11 @@ public class UserService implements CrudInterface<User> {
             // Définir l'image par défaut ici
             String defaultImageUrl = "/assets/logo.png"; // Remplace par l'URL de ton image par défaut
             stmt.setString(8, defaultImageUrl);
-
+            stmt.setString(9, String.valueOf( obj.getNum_phone()));
             stmt.executeUpdate();
             String emailBody = "Hello " + obj.getNom() + "\n" + " Account created successfully."
                     + "\n" + "Email : " + obj.getEmail() + "\n"+
-                     "Password : " + nonHashedPassword + "\n" ;
+                    "Password : " + nonHashedPassword + "\n" ;
             String subject = "Welcome email";
             emailService.sendEmail(obj.getEmail(), emailBody, subject);
         } catch (SQLException e) {
@@ -110,7 +110,7 @@ public class UserService implements CrudInterface<User> {
 
     @Override
     public void update(User obj) throws SQLException {
-        String sql = "UPDATE user SET nom = ?, prenom = ?, email = ?, cin = ?, dateNaissance = ?, role = ?, image_url = ? , status = ? WHERE id = ?";
+        String sql = "UPDATE user SET nom = ?, prenom = ?, email = ?, cin = ?, dateNaissance = ?, role = ?, image_url = ? , status = ?, num_phone =? WHERE id = ?";
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, obj.getNom());
             stmt.setString(2, obj.getPrenom());
@@ -128,8 +128,8 @@ public class UserService implements CrudInterface<User> {
             String imageUrl = obj.getImage_url() != null ? obj.getImage_url() : "/assets/logo.png";
             stmt.setString(7, imageUrl);
             stmt.setString(8, obj.getStatus().toString());
-            stmt.setInt(9, obj.getId());
-
+            stmt.setString(9, String.valueOf(obj.getNum_phone()));
+            stmt.setInt(10, obj.getId());
             int rowsUpdated = stmt.executeUpdate();
             System.out.println(obj);
         } catch (SQLException e) {
@@ -140,14 +140,30 @@ public class UserService implements CrudInterface<User> {
 
 
     public Boolean updatePassword(String code, String newPassword) throws SQLException {
+        // Trouver l'utilisateur à partir du code
+        User user = findUserByCode(code);
+        if (user == null) {
+            return false; // Aucun utilisateur associé au code
+        }
 
-        String sql = "update user set password = ? where id = ?";
-        PreparedStatement stmt = con.prepareStatement(sql);
-        stmt.setString(1, passwordEncoder.encode(newPassword));
-        stmt.setInt(2, findUserByCode(code).getId());
-        stmt.executeUpdate();
+        // 1. Mettre à jour le mot de passe
+        String sqlUpdate = "UPDATE user SET password = ? WHERE id = ?";
+        PreparedStatement stmtUpdate = con.prepareStatement(sqlUpdate);
+        stmtUpdate.setString(1, passwordEncoder.encode(newPassword));
+        stmtUpdate.setInt(2, user.getId());
+        stmtUpdate.executeUpdate();
+
+        // 2. Supprimer le code de la table code
+        String sqlDelete = "DELETE FROM code WHERE code = ?";
+        PreparedStatement stmtDelete = con.prepareStatement(sqlDelete);
+        stmtDelete.setString(1, code);
+        stmtDelete.executeUpdate();
+
         return true;
     }
+
+
+
 
     @Override
     public void delete(int id) throws Exception {
@@ -173,6 +189,7 @@ public class UserService implements CrudInterface<User> {
             user.setDateNaissance(rs.getDate("dateNaissance"));
             user.setRole(Role.valueOf(rs.getObject("role").toString()));
             user.setStatus(Statut.valueOf(rs.getObject("status").toString()));
+            user.setNum_phone(rs.getInt("num_phone"));
             users.add(user);
         }
         return users;
@@ -211,6 +228,7 @@ public class UserService implements CrudInterface<User> {
             user.setDateNaissance(rs.getDate("dateNaissance"));
             user.setRole(Role.valueOf(rs.getObject("role").toString()));
             user.setStatus(Statut.valueOf(rs.getObject("status").toString()));
+            user.setNum_phone(rs.getInt("num_phone"));
         }
         return user;
     }
@@ -246,6 +264,7 @@ public class UserService implements CrudInterface<User> {
                 user.setRole(Role.valueOf(rs.getObject("role").toString()));
                 user.setImage_url(rs.getString("image_url"));
                 user.setStatus(Statut.valueOf(rs.getObject("status").toString()));
+                user.setNum_phone(rs.getInt("num_phone"));
             }
             return user;
         } catch (SQLException e) {

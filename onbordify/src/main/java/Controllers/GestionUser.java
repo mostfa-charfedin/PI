@@ -49,6 +49,9 @@ public class GestionUser {
     private TextField prenom;
 
     @FXML
+    private TextField num_phone;
+
+    @FXML
     private TextField rechercheFildMod;
 
     @FXML
@@ -62,6 +65,8 @@ public class GestionUser {
     @FXML
     private VBox nomErrorBox;
     @FXML
+    private VBox numErrorBox;
+    @FXML
     private VBox emailErrorBox;
     @FXML
     private VBox cinErrorBox;
@@ -70,11 +75,11 @@ public class GestionUser {
 
 
 
-  //  private final String LOGIN_URL = "http://localhost:8080/users/login";
+    //  private final String LOGIN_URL = "http://localhost:8080/users/login";
 
-private User selectedUser ;
-private ObservableList<String> userList;
-private FilteredList<String> filteredList;
+    private User selectedUser ;
+    private ObservableList<String> userList;
+    private FilteredList<String> filteredList;
 
     @FXML
     public void initialize() {
@@ -113,6 +118,19 @@ private FilteredList<String> filteredList;
                 showError(cinErrorBox, "The Cin should not exceed 8 digits.");
             } else {
                 clearError(cinErrorBox);
+            }
+        });
+
+
+        num_phone.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                num_phone.setText(oldValue);
+                showError(numErrorBox, "The Number phone should contain only numbers.");
+            } else if (newValue.length() > 8) {
+                num_phone.setText(oldValue);
+                showError(numErrorBox, "The Number phone should not exceed 8 digits.");
+            } else {
+                clearError(numErrorBox);
             }
         });
 
@@ -223,7 +241,7 @@ private FilteredList<String> filteredList;
     @FXML
     void addUser(ActionEvent event) {
         // Vérifier que tous les champs sont remplis
-        if (cin.getText().isEmpty() || nom.getText().isEmpty() || prenom.getText().isEmpty()
+        if (cin.getText().isEmpty() || nom.getText().isEmpty() || prenom.getText().isEmpty()|| num_phone.getText().isEmpty()
                 || email.getText().isEmpty() || date.getValue() == null || role.getValue() == null) {
             message.setText("Please fill in all fields.");
             return; // Arrêter l'exécution si un champ est vide
@@ -246,8 +264,8 @@ private FilteredList<String> filteredList;
 
         // Création de l'objet utilisateur
         User user = new User(nom.getText(), prenom.getText(), email.getText(),
-                cinValue, java.sql.Date.valueOf(date.getValue()),
-                role.getValue());
+                Integer.parseInt(cin.getText()), java.sql.Date.valueOf(date.getValue()),
+                role.getValue(),Integer.parseInt( num_phone.getText()));
 
         try {
             userservice.create(user);
@@ -332,6 +350,7 @@ private FilteredList<String> filteredList;
         this.prenom.clear();
         this.email.clear();
         this.cin.clear();
+        this.num_phone.clear();
         this.date.setValue(null);
         this.role.setItems(null);
         this.selectedUser= null;

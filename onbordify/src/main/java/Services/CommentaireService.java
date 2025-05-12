@@ -11,16 +11,15 @@ public class CommentaireService {
     static Connection conn = MyDb.getMydb().getConnection();
 
     public void add(Commentaire commentaire) {
-        String query = "INSERT INTO commentaire (titre, description, imagePath, idUser, idPublication) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO comment (user_id, poste_id, created_at, contenu) VALUES (?, ?, ?, ?)";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, commentaire.getTitre());
-            ps.setString(2, commentaire.getDescription());
-            ps.setString(3, commentaire.getImagePath());
-            ps.setInt(4, commentaire.getIdUser());
-            ps.setInt(5, commentaire.getIdPublication());
+            ps.setInt(1, commentaire.getUserId());
+            ps.setInt(2, commentaire.getPosteId());
+            ps.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+            ps.setString(4, commentaire.getContenu());
             ps.executeUpdate();
-            System.out.println("Commentaire added successfully!");
+            System.out.println("Comment added successfully!");
         } catch (SQLException e) {
             System.out.println("Add Error: " + e.getMessage());
         }
@@ -28,18 +27,17 @@ public class CommentaireService {
 
     public List<Commentaire> getAll() {
         List<Commentaire> commentaires = new ArrayList<>();
-        String query = "SELECT * FROM commentaire";
+        String query = "SELECT * FROM comment";
         try {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(query);
             while (rs.next()) {
                 Commentaire commentaire = new Commentaire();
-                commentaire.setIdCommentaire(rs.getInt("idCommentaire"));
-                commentaire.setTitre(rs.getString("titre"));
-                commentaire.setDescription(rs.getString("description"));
-                commentaire.setImagePath(rs.getString("imagePath"));
-                commentaire.setIdUser(rs.getInt("idUser"));
-                commentaire.setIdPublication(rs.getInt("idPublication"));
+                commentaire.setId(rs.getInt("id"));
+                commentaire.setUserId(rs.getInt("user_id"));
+                commentaire.setPosteId(rs.getInt("poste_id"));
+                commentaire.setCreatedAt(rs.getTimestamp("created_at"));
+                commentaire.setContenu(rs.getString("contenu"));
                 commentaires.add(commentaire);
             }
         } catch (SQLException e) {
@@ -50,19 +48,30 @@ public class CommentaireService {
 
     public List<Commentaire> getCommentsByPublication(int publicationId) {
         List<Commentaire> commentaires = new ArrayList<>();
-        String query = "SELECT * FROM commentaire WHERE idPublication = ?";
+        String query = "SELECT c.*, u.nom, u.prenom FROM comment c " +
+                "JOIN user u ON c.user_id = u.id " +
+                "WHERE c.poste_id = ? ORDER BY c.created_at DESC";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, publicationId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Commentaire commentaire = new Commentaire();
-                commentaire.setIdCommentaire(rs.getInt("idCommentaire"));
-                commentaire.setTitre(rs.getString("titre"));
-                commentaire.setDescription(rs.getString("description"));
-                commentaire.setImagePath(rs.getString("imagePath"));
-                commentaire.setIdUser(rs.getInt("idUser"));
-                commentaire.setIdPublication(rs.getInt("idPublication"));
+                commentaire.setId(rs.getInt("id"));
+                commentaire.setUserId(rs.getInt("user_id"));
+                commentaire.setPosteId(rs.getInt("poste_id"));
+                commentaire.setCreatedAt(rs.getTimestamp("created_at"));
+                commentaire.setContenu(rs.getString("contenu"));
+
+                // Debug user names
+                String nom = rs.getString("nom");
+                String prenom = rs.getString("prenom");
+                System.out.println("DEBUG: Fetched comment by user: " + prenom + " " + nom);
+
+                // Ajoutez ces lignes pour récupérer le nom et prénom
+                commentaire.setUserNom(rs.getString("nom"));
+                commentaire.setUserPrenom(rs.getString("prenom"));
+
                 commentaires.add(commentaire);
             }
         } catch (SQLException e) {
@@ -72,7 +81,7 @@ public class CommentaireService {
     }
 
     public void delete(int commentId) {
-        String query = "DELETE FROM commentaire WHERE idCommentaire = ?";
+        String query = "DELETE FROM comment WHERE id = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, commentId);
@@ -87,22 +96,17 @@ public class CommentaireService {
         }
     }
 
-    // Méthode pour mettre à jour un commentaire
     public void update(Commentaire commentaire) {
-        String query = "UPDATE commentaire SET titre = ?, description = ?, imagePath = ?, idUser = ?, idPublication = ? WHERE idCommentaire = ?";
+        String query = "UPDATE comment SET contenu = ? WHERE id = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, commentaire.getTitre());
-            ps.setString(2, commentaire.getDescription());
-            ps.setString(3, commentaire.getImagePath());
-            ps.setInt(4, commentaire.getIdUser());
-            ps.setInt(5, commentaire.getIdPublication());
-            ps.setInt(6, commentaire.getIdCommentaire());  // Utilisation de l'ID pour identifier quel commentaire mettre à jour
+            ps.setString(1, commentaire.getContenu());
+            ps.setInt(2, commentaire.getId());
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Comment updated successfully!");
             } else {
-                System.out.println("No comment found with ID: " + commentaire.getIdCommentaire());
+                System.out.println("No comment found with ID: " + commentaire.getId());
             }
         } catch (SQLException e) {
             System.out.println("Update Error: " + e.getMessage());

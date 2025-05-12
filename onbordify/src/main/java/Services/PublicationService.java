@@ -12,12 +12,15 @@ public class PublicationService {
     static Connection conn = MyDb.getMydb().getConnection();
 
     public void add(Publication publication) {
-        String query = "INSERT INTO publication (contenu, date, idUser) VALUES (?, ?, ?)";
+        String query = "INSERT INTO poste (user_id, title, contenu, image, signaled, categories) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, publication.getContenu());
-            ps.setDate(2, publication.getDate());
-            ps.setInt(3, publication.getIdUser());
+            ps.setInt(1, publication.getUserId());
+            ps.setString(2, publication.getTitle());
+            ps.setString(3, publication.getContenu());
+            ps.setString(4, publication.getImage());
+            ps.setBoolean(5, publication.getSignaled() != null ? publication.getSignaled() : false);
+            ps.setString(6, publication.getCategories());
             ps.executeUpdate();
             System.out.println("Publication added successfully!");
         } catch (SQLException e) {
@@ -27,16 +30,19 @@ public class PublicationService {
 
     public List<Publication> getAll() {
         List<Publication> publications = new ArrayList<>();
-        String query = "SELECT * FROM publication";
+        String query = "SELECT * FROM poste";
         try {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(query);
             while (rs.next()) {
                 Publication publication = new Publication();
-                publication.setIdPublication(rs.getInt("idPublication"));
+                publication.setId(rs.getInt("id"));
+                publication.setUserId(rs.getInt("user_id"));
+                publication.setTitle(rs.getString("title"));
                 publication.setContenu(rs.getString("contenu"));
-                publication.setDate(rs.getDate("date"));
-                publication.setIdUser(rs.getInt("idUser"));
+                publication.setImage(rs.getString("image"));
+                publication.setSignaled(rs.getBoolean("signaled"));
+                publication.setCategories(rs.getString("categories"));
                 publications.add(publication);
             }
         } catch (SQLException e) {
@@ -45,11 +51,12 @@ public class PublicationService {
         return publications;
     }
 
-    public void delete(int idPublication) {
-        String query = "DELETE FROM publication WHERE idPublication = ?";
+
+    public void delete(int id) {
+        String query = "DELETE FROM poste WHERE id = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setInt(1, idPublication);
+            ps.setInt(1, id);
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Publication deleted successfully!");
@@ -61,15 +68,17 @@ public class PublicationService {
         }
     }
 
-    // Nouvelle méthode update
     public void update(Publication publication) {
-        String query = "UPDATE publication SET contenu = ?, date = ?, idUser = ? WHERE idPublication = ?";
+        String query = "UPDATE poste SET user_id = ?, title = ?, contenu = ?, image = ?, signaled = ?, categories = ? WHERE id = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, publication.getContenu());
-            ps.setDate(2, publication.getDate());
-            ps.setInt(3, publication.getIdUser());
-            ps.setInt(4, publication.getIdPublication());
+            ps.setInt(1, publication.getUserId());
+            ps.setString(2, publication.getTitle());
+            ps.setString(3, publication.getContenu());
+            ps.setString(4, publication.getImage());
+            ps.setBoolean(5, publication.getSignaled() != null ? publication.getSignaled() : false);
+            ps.setString(6, publication.getCategories());
+            ps.setInt(7, publication.getId());
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Publication updated successfully!");

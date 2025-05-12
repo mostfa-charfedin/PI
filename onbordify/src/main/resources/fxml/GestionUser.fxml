@@ -1,111 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.ScrollPane?>
-<?import java.net.URL?>
-<AnchorPane xmlns="http://javafx.com/javafx/23.0.1"  stylesheets="@/css/styles.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GestionUser">
+
+<AnchorPane xmlns="http://javafx.com/javafx/17" stylesheets="@../fxml/userManagement.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GestionUser">
+
 
     <children>
-        <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" styleClass="custom-tab-pane" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
             <tabs>
-
-                <!-- Tab 1: Ajouter User -->
-                <Tab closable="false" text="Ajouter user">
+                <!-- Tab 1: Add User -->
+                <Tab closable="false" text="Add User" styleClass="custom-tab">
                     <content>
-                        <ScrollPane fitToWidth="true" fitToHeight="true">
+                        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="transparent-scroll">
                             <content>
-                                <VBox alignment="CENTER" spacing="20" style="-fx-padding: 20;">
-                                    <!-- Titre et Message -->
+                                <VBox alignment="TOP_CENTER" spacing="20" style="-fx-padding: 20;">
+                                    <!-- Title Section -->
                                     <HBox alignment="CENTER" spacing="20">
-                                        <Label styleClass="welcome-label" text="Ajouter un Utilisateur"/>
+                                        <Label styleClass="section-title" text="Add New User" />
                                     </HBox>
 
-                                    <!-- Champs du formulaire -->
-                                    <HBox alignment="CENTER" spacing="30">
-                                        <!-- Left VBox -->
-                                        <VBox alignment="CENTER" spacing="10" maxWidth="300" style="-fx-padding: 10;">
-                                            <children>
-                                                <Label text="First name" />
-                                                <TextField fx:id="nom" prefHeight="30.0" promptText="Nom" />
-                                                <VBox fx:id="nomErrorBox" />
-                                                <Label text="Last name" />
-                                                <TextField fx:id="prenom" prefHeight="30.0" promptText="Prénom" />
-                                                <VBox fx:id="prenomErrorBox" />
-                                                <Label text="Email" />
-                                                <TextField fx:id="email" prefHeight="30.0" promptText="Email" />
-                                                <VBox fx:id="emailErrorBox" />
-                                            </children>
-                                        </VBox>
-                                        <!-- Right VBox -->
-                                        <VBox alignment="CENTER" spacing="10" maxWidth="300" style="-fx-padding: 10;">
-                                            <children>
-                                                <Label text="CIN" />
-                                                <TextField fx:id="cin" prefHeight="30.0" promptText="CIN" />
-                                                <VBox fx:id="cinErrorBox" />
-                                                <Label text="Birthday" />
-                                                <DatePicker fx:id="date" prefHeight="30.0" promptText="Date de naissance" />
-                                                <VBox fx:id="dateNaissanceErrorBox" />
-                                                <Label text="Role" />
-                                                <ComboBox fx:id="role" prefHeight="30.0" promptText="Rôle" />
-                                            </children>
-                                        </VBox>
+                                    <!-- Form Section - 3 Columns Layout -->
+                                    <GridPane alignment="CENTER" hgap="20" vgap="15" style="-fx-padding: 10;">
+                                        <columnConstraints>
+                                            <ColumnConstraints percentWidth="33" />
+                                            <ColumnConstraints percentWidth="33" />
+                                            <ColumnConstraints percentWidth="33" />
+                                        </columnConstraints>
+
+                                        <!-- Personal Information Group -->
+                                        <Label text="Personal Information" styleClass="form-group-title" GridPane.columnSpan="3" />
+
+                                        <!-- Row 1 -->
+                                        <Label text="First Name *" styleClass="form-label required" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                                        <TextField fx:id="nom" styleClass="form-field" promptText="Enter first name" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                                        <VBox fx:id="nomErrorBox" styleClass="error-container" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+
+                                        <Label text="Last Name *" styleClass="form-label required" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                                        <TextField fx:id="prenom" styleClass="form-field" promptText="Enter last name" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                                        <VBox fx:id="prenomErrorBox" styleClass="error-container" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+
+                                        <Label text="Birth Date *" styleClass="form-label required" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+                                        <DatePicker fx:id="date" styleClass="form-field" promptText="Select birth date" GridPane.rowIndex="2" GridPane.columnIndex="2" />
+                                        <VBox fx:id="dateNaissanceErrorBox" styleClass="error-container" GridPane.rowIndex="3" GridPane.columnIndex="2" />
+
+                                        <!-- Row 4 -->
+                                        <Label text="CIN *" styleClass="form-label required" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                                        <TextField fx:id="cin" styleClass="form-field" promptText="Enter CIN" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+                                        <VBox fx:id="cinErrorBox" styleClass="error-container" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+
+                                        <!-- Contact Information Group -->
+                                        <Label text="Contact Information" styleClass="form-group-title" GridPane.rowIndex="7" GridPane.columnSpan="3" />
+
+                                        <!-- Row 8 -->
+                                        <Label text="Email *" styleClass="form-label required" GridPane.rowIndex="8" GridPane.columnIndex="0" />
+                                        <TextField fx:id="email" styleClass="form-field" promptText="Enter email" GridPane.rowIndex="9" GridPane.columnIndex="0" />
+                                        <VBox fx:id="emailErrorBox" styleClass="error-container" GridPane.rowIndex="10" GridPane.columnIndex="0" />
+
+                                        <Label text="Phone *" styleClass="form-label required" GridPane.rowIndex="8" GridPane.columnIndex="1" />
+                                        <TextField fx:id="num_phone" styleClass="form-field" promptText="Enter phone" GridPane.rowIndex="9" GridPane.columnIndex="1" />
+                                        <VBox fx:id="numErrorBox" styleClass="error-container" GridPane.rowIndex="10" GridPane.columnIndex="1" />
+
+                                        <!-- Account Information Group -->
+                                        <Label text="Account Information" styleClass="form-group-title" GridPane.rowIndex="11" GridPane.columnSpan="3" />
+
+                                        <!-- Row 12 -->
+                                        <Label text="Role *" styleClass="form-label required" GridPane.rowIndex="12" GridPane.columnIndex="0" />
+                                        <ComboBox fx:id="role" styleClass="form-field" promptText="Select role" GridPane.rowIndex="13" GridPane.columnIndex="0" />
+                                    </GridPane>
+
+                                    <!-- Action Buttons -->
+                                    <HBox alignment="CENTER" spacing="20" style="-fx-padding: 20;">
+                                        <Button fx:id="addButton" styleClass="primary-button" onAction="#addUser" text="Save User" />
                                     </HBox>
 
-                                    <!-- Boutons -->
-                                    <HBox alignment="CENTER" spacing="20">
-                                        <Button fx:id="addButton" onAction="#addUser" text="Enregistrer" />
-                                    </HBox>
-
-                                    <!-- Message d'erreur ou succès -->
-                                    <Label fx:id="message" styleClass="error-message" />
+                                    <!-- Status Message -->
+                                    <Label fx:id="message" styleClass="status-message" />
                                 </VBox>
                             </content>
                         </ScrollPane>
                     </content>
                 </Tab>
 
-                <!-- Tab 2: List Users -->
-                <Tab closable="false" text="List users">
+                <!-- Tab 2: User List -->
+                <Tab closable="false" text="User List" styleClass="custom-tab">
                     <content>
-                        <ScrollPane fitToWidth="true" fitToHeight="true">
+                        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="transparent-scroll">
                             <content>
-                                <VBox alignment="CENTER" spacing="20" style="-fx-padding: 20;">
-                                    <!-- Recherche et Filter -->
-                                    <HBox alignment="CENTER" spacing="30">
-                                        <Label text="Recherche" />
-                                        <TextField fx:id="rechercheFildMod" prefHeight="26.0" prefWidth="150.0" />
-                                        <ComboBox fx:id="roleFilter" onAction="#filterByRole" prefHeight="26.0" prefWidth="150.0" />
+                                <VBox alignment="TOP_CENTER" spacing="20" style="-fx-padding: 20;">
+                                    <!-- Title Section (unchanged structure) -->
+                                    <HBox alignment="CENTER" spacing="20">
+                                        <Label styleClass="section-title" text="User Management" />
                                     </HBox>
 
-                                    <!-- ListView -->
-                                    <ListView fx:id="listview" prefHeight="300.0" prefWidth="600.0" />
-
-                                    <!-- Actions: Update and Delete -->
-                                    <HBox alignment="CENTER" spacing="30">
-                                        <Button fx:id="updateButton" onAction="#updateUser" text="Modifier" />
-                                        <Button fx:id="deleteButton" onAction="#deleteUser" text="Supprimer" />
+                                    <!-- Search and Filter Section (same elements, only styled) -->
+                                    <HBox alignment="CENTER" spacing="20" styleClass="search-filter-container">
+                                        <TextField fx:id="rechercheFildMod" styleClass="search-field" promptText="Search users..." />
+                                        <ComboBox fx:id="roleFilter" styleClass="filter-combo" onAction="#filterByRole" promptText="Filter by role" />
                                     </HBox>
 
-                                    <!-- Message -->
-                                    <Label fx:id="messagelist" styleClass="message-list" />
+                                    <!-- User List (same ListView, only styled) -->
+                                    <ListView fx:id="listview" styleClass="user-list-view" prefHeight="400" prefWidth="800" />
+
+                                    <!-- Action Buttons (same buttons, only styled) -->
+                                    <HBox alignment="CENTER" spacing="30" style="-fx-padding: 10;">
+                                        <Button fx:id="updateButton" styleClass="secondary-button" onAction="#updateUser" text="Edit User" />
+                                        <Button fx:id="deleteButton" styleClass="danger-button" onAction="#deleteUser" text="Delete User" />
+                                    </HBox>
+
+                                    <!-- Status Message (same label, only styled) -->
+                                    <Label fx:id="messagelist" styleClass="status-message" />
                                 </VBox>
                             </content>
                         </ScrollPane>
                     </content>
                 </Tab>
-
             </tabs>
         </TabPane>
     </children>

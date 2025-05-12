@@ -4,6 +4,7 @@ import Models.Tache;
 import utils.MyDb;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,15 +118,30 @@ public class TacheService implements CrudInterface<Tache> {
     }
     public void updateTaskStatus(int taskId, String newStatus) {
         try {
-            String query = "UPDATE tache SET status = ? WHERE idTache = ?";
+            String query;
+
+            if ("done".equalsIgnoreCase(newStatus)) {
+                query = "UPDATE tache SET status = ?, completed_at = ? WHERE idTache = ?";
+            } else {
+                query = "UPDATE tache SET status = ? WHERE idTache = ?";
+            }
+
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setString(1, newStatus);
-            stmt.setInt(2, taskId);
+
+            if ("done".equalsIgnoreCase(newStatus)) {
+                stmt.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+                stmt.setInt(3, taskId);
+            } else {
+                stmt.setInt(2, taskId);
+            }
+
             stmt.executeUpdate();
         } catch (Exception e) {
             System.out.println("Error updating task status: " + e.getMessage());
         }
     }
+
 
 
     /**
@@ -277,6 +293,7 @@ public class TacheService implements CrudInterface<Tache> {
         }
         return tasks;
     }
+
 
     public List<String> getAllUserNamesWithRoles() throws Exception {
         String sql = "SELECT nom, prenom, role FROM user";

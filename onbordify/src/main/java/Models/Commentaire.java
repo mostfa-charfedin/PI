@@ -1,72 +1,65 @@
 package Models;
 
+import java.sql.Timestamp;
+
 public class Commentaire {
-    private int idCommentaire;
-    private String titre;
-    private String description;
-    private String imagePath;
-    private int idUser;
-    private int idPublication; // Foreign key
+    private int id;
+    private String contenu;
+    private int userId;
+    private int posteId;
+    private Timestamp createdAt;
+    private String userNom;
+    private String userPrenom;
 
     // Constructors
-    public Commentaire() {
-    }
+    public Commentaire() {}
 
-    public Commentaire(int idCommentaire, String titre, String description, String imagePath, int idUser, int idPublication) {
-        this.idCommentaire = idCommentaire;
-        this.titre = titre;
-        this.description = description;
-        this.imagePath = imagePath;
-        this.idUser = idUser;
-        this.idPublication = idPublication;
+    public Commentaire(String contenu, int userId, int posteId) {
+        this.contenu = contenu;
+        this.userId = userId;
+        this.posteId = posteId;
     }
 
     // Getters and Setters
-    public int getIdCommentaire() {
-        return idCommentaire;
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public String getContenu() { return contenu; }
+    public void setContenu(String contenu) { this.contenu = contenu; }
+
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
+
+    public int getPosteId() { return posteId; }
+    public void setPosteId(int posteId) { this.posteId = posteId; }
+
+    public Timestamp getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+
+    public String getUserNom() {
+        return userNom;
     }
 
-    public void setIdCommentaire(int idCommentaire) {
-        this.idCommentaire = idCommentaire;
+    public void setUserNom(String userNom) {
+        this.userNom = userNom;
     }
 
-    public String getTitre() {
-        return titre;
+    public String getUserPrenom() {
+        return userPrenom;
     }
 
-    public void setTitre(String titre) {
-        this.titre = titre;
+    public void setUserPrenom(String userPrenom) {
+        this.userPrenom = userPrenom;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    public int getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
-    }
-
-    public int getIdPublication() {
-        return idPublication;
-    }
-
-    public void setIdPublication(int idPublication) {
-        this.idPublication = idPublication;
+    @Override
+    public String toString() {
+        return "Commentaire{" +
+                "id=" + id +
+                ", contenu='" + contenu + '\'' +
+                ", userId=" + userId +
+                ", posteId=" + posteId +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

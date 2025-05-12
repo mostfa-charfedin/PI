@@ -1,33 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<VBox spacing="20" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.UpdateReclamationStatusController" style="-fx-background-color: #f8f9fa; -fx-padding: 20;">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.chart.PieChart?>
 
-    <!-- Title -->
-    <Label text="Update Reclamation Status" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-effect: dropshadow(gaussian, #3e5bb2, 10, 0.5, 2, 2); -fx-padding: 10;"/>
+<AnchorPane prefHeight="400.0" prefWidth="800.0"
+            stylesheets="@/css/style.css"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.ListreclamationController">
+    <VBox prefHeight="494.0" prefWidth="502.0" spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+        <!-- Title -->
+        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1D3D6D; -fx-effect: dropshadow(gaussian, #3e5bb2, 10, 0.5, 2, 2); -fx-padding: 10;" text="List of Claims" />
 
-    <!-- Reclamation ID Display -->
-    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: #eaf2f8; -fx-border-radius: 10px; -fx-padding: 12; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0.5, 2, 2);">
-        <Label text="Reclamation ID:" style="-fx-font-size: 16px; -fx-text-fill: #2c3e50; -fx-font-weight: bold;"/>
-        <TextField fx:id="reclamationIdField" editable="false" style="-fx-background-color: white; -fx-border-color: #3498db; -fx-border-radius: 8px; -fx-font-size: 14px; -fx-padding: 5;"/>
-    </HBox>
+        <!-- Filters -->
+        <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: #F7F9FB; -fx-border-radius: 10px; -fx-padding: 12; -fx-effect: dropshadow(gaussian, #BDC3C7, 8, 0.5, 0, 2);">
+            <Label style="-fx-font-size: 16px; -fx-text-fill: #1850F8; -fx-font-weight: bold;" text="Select Status:" />
+            <ComboBox fx:id="statusComboBox" promptText="Select status" style="-fx-background-color: white; -fx-border-color: #3e5bb2; -fx-border-radius: 8px; -fx-font-size: 14px; -fx-padding: 5; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.3, 0, 2);"/>
+        </HBox>
 
-    <!-- Status Selector -->
-    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: #eaf2f8; -fx-border-radius: 10px; -fx-padding: 12; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0.5, 2, 2);">
-        <Label text="New Status:" style="-fx-font-size: 16px; -fx-text-fill: #2c3e50; -fx-font-weight: bold;"/>
-        <ComboBox fx:id="statusComboBox" promptText="Select new status" style="-fx-background-color: white; -fx-border-color: #3498db; -fx-border-radius: 8px; -fx-font-size: 14px; -fx-padding: 5;"/>
-    </HBox>
+        <!-- List of claims -->
+        <ListView fx:id="reclamationListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250" prefWidth="449.0" style="-fx-background-color: white; -fx-border-radius: 15px; -fx-border-color: #3498DB; -fx-border-width: 2px; -fx-font-size: 14px; -fx-padding: 10; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.5, 0, 2);">
+            <items>
+                <!-- The ListView items will be set programmatically in the Controllers -->
+            </items>
+        </ListView>
 
-    <!-- Buttons Section -->
-    <HBox spacing="20" alignment="CENTER" style="-fx-padding: 20;">
+        <!-- Statistics Chart -->
+        <PieChart fx:id="statsChart" title="Claims Statistics" style="-fx-background-color: white; -fx-border-radius: 15px; -fx-border-color: #3498DB; -fx-border-width: 2px; -fx-padding: 10; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.5, 0, 2);" />
 
-        <!-- Save Button -->
-        <Button fx:id="saveButton" text="Save" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-border-radius: 12px; -fx-padding: 10 20; -fx-effect: dropshadow(gaussian, #28a745, 10, 0.5, 2, 2);" onAction="#saveStatus"/>
-
-        <!-- Cancel Button -->
-        <Button fx:id="cancelButton" text="Cancel" style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-border-radius: 12px; -fx-padding: 10 20; -fx-effect: dropshadow(gaussian, #dc3545, 10, 0.5, 2, 2);" onAction="#cancelUpdate"/>
-    </HBox>
-
-</VBox>
+        <!-- Update Status Button -->
+        <Button fx:id="updateStatusButton" onAction="#handleUpdateStatus" text="Update Status" style="-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px; -fx-padding: 10 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0.5, 2, 2);"/>
+    </VBox>
+</AnchorPane>

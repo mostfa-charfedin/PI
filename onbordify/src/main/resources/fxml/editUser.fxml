@@ -1,63 +1,153 @@
-<?xml version="1.0" encoding="UTF-8"?>
+package Controllers;
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+        import Services.UserService;
+        import javafx.fxml.FXML;
+        import javafx.fxml.FXMLLoader;
+        import javafx.scene.Parent;
+        import javafx.scene.control.*;
 
-<AnchorPane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: 3498db;" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.EditUser">
-   <children>
+        import java.io.IOException;
+        import java.sql.SQLException;
 
-      <!-- Update Button -->
-      <Button fx:id="updateButton" onAction="#updateUser" text="Update" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" />
+        public class verifierCode {
 
-      <!-- Message Label -->
-      <Label fx:id="messageMod" AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="20" />
+        @FXML
+        private TextField codeField;
 
-      <!-- HBox centré -->
-      <HBox alignment="CENTER" spacing="20" style="-fx-padding: 20;" stylesheets="@../css/style.css">
-         <children>
-            <!-- Left VBox -->
-            <VBox fx:id="vboxLeft" alignment="CENTER" prefHeight="237.0" prefWidth="280.0" spacing="10">
-               <children>
-                  <Label text="First name" />
-                  <TextField fx:id="nomMod" prefHeight="30.0" prefWidth="200.0" />
-                  <VBox fx:id="nomErrorBox" /> <!-- Pour afficher les erreurs du nom -->
-                  <Label text="Last name" />
-                  <TextField fx:id="prenomMod" prefHeight="30.0" prefWidth="200.0" />
-                  <VBox fx:id="prenomErrorBox" /> <!-- Pour afficher les erreurs du prénom -->
-                  <Label text="Email" />
-                  <TextField fx:id="emailMod" prefHeight="30.0" prefWidth="200.0" />
-                  <VBox fx:id="emailErrorBox" /> <!-- Pour afficher les erreurs de l'email -->
-               </children>
-               <HBox.margin>
-                  <Insets left="50.0" right="50.0" />
-               </HBox.margin>
-            </VBox>
-            <VBox alignment="CENTER" prefHeight="145.0" prefWidth="280.0" spacing="10">
-               <children>
-                  <Label text="Cin" />
-                  <TextField fx:id="cinMod" prefHeight="30.0" prefWidth="200.0" />
-                  <VBox fx:id="cinErrorBox" /> <!-- Pour afficher les erreurs du Cin -->
-                  <Label text="Birthday" />
-                  <DatePicker fx:id="dateMod" prefHeight="30.0" prefWidth="267.0" />
-                  <VBox fx:id="dateNaissanceErrorBox" />
-                  <Label text="Role" />
-                  <ComboBox fx:id="roleMod" prefHeight="30.0" prefWidth="279.0" />
-                  <Label prefHeight="20.0" prefWidth="113.0" text="Account Status" />
-                  <ComboBox fx:id="StatusCompte" prefHeight="31.0" prefWidth="278.0" />
-               </children>
-               <HBox.margin>
-                  <Insets right="50.0" />
-               </HBox.margin>
-            </VBox>
-         </children>
-      </HBox>
+        @FXML
+        private PasswordField confirmPasswordField;
 
-   </children>
-</AnchorPane>
+        @FXML
+        private Label messageLabel;
+
+        @FXML
+        private PasswordField newPasswordField;
+
+        @FXML
+        private Button resetButton;
+
+        UserService userService = new UserService();
+
+        @FXML
+        public void initialize() {
+
+        resetButton.setDisable(true);
+
+        codeField.textProperty().addListener((observable, oldValue, newValue) -> validateCode(newValue));
+        newPasswordField.textProperty().addListener((observable, oldValue, newValue) -> validatePassword(newValue));
+        confirmPasswordField.textProperty().addListener((observable, oldValue, newValue) -> validateConfirmPassword(newValue));
+        }
+
+
+        private void validateCode(String code) {
+        if (code.isEmpty()) {
+        messageLabel.setText("Veuillez entrer le code reçu par email.");
+        messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
+
+        } else {
+        messageLabel.setText("");
+        resetButton.setDisable(newPasswordField.getText().isEmpty() || confirmPasswordField.getText().isEmpty());
+        }
+        }
+
+        // Méthode pour valider le nouveau mot de passe
+        private void validatePassword(String password) {
+        if (password.isEmpty()) {
+        messageLabel.setText("Veuillez entrer un nouveau mot de passe.");
+        messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
+        resetButton.setDisable(true);
+        } else if (!isPasswordStrong(password)) {
+        messageLabel.setText("Le mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre.");
+        messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
+        resetButton.setDisable(true);
+        } else {
+        messageLabel.setText("");
+        resetButton.setDisable(codeField.getText().isEmpty() || confirmPasswordField.getText().isEmpty());
+        }
+        }
+
+        // Méthode pour valider la confirmation du mot de passe
+        private void validateConfirmPassword(String confirmPassword) {
+        String newPassword = newPasswordField.getText();
+
+        if (confirmPassword.isEmpty()) {
+        messageLabel.setText("Veuillez confirmer votre nouveau mot de passe.");
+        messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
+        resetButton.setDisable(true);
+        } else if (!confirmPassword.equals(newPassword)) {
+        messageLabel.setText("Les mots de passe ne correspondent pas.");
+        messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
+        resetButton.setDisable(true);
+        } else {
+        messageLabel.setText("");
+        resetButton.setDisable(codeField.getText().isEmpty() || newPasswordField.getText().isEmpty());
+        }
+        }
+
+        // Méthode pour vérifier la force du mot de passe
+        private boolean isPasswordStrong(String password) {
+        // Vérifier que le mot de passe a au moins 8 caractères
+        if (password.length() < 8) {
+        return false;
+        }
+        // Vérifier que le mot de passe contient au moins une majuscule
+        if (!password.matches(".*[A-Z].*")) {
+        return false;
+        }
+        // Vérifier que le mot de passe contient au moins un chiffre
+        if (!password.matches(".*\\d.*")) {
+        return false;
+        }
+        return true;
+        }
+
+        @FXML
+        void handleResetPassword() {
+        String code = codeField.getText();
+        String newPassword = newPasswordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
+
+        // Vérifier si les champs sont vides (au cas où le bouton est activé autrement)
+        if (code.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
+        messageLabel.setText("Veuillez remplir tous les champs.");
+        messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
+        return;
+        }
+
+        // Vérifier si le nouveau mot de passe et la confirmation correspondent
+        if (!newPassword.equals(confirmPassword)) {
+        messageLabel.setText("Les mots de passe ne correspondent pas.");
+        messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
+        return;
+        }
+
+
+        try {
+        userService.updatePassword(code, newPassword);
+        showAlert("Success", "Mot de passe réinitialisé avec succès.");
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+        Parent root = loader.load();
+        messageLabel.getScene().setRoot(root);
+        } catch (SQLException e) {
+
+        messageLabel.setText("code invalide ou problème lors de la réinitialisation.");
+        messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
+        throw new RuntimeException(e);
+
+
+        } catch (IOException e) {
+        throw new RuntimeException(e);
+        }
+        }
+
+        private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+
+        }
+
+        }

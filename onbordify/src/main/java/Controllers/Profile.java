@@ -37,7 +37,8 @@ public class Profile {
 
     @FXML
     private TextField cinField; // Champ pour le CIN
-
+    @FXML
+    private TextField numField;
     @FXML
     private Button saveButton; // Bouton Enregistrer
 
@@ -71,7 +72,7 @@ public class Profile {
         prenomField.setText(user.getPrenom());
         emailField.setText(user.getEmail());
         role.setText(roleSession.toString());
-
+        numField.setText(String.valueOf( user.getNum_phone()));
         if (user.getImage_url() != null) {
 
             String imagePath = user.getImage_url();
@@ -94,7 +95,7 @@ public class Profile {
         cinField.setText(String.valueOf(user.getCin()));
 
     }
-private String pathSelectedimage = user.getImage_url();
+    private String pathSelectedimage = user.getImage_url();
 
 
     @FXML
@@ -144,17 +145,17 @@ private String pathSelectedimage = user.getImage_url();
         String email = emailField.getText();
         LocalDate dateNaissance = dateNaissanceField.getValue();
         String cin = cinField.getText();
-
+        String num_phone = numField.getText();
 
         // Vérifier si les champs sont vides
-        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || dateNaissance == null || cin.isEmpty()) {
+        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || dateNaissance == null || cin.isEmpty() || num_phone.isEmpty()) {
             messageLabel.setText("Veuillez remplir tous les champs obligatoires.");
             messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
             return;
         }
 
 
-        boolean updateSuccessful = updateProfile(nom, prenom, email, dateNaissance, cin, pathSelectedimage);
+        boolean updateSuccessful = updateProfile(nom, prenom, email, dateNaissance, cin, pathSelectedimage, num_phone);
 
         if (updateSuccessful) {
             messageLabel.setText("Profil mis à jour avec succès.");
@@ -167,7 +168,7 @@ private String pathSelectedimage = user.getImage_url();
     }
 
 
-    private boolean updateProfile(String nom, String prenom, String email, LocalDate dateNaissance, String cin, String imageUrl) {
+    private boolean updateProfile(String nom, String prenom, String email, LocalDate dateNaissance, String cin, String imageUrl,String num_phone) {
         try {
             user.setNom(nom);
             user.setPrenom(prenom);
@@ -176,6 +177,7 @@ private String pathSelectedimage = user.getImage_url();
             user.setCin(Integer.parseInt(cin));
             user.setRole(session.getRole());
             user.setImage_url(imageUrl);
+            user.setNum_phone(Integer.parseInt( num_phone));
             // Vérification si l'image a été changée
             if (user.getImage_url() != null && !user.getImage_url().isEmpty()) {
                 userService.update(user);

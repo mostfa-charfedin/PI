@@ -1,33 +1,54 @@
 package Models;
 
-import java.sql.Date;
 import java.util.List;
 
 public class Publication {
-    private int idPublication;
+    private int id;
+    private int userId;
+    private String title;
     private String contenu;
-    private Date date;
-    private int idUser;
+    private String image;
+    private Boolean signaled;
+    private String categories; // JSON string
     private List<Commentaire> commentaires;
 
     // Constructors
     public Publication() {
     }
 
-    public Publication(int idPublication, String contenu, Date date, int idUser) {
-        this.idPublication = idPublication;
+    public Publication(int id, int userId, String title, String contenu, String image, Boolean signaled, String categories) {
+        this.id = id;
+        this.userId = userId;
+        this.title = title;
         this.contenu = contenu;
-        this.date = date;
-        this.idUser = idUser;
+        this.image = image;
+        this.signaled = signaled;
+        this.categories = categories;
     }
 
     // Getters and Setters
-    public int getIdPublication() {
-        return idPublication;
+    public int getId() {
+        return id;
     }
 
-    public void setIdPublication(int idPublication) {
-        this.idPublication = idPublication;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getContenu() {
@@ -38,20 +59,28 @@ public class Publication {
         this.contenu = contenu;
     }
 
-    public Date getDate() {
-        return date;
+    public String getImage() {
+        return image;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setImage(String image) {
+        this.image = image;
     }
 
-    public int getIdUser() {
-        return idUser;
+    public Boolean getSignaled() {
+        return signaled;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public void setSignaled(Boolean signaled) {
+        this.signaled = signaled;
+    }
+
+    public String getCategories() {
+        return categories;
+    }
+
+    public void setCategories(String categories) {
+        this.categories = categories;
     }
 
     public List<Commentaire> getCommentaires() {

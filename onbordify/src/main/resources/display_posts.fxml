@@ -5,15 +5,57 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" stylesheets="css/style.css" fx:controller="Controllers.DisplayPostsController" style="-fx-background-color: linear-gradient(to bottom, #B3D9FF, #8AB0D1);">
-    <children>
-        <VBox fx:id="mainContainer" spacing="10" alignment="CENTER" prefWidth="600" prefHeight="400" style="-fx-background-color: white; -fx-background-radius: 15px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);" >
-            <Label text="Publications" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" />
-            <ListView fx:id="listViewPublications" prefHeight="300" style="-fx-background-color: #E1F5FE; -fx-border-radius: 8px; -fx-selection-bar: #1976D2; -fx-text-fill: #2C3E50;" />
-            <VBox spacing="5">
-                <Button text="Add Post" onAction="#openAddPost" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 0);" />
-            </VBox>
-        </VBox>
-    </children>
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.DisplayPostsController"
+            style="-fx-background-color: linear-gradient(to bottom, #E3F2FD, #BBDEFB);">
+
+    <VBox fx:id="mainContainer" spacing="15" alignment="TOP_CENTER"
+          AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20"
+          AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20"
+          style="-fx-background-color: white; -fx-background-radius: 15px;
+                -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 5);">
+
+        <!-- Header Section -->
+        <Label text="Publications Management"
+               style="-fx-font-size: 24px; -fx-font-weight: bold;
+                     -fx-text-fill: #0D47A1; -fx-padding: 15 0 10 0;"/>
+
+        <!-- Search and Filter Section -->
+        <HBox spacing="10" alignment="CENTER"
+              style="-fx-padding: 0 15 10 15;">
+            <TextField fx:id="searchField" promptText="Search posts..."
+                       style="-fx-background-color: #F5F5F5; -fx-background-radius: 8px;
+                             -fx-border-color: #BDBDBD; -fx-border-radius: 8px;
+                             -fx-pref-width: 300; -fx-padding: 8;"/>
+            <Button text="Search"
+                    style="-fx-background-color: #2196F3; -fx-text-fill: white;
+                          -fx-font-weight: bold; -fx-background-radius: 8px;
+                          -fx-padding: 8 15;"/>
+        </HBox>
+
+        <!-- Posts List View -->
+        <ListView fx:id="listViewPublications" prefHeight="350" prefWidth="550"
+                  style="-fx-background-color: #E3F2FD; -fx-background-radius: 10px;
+                        -fx-border-color: #BBDEFB; -fx-border-radius: 10px;
+                        -fx-border-width: 2px; -fx-effect: innershadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);"/>
+
+        <!-- Action Buttons -->
+        <HBox spacing="15" alignment="CENTER" style="-fx-padding: 15;">
+            <Button text="Add New Post" onAction="#openAddPost"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white;
+                          -fx-font-weight: bold; -fx-font-size: 14px;
+                          -fx-background-radius: 8px; -fx-padding: 10 25;
+                          -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 5, 0, 0, 2);"/>
+
+
+            <Button text="View Details"
+                    style="-fx-background-color: #FF9800; -fx-text-fill: white;
+                          -fx-font-weight: bold; -fx-font-size: 14px;
+                          -fx-background-radius: 8px; -fx-padding: 10 25;
+                          -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 5, 0, 0, 2);"/>
+        </HBox>
+    </VBox>
 </AnchorPane>

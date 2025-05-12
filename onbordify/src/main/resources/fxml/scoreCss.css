@@ -1,0 +1,57 @@
+/* Score Management Page Specific Styles */
+
+/* Search and Filter Section */
+.search-filter-container {
+    -fx-padding: 10px 0;
+    -fx-spacing: 15px;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.search-field {
+    -fx-pref-width: 250px;
+    -fx-pref-height: 35px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: #ced4da;
+    -fx-font-size: 14px;
+}
+
+.filter-combo {
+    -fx-pref-width: 200px;
+    -fx-pref-height: 35px;
+}
+
+/* List View Styles */
+.user-list-view {
+    -fx-background-color: white;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 4px;
+    -fx-padding: 5px;
+}
+
+.user-list-view .list-cell {
+    -fx-padding: 10px;
+    -fx-border-color: #e9ecef;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.user-list-view .list-cell:filled:hover {
+    -fx-background-color: #f1f3f5;
+}
+
+.user-list-view .list-cell:filled:selected {
+    -fx-background-color: #e2e6ff;
+}
+
+/* Danger Button */
+.danger-button {
+    -fx-background-color: #dc3545;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 20px;
+}
+
+.danger-button:hover {
+    -fx-background-color: #bd2130;
+}
