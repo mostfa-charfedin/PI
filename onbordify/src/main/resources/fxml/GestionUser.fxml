@@ -15,7 +15,7 @@
 
 <?import javafx.scene.control.ScrollPane?>
 <?import java.net.URL?>
-<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GestionUser">
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1"  stylesheets="@/css/styles.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GestionUser">
 
     <children>
         <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">

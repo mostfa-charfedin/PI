@@ -85,7 +85,7 @@ public UserSession session = UserSession.getInstance();
     private void loadPage(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
-            AnchorPane newPage = loader.load();
+            Parent newPage = loader.load();
 
             // Ajuster la taille pour qu'elle prenne tout l'espace disponible
             AnchorPane.setTopAnchor(newPage, 0.0);
