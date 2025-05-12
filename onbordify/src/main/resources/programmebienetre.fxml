@@ -30,14 +30,25 @@
             <ComboBox fx:id="cmbType" style="-fx-font-size: 14px; -fx-background-radius: 8px;">
                <items>
                   <FXCollections fx:factory="observableArrayList">
-                     <String fx:value="Running" />
-                     <String fx:value="Competition" />
-                     <String fx:value="Horse Riding" />
-                     <String fx:value="Padel" />
-                     <String fx:value="Trip" />
+                     <String fx:value="Physical" />
+                     <String fx:value="Mental" />
+                     <String fx:value="Social" />
+                     <String fx:value="Professional" />
                   </FXCollections>
                </items>
             </ComboBox>
+         </VBox>
+
+         <!-- Program Manager -->
+         <VBox spacing="5">
+            <Label style="-fx-font-size: 14px; -fx-text-fill: #7F8C8D;" text="Program Manager" />
+            <ComboBox fx:id="cmbManager" promptText="Select admin manager" style="-fx-font-size: 14px; -fx-background-radius: 8px;" />
+         </VBox>
+
+         <!-- Date -->
+         <VBox spacing="5">
+            <Label style="-fx-font-size: 14px; -fx-text-fill: #7F8C8D;" text="Program Date" />
+            <DatePicker fx:id="dateProgramme" style="-fx-font-size: 14px; -fx-background-radius: 8px;" />
          </VBox>
 
          <!-- Description -->

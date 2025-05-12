@@ -9,6 +9,8 @@ public class programmebienetre {
     private String nom;       // Nom de l'utilisateur
     private String prenom;    // Prénom de l'utilisateur
     private String email;     // Email de l'utilisateur
+    private String date_programme;  // Date du programme
+    private int idRecompense; // ID de la récompense associée
 
     // Constructeur par défaut
     public programmebienetre() {
@@ -20,18 +22,22 @@ public class programmebienetre {
         this.nom = "";
         this.prenom = "";
         this.email = "";
+        this.date_programme = "";
+        this.idRecompense = 0;
     }
 
     // Constructeur complet
-    public programmebienetre(int idProgramme, String titre, String type, String description) {
+    public programmebienetre(int idProgramme, String titre, String type, String description, String date_programme, int idUser) {
         this.idProgramme = idProgramme;
         this.titre = titre;
         this.type = type;
         this.description = description;
+        this.date_programme = date_programme;
         this.idUser = idUser;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.email = email;
+        this.nom = "";
+        this.prenom = "";
+        this.email = "";
+        this.idRecompense = 0;
     }
 
     // Getters et Setters
@@ -99,7 +105,21 @@ public class programmebienetre {
         this.email = email;
     }
 
+    public String getDate_programme() {
+        return date_programme;
+    }
 
+    public void setDate_programme(String date_programme) {
+        this.date_programme = date_programme;
+    }
+
+    public int getIdRecompense() {
+        return idRecompense;
+    }
+
+    public void setIdRecompense(int idRecompense) {
+        this.idRecompense = idRecompense;
+    }
 
     @Override
     public String toString() {
@@ -112,7 +132,8 @@ public class programmebienetre {
                 ", nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
                 ", email='" + email + '\'' +
-
+                ", date_programme='" + date_programme + '\'' +
+                ", idRecompense=" + idRecompense +
                 '}';
     }
 }

@@ -1,20 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
 
-<VBox prefHeight="161.0" prefWidth="268.0" spacing="20" style="-fx-background-color: linear-gradient(to bottom, #E3F2FD, #bbbcfb); -fx-padding: 20;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="Controller.statisticAvis">
-
-    <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-alignment: center;" text="Statistiques des Avis" />
-
-    <HBox alignment="CENTER" spacing="20">
-        <Label fx:id="totalReviewsLabel" style="-fx-font-size: 16px; -fx-text-fill: #34495e;" />
-
-        <Label fx:id="averageRatingLabel" style="-fx-font-size: 16px; -fx-text-fill: #34495e;" />
-   
-       <VBox fx:id="chartContainer" spacing="20" style="-fx-background-color: white;                  -fx-background-radius: 10;                  -fx-padding: 20;                  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
-        <!-- Les graphiques seront ajoutés dynamiquement ici -->
-    </VBox>
+<VBox prefHeight="700.0" prefWidth="1200.0" spacing="30" style="-fx-background-color: linear-gradient(to bottom, #F8FBFF, #E3F2FD); -fx-padding: 30;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="Controller.statisticAvis">
+    <HBox spacing="30">
+        <!-- Average Rating Card -->
+        <VBox style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 0);" spacing="10" alignment="CENTER">
+            <Label text="Average Rating" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #15396A;" />
+            <Label fx:id="averageRatingValue" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #222;" />
+            <HBox fx:id="starBox" alignment="CENTER" spacing="2" />
+            <Label text="Based on all reviews" style="-fx-font-size: 14px; -fx-text-fill: #888;" />
+        </VBox>
+        <!-- Total Reviewers Card -->
+        <VBox style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 0);" spacing="10" alignment="CENTER">
+            <Label text="Total Reviewers" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #15396A;" />
+            <HBox alignment="CENTER" spacing="8">
+                <Label text="👥" style="-fx-font-size: 32px;" />
+                <Label fx:id="totalReviewersValue" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #222;" />
+            </HBox>
+            <Label text="Unique users who gave reviews" style="-fx-font-size: 14px; -fx-text-fill: #888;" />
+        </VBox>
+        <!-- Rating Distribution Card -->
+        <VBox style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 0);" spacing="10" alignment="CENTER">
+            <Label text="Rating Distribution" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #15396A;" />
+            <BarChart fx:id="ratingBarChart" prefHeight="200" prefWidth="300">
+                <xAxis>
+                    <CategoryAxis />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis />
+                </yAxis>
+            </BarChart>
+        </VBox>
     </HBox>
+    <Label text="Program Statistics" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #15396A; -fx-padding: 10 0 0 0;" />
+    <TableView fx:id="programStatsTable" prefHeight="350" style="-fx-background-radius: 12;">
+        <columns>
+            <TableColumn fx:id="colProgramName" text="Program Name" prefWidth="200" />
+            <TableColumn fx:id="colNumReviews" text="Number of Reviews" prefWidth="150" />
+            <TableColumn fx:id="colAvgRating" text="Average Rating" prefWidth="150" />
+            <TableColumn fx:id="colRatingDist" text="Rating Distribution" prefWidth="350" />
+        </columns>
+    </TableView>
 </VBox>

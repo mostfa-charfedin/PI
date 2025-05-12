@@ -31,6 +31,7 @@
             <Button fx:id="btnPage4" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Projet" />
 
             <Button fx:id="btnPage5" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Program BE" />
+            <Button fx:id="btnPage65" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Program Stat" />
 
             <Button fx:id="btnPage7" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Ressources" />
          <Button fx:id="btnPage61" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Complaint" />

@@ -73,18 +73,7 @@ public class Avis implements Initializable {
         btnAvis.setOnAction(event -> laisserAvis(programme));
         btnAvis.setStyle("-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px;");
 
-        Button btnStats = new Button("Voir les Statistiques");
-        btnStats.setOnAction(event -> {
-            try {
-                openDetailedStatistics(programme);
-            } catch (IOException e) {
-                e.printStackTrace();
-                showAlert("Erreur", "Impossible d'ouvrir les statistiques : " + e.getMessage(), Alert.AlertType.ERROR);
-            }
-        });
-        btnStats.setStyle("-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8px;");
-
-        HBox hbox = new HBox(25, lblTitre, lblDescription, lblRating,  btnAvis, btnStats);
+        HBox hbox = new HBox(25, lblTitre, lblDescription, lblRating, btnAvis);
         hbox.setStyle("-fx-padding: 15; -fx-border-color: #D5DBDB; -fx-background-color: white; -fx-border-radius: 12; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);");
 
         return hbox;
@@ -193,6 +182,10 @@ public class Avis implements Initializable {
 
     private void soumettreAvis(programmebienetre programme, int rating, String commentaire) {
         try {
+            if (programme.getIdProgramme() == 0 || userId == 0) {
+                showAlert("Erreur", "Programme ou utilisateur invalide.", Alert.AlertType.ERROR);
+                return;
+            }
             service.ajouterAvis(programme.getIdProgramme(), userId, rating, commentaire);
             Platform.runLater(() -> {
                 showAlert("Avis ajouté", "Votre avis a été enregistré.", Alert.AlertType.INFORMATION);
@@ -201,37 +194,11 @@ public class Avis implements Initializable {
         } catch (Exception ex) {
             ex.printStackTrace();
             Platform.runLater(() -> {
-                showAlert("Erreur", "Impossible d'ajouter l'avis : " + ex.getMessage(), Alert.AlertType.ERROR);
+                showAlert("Erreur", ex.getMessage(), Alert.AlertType.ERROR);
             });
         }
     }
 
-
-
-    private void showStatistics(programmebienetre programme) throws SQLException {
-        double averageRating = service.getAverageRating(programme.getIdProgramme());
-        int totalReviews = service.getTotalReviews(programme.getIdProgramme());
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Statistiques des notes");
-        alert.setHeaderText(null);
-        alert.setContentText(String.format("Note moyenne: %.1f/5\nTotal des avis: %d", averageRating, totalReviews));
-        alert.showAndWait();
-    }
-    private void openDetailedStatistics(programmebienetre programme) throws IOException {
-        // Create a new stage for detailed statistics
-        Stage statisticsStage = new Stage();
-        statisticsStage.setTitle("Statistiques détaillées - " + programme.getTitre());
-        statisticsStage.initModality(Modality.WINDOW_MODAL);
-
-        // Load the FXML for statistics
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/statisticAvis.fxml"));
-        Parent root = loader.load();
-        statisticAvis statisticsController = loader.getController();
-        Scene scene = new Scene(root);
-        statisticsStage.setScene(scene);
-        statisticsStage.showAndWait();
-    }
     private void showAlert(String title, String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

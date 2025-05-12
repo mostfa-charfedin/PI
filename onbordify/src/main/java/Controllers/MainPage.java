@@ -1,6 +1,7 @@
 package Controllers;
 
 import Models.Role;
+import com.sun.javafx.menu.MenuItemBase;
 import utils.UserSession;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,11 +19,12 @@ import utils.UserSession;
 
 public class MainPage {
 
+
     @FXML
     private StackPane contentPane;  // Zone où afficher les pages
 
     @FXML
-    private Button btnPage1, btnPage2, btnPage3, btnPage4,btnPage6, btnPage5, btnPage7,btnPage61,btnPage62;  // Boutons du menu latéral
+    private Button btnPage1, btnPage2, btnPage3, btnPage4,btnPage6, btnPage5, btnPage7,btnPage61,btnPage62,btnPage65;  // Boutons du menu latéral
 public UserSession session = UserSession.getInstance();
     @FXML
     public void initialize() {
@@ -54,6 +56,9 @@ public UserSession session = UserSession.getInstance();
             btnPage5.setOnAction(e -> loadPage("/programmebienetre.fxml"));
         } else {
             btnPage5.setOnAction(e -> loadPage("/Avis.fxml"));
+        }
+        if (roleSession == Role.ADMIN) {
+            btnPage65.setOnAction(e -> loadPage("/statisticAvis.fxml"));
         }
 
         if (roleSession == Role.ADMIN) {

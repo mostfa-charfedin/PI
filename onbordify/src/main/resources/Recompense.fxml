@@ -21,7 +21,17 @@
 
         <VBox spacing="10">
             <Label style="-fx-font-size: 16px;" text="Type :" />
-            <TextField fx:id="txtType" promptText="Entrez le type" style="-fx-font-size: 14px; -fx-background-radius: 8px; -fx-border-radius: 8px; -fx-border-color: #90CAF9;" />
+            <ComboBox fx:id="cmbRecompenseType" promptText="Select type" style="-fx-font-size: 14px; -fx-background-radius: 8px; -fx-border-radius: 8px; -fx-border-color: #90CAF9;">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Gift Card" />
+                        <String fx:value="Voucher" />
+                        <String fx:value="Bonus" />
+                        <String fx:value="Recognition" />
+                        <String fx:value="Other" />
+                    </FXCollections>
+                </items>
+            </ComboBox>
         </VBox>
 
         <VBox spacing="10">
@@ -34,9 +44,10 @@
             <ComboBox fx:id="cmbStatut" style="-fx-font-size: 14px; -fx-background-radius: 8px; -fx-border-radius: 8px; -fx-border-color: #90CAF9;">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Expired" />
-                        <String fx:value="Received" />
-                        <String fx:value="Waiting" />
+                        <String fx:value="Pending" />
+                        <String fx:value="Approved" />
+                        <String fx:value="Delivered" />
+                        <String fx:value="Cancelled" />
                     </FXCollections>
                 </items>
             </ComboBox>

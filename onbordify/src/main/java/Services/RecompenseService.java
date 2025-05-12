@@ -21,6 +21,16 @@ public class RecompenseService implements CrudInterface<Recompense> {
 
     @Override
     public void create(Recompense recompense) throws Exception {
+        // Vérifier si une récompense existe déjà pour ce programme
+        String checkSql = "SELECT COUNT(*) FROM recompense WHERE idProgramme = ?";
+        try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
+            checkStmt.setInt(1, recompense.getIdProgramme());
+            ResultSet rs = checkStmt.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                throw new Exception("Ce programme a déjà une récompense associée !");
+            }
+        }
+
         String sql = "INSERT INTO recompense (type, dateAttribution, statusRecompence, idProgramme) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, recompense.getType_Recompense());

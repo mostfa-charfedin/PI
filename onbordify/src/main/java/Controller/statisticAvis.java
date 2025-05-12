@@ -1,137 +1,169 @@
 package Controller;
+
 import Models.programmebienetre;
 import Services.programmebienetreService;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.*;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 
 import java.net.URL;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
-public class statisticAvis implements Initializable{
-    @FXML
-    private VBox chartContainer;
+public class statisticAvis implements Initializable {
+    @FXML private Label averageRatingValue;
+    @FXML private HBox starBox;
+    @FXML private Label totalReviewersValue;
+    @FXML private BarChart<String, Number> ratingBarChart;
+    @FXML private TableView<ProgramStat> programStatsTable;
+    @FXML private TableColumn<ProgramStat, String> colProgramName;
+    @FXML private TableColumn<ProgramStat, Integer> colNumReviews;
+    @FXML private TableColumn<ProgramStat, Double> colAvgRating;
+    @FXML private TableColumn<ProgramStat, Double> colRatingDist;
 
-    @FXML
-    private Label totalReviewsLabel;
+    private final programmebienetreService service = new programmebienetreService();
 
-    @FXML
-    private Label averageRatingLabel;
+    public static class ProgramStat {
+        private final SimpleStringProperty name;
+        private final SimpleIntegerProperty numReviews;
+        private final SimpleDoubleProperty avgRating;
+        private final SimpleDoubleProperty ratingDist;
 
-    private programmebienetreService service = new programmebienetreService();
-    private programmebienetre currentProgramme = null;
+        public ProgramStat(String name, int numReviews, double avgRating, double ratingDist) {
+            this.name = new SimpleStringProperty(name);
+            this.numReviews = new SimpleIntegerProperty(numReviews);
+            this.avgRating = new SimpleDoubleProperty(avgRating);
+            this.ratingDist = new SimpleDoubleProperty(ratingDist);
+        }
+        public String getName() { return name.get(); }
+        public int getNumReviews() { return numReviews.get(); }
+        public double getAvgRating() { return avgRating.get(); }
+        public double getRatingDist() { return ratingDist.get(); }
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("StatisticAvis est initialisé!");
         try {
-            // Charger les statistiques globales par défaut
-            loadStatistics();
+            ratingBarChart.getStylesheets().add(getClass().getResource("/statisticAvis.css").toExternalForm());
+            loadDashboardStats();
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Erreur lors du chargement des statistiques : " + e.getMessage());
         }
     }
 
-    public void loadStatistics() throws Exception {
-        // Récupérer les programmes
+    private void loadDashboardStats() throws Exception {
         List<programmebienetre> programmes = service.getAll();
-        System.out.println("Nombre de programmes : " + programmes.size());
 
-        // Créer un graphique à barres pour les notes moyennes par programme
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis(0, 5, 1);
-        yAxis.setLabel("Note Moyenne");
-        xAxis.setLabel("Programmes");
-
-        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
-        barChart.setTitle("Notes Moyennes par Programme");
-
-        // Série de données
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Notes Moyennes");
-
-        // Variables pour les statistiques globales
-        double totalAverageRating = 0;
         int totalReviews = 0;
-        int validProgrammesCount = 0;
+        double totalRatingSum = 0;
+        int totalRatingCount = 0;
+        Map<Integer, Integer> ratingDistribution = new HashMap<>();
+        ObservableList<ProgramStat> stats = FXCollections.observableArrayList();
 
-        // Collecter les statistiques pour chaque programme
-        for (programmebienetre programme : programmes) {
-            int programReviews = service.getTotalReviews(programme.getIdProgramme());
-            System.out.println("Programme : " + programme.getTitre() + ", Nombre d'avis : " + programReviews);
-
-            // Ne traiter que les programmes avec des avis
-            if (programReviews > 0) {
-                double averageRating = service.getAverageRating(programme.getIdProgramme());
-                System.out.println("Note moyenne : " + averageRating);
-
-                // Ajouter au graphique à barres
-                series.getData().add(new XYChart.Data<>(programme.getTitre(), averageRating));
-
-                // Calculer les totaux
-                totalAverageRating += averageRating;
-                totalReviews += programReviews;
-                validProgrammesCount++;
+        for (programmebienetre prog : programmes) {
+            int numReviews = service.getTotalReviews(prog.getIdProgramme());
+            double avgRating = numReviews > 0 ? service.getAverageRating(prog.getIdProgramme()) : 0.0;
+            stats.add(new ProgramStat(prog.getTitre(), numReviews, avgRating, avgRating / 5.0));
+            totalReviews += numReviews;
+            totalRatingSum += avgRating * numReviews;
+            totalRatingCount += numReviews;
+            for (int i = 1; i <= 5; i++) {
+                int count = service.getReviewCountByRatingForProgramme(prog.getIdProgramme(), i);
+                ratingDistribution.put(i, ratingDistribution.getOrDefault(i, 0) + count);
             }
         }
 
-        // Calculer la moyenne globale
-        if (validProgrammesCount > 0) {
-            totalAverageRating /= validProgrammesCount;
+        double globalAvg = totalRatingCount > 0 ? totalRatingSum / totalRatingCount : 0.0;
+        averageRatingValue.setText(String.format("%.1f / 5", globalAvg));
+        setStars(globalAvg);
+        int uniqueUsers = service.getUniqueReviewerCount();
+        totalReviewersValue.setText(String.valueOf(uniqueUsers));
 
-            // Mettre à jour les labels
-            totalReviewsLabel.setText("Nombre total d'avis : " + totalReviews);
-            averageRatingLabel.setText(String.format("Note moyenne globale : %.2f/5", totalAverageRating));
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Number of Reviews");
+        for (int i = 1; i <= 5; i++) {
+            series.getData().add(new XYChart.Data<>(i + " Stars", ratingDistribution.getOrDefault(i, 0)));
+        }
+        ratingBarChart.getData().clear();
+        ratingBarChart.getData().add(series);
 
-            // Ajouter la série au graphique
-            barChart.getData().add(series);
-        } else {
-            totalReviewsLabel.setText("Aucun avis disponible");
-            averageRatingLabel.setText("Pas de note moyenne");
+        // Set per-bar color for each bar
+        for (int i = 0; i < series.getData().size(); i++) {
+            XYChart.Data<String, Number> item = series.getData().get(i);
+            String color;
+            switch (i) {
+                case 0: color = "#eeb6c2"; break; // 1 Star - Pink
+                case 1: color = "#ffe0a3"; break; // 2 Stars - Orange/Yellow
+                case 2: color = "#ffeeb3"; break; // 3 Stars - Light Yellow
+                case 3: color = "#b6e2f2"; break; // 4 Stars - Light Blue
+                case 4: color = "#b6d7f2"; break; // 5 Stars - Blue
+                default: color = "#eeb6c2";
+            }
+            item.nodeProperty().addListener((obs, oldNode, newNode) -> {
+                if (newNode != null) {
+                    newNode.setStyle("-fx-bar-fill: " + color + ";");
+                }
+            });
         }
 
-        // Créer un graphique à secteurs pour la répartition des notes
-        PieChart pieChart = createRatingDistributionChart();
-
-        // Ajouter les graphiques au conteneur
-        chartContainer.getChildren().clear();
-        chartContainer.getChildren().addAll(barChart, pieChart);
+        colProgramName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
+        colNumReviews.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getNumReviews()).asObject());
+        colAvgRating.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getAvgRating()).asObject());
+        colAvgRating.setCellFactory(column -> new TableCell<ProgramStat, Double>() {
+            @Override
+            protected void updateItem(Double value, boolean empty) {
+                super.updateItem(value, empty);
+                if (empty || value == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("%.1f", value));
+                }
+            }
+        });
+        colRatingDist.setCellFactory(column -> new TableCell<ProgramStat, Double>() {
+            @Override
+            protected void updateItem(Double value, boolean empty) {
+                super.updateItem(value, empty);
+                if (empty || value == null) {
+                    setGraphic(null);
+                } else {
+                    ProgressBar bar = new ProgressBar(value);
+                    bar.setStyle("-fx-accent: #FFC107;");
+                    bar.setPrefWidth(120);
+                    setGraphic(bar);
+                }
+            }
+        });
+        colRatingDist.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getRatingDist()).asObject());
+        programStatsTable.setItems(stats);
     }
 
-    private PieChart createRatingDistributionChart() throws SQLException {
-        // Collecter la distribution des notes
-        Map<Integer, Integer> ratingDistribution = new HashMap<>();
-        for (int rating = 1; rating <= 5; rating++) {
-            int count = service.getReviewCountByRating(rating);
-            System.out.println("Rating " + rating + " : " + count + " avis");
-            if (count > 0) {
-                ratingDistribution.put(rating, count);
-            }
+    private void setStars(double rating) {
+        starBox.getChildren().clear();
+        int fullStars = (int) rating;
+        boolean halfStar = (rating - fullStars) >= 0.5;
+        for (int i = 0; i < fullStars; i++) {
+            Label star = new Label("★");
+            star.setStyle("-fx-font-size: 28px; -fx-text-fill: #FFC107;");
+            starBox.getChildren().add(star);
         }
-
-        // Créer le graphique à secteurs
-        PieChart pieChart = new PieChart();
-        pieChart.setTitle("Distribution des Notes");
-
-        // Ajouter les données
-        for (Map.Entry<Integer, Integer> entry : ratingDistribution.entrySet()) {
-            PieChart.Data slice = new PieChart.Data(
-                    entry.getKey() + " étoile" + (entry.getKey() > 1 ? "s" : ""),
-                    entry.getValue()
-            );
-            pieChart.getData().add(slice);
+        if (halfStar) {
+            Label half = new Label("☆");
+            half.setStyle("-fx-font-size: 28px; -fx-text-fill: #FFC107;");
+            starBox.getChildren().add(half);
         }
-
-        return pieChart;
+        for (int i = fullStars + (halfStar ? 1 : 0); i < 5; i++) {
+            Label empty = new Label("☆");
+            empty.setStyle("-fx-font-size: 28px; -fx-text-fill: #E0E0E0;");
+            starBox.getChildren().add(empty);
+        }
     }
 }

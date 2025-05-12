@@ -13,10 +13,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import Services.EmailService;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import Services.UserService;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class programmebienetre implements Initializable {
 
@@ -31,6 +35,9 @@ public class programmebienetre implements Initializable {
     private TextArea txtDescription;
 
     @FXML
+    private DatePicker dateProgramme;
+
+    @FXML
     private ListView<String> listViewProgrammes;
 
     @FXML
@@ -42,6 +49,9 @@ public class programmebienetre implements Initializable {
     @FXML
     private Button btnCreateRecompense;
 
+    @FXML
+    private ComboBox<Models.User> cmbManager;
+
     private programmebienetreService service = new programmebienetreService();
     private EmailService emailService = new EmailService(); // Initialisation de EmailService
     private UserService userService = new UserService(); // Initialisation de UserService
@@ -49,7 +59,35 @@ public class programmebienetre implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        cmbType.getItems().addAll("Fitness", "Nutrition", "Mental Health", "Wellness");
+        cmbType.getItems().clear();
+        cmbType.getItems().addAll("Physical", "Mental", "Social", "Professional");
+
+        // Load only admin users into cmbManager
+        try {
+            List<Models.User> users = userService.getAll();
+            cmbManager.getItems().clear();
+            for (Models.User user : users) {
+                if (user.getRole() == Models.Role.ADMIN) {
+                    cmbManager.getItems().add(user);
+                }
+            }
+            cmbManager.setCellFactory(param -> new ListCell<Models.User>() {
+                @Override
+                protected void updateItem(Models.User user, boolean empty) {
+                    super.updateItem(user, empty);
+                    setText((user == null || empty) ? null : user.getNom() + " " + user.getPrenom());
+                }
+            });
+            cmbManager.setButtonCell(new ListCell<Models.User>() {
+                @Override
+                protected void updateItem(Models.User user, boolean empty) {
+                    super.updateItem(user, empty);
+                    setText((user == null || empty) ? null : user.getNom() + " " + user.getPrenom());
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         loadProgrammes();
 
@@ -84,8 +122,11 @@ public class programmebienetre implements Initializable {
         String titre = txtTitre.getText();
         String type = cmbType.getValue();
         String description = txtDescription.getText();
+        LocalDate date = dateProgramme.getValue();
+        String dateStr = date != null ? date.format(DateTimeFormatter.ISO_DATE) : "";
+        Models.User selectedManager = cmbManager.getValue();
 
-        if (titre.isEmpty() || type == null || description.isEmpty()) {
+        if (titre.isEmpty() || type == null || description.isEmpty() || date == null || selectedManager == null) {
             showAlert("Attention", "Veuillez remplir tous les champs !");
             return;
         }
@@ -105,6 +146,9 @@ public class programmebienetre implements Initializable {
             selectedProgramme.setTitre(titre);
             selectedProgramme.setType(type);
             selectedProgramme.setDescription(description);
+            selectedProgramme.setDate_programme(dateStr);
+            selectedProgramme.setNom(selectedManager.getNom());
+            selectedProgramme.setPrenom(selectedManager.getPrenom());
 
             try {
                 service.update(selectedProgramme);
@@ -115,6 +159,8 @@ public class programmebienetre implements Initializable {
                 txtTitre.clear();
                 cmbType.getSelectionModel().clearSelection();
                 txtDescription.clear();
+                dateProgramme.setValue(null);
+                cmbManager.getSelectionModel().clearSelection();
                 btnModifier.setDisable(false);
 
                 btnAjouter.setText("Ajouter Programme");
@@ -124,10 +170,13 @@ public class programmebienetre implements Initializable {
                 showAlert("Erreur", "Erreur lors de la mise à jour du programme !");
             }
         } else {
-            Models.programmebienetre programme = new Models.programmebienetre(0, titre, type, description);
+            int idUser = selectedManager.getId();
+            Models.programmebienetre programme = new Models.programmebienetre(0, titre, type, description, dateStr, idUser);
+            programme.setNom(selectedManager.getNom());
+            programme.setPrenom(selectedManager.getPrenom());
             try {
                 service.create(programme);
-                List<String> allEmails = userService.getAllUserEmails(); // Appel sur l'instance de UserService
+                List<String> allEmails = userService.getAllUserEmails();
                 for (String email : allEmails) {
                     emailService.sendEmail(email, "ProgWellBeing Created", "A new ProgWellBeing has been created, you can check it now!");
                 }
@@ -137,6 +186,8 @@ public class programmebienetre implements Initializable {
                 txtTitre.clear();
                 cmbType.getSelectionModel().clearSelection();
                 txtDescription.clear();
+                dateProgramme.setValue(null);
+                cmbManager.getSelectionModel().clearSelection();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -159,6 +210,16 @@ public class programmebienetre implements Initializable {
         txtTitre.setText(selectedProgramme.getTitre());
         cmbType.setValue(selectedProgramme.getType());
         txtDescription.setText(selectedProgramme.getDescription());
+        if (selectedProgramme.getDate_programme() != null && !selectedProgramme.getDate_programme().isEmpty()) {
+            dateProgramme.setValue(LocalDate.parse(selectedProgramme.getDate_programme()));
+        }
+        // Set the selected manager in the ComboBox by matching id
+        for (Models.User user : cmbManager.getItems()) {
+            if (user.getNom().equals(selectedProgramme.getNom()) && user.getPrenom().equals(selectedProgramme.getPrenom())) {
+                cmbManager.setValue(user);
+                break;
+            }
+        }
 
         btnAjouter.setText("Mettre à jour");
         btnModifier.setDisable(true);
@@ -196,26 +257,56 @@ public class programmebienetre implements Initializable {
 
     @FXML
     private void createRecompense() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/recompense.fxml"));
-            Parent root = loader.load();
-
-            Scene scene = new Scene(root);
-
-            Stage popupStage = new Stage();
-            popupStage.setTitle("Créer une Récompense");
-            popupStage.setScene(scene);
-            popupStage.initModality(Modality.APPLICATION_MODAL);
-
-            Stage mainStage = (Stage) btnCreateRecompense.getScene().getWindow();
-            popupStage.initOwner(mainStage);
-
-            popupStage.showAndWait();
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Erreur", "Impossible d'ouvrir la fenêtre de récompense !");
+        int selectedIndex = listViewProgrammes.getSelectionModel().getSelectedIndex();
+        if (selectedIndex == -1) {
+            showAlert("Attention", "Veuillez sélectionner un programme pour créer une récompense !");
+            return;
         }
 
+        Models.programmebienetre selectedProgramme = programmeList.get(selectedIndex);
+
+        // Vérifier si le programme a déjà une récompense
+        try {
+            String sql = "SELECT COUNT(*) FROM recompense WHERE idProgramme = ?";
+            try (PreparedStatement stmt = service.getConnection().prepareStatement(sql)) {
+                stmt.setInt(1, selectedProgramme.getIdProgramme());
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next() && rs.getInt(1) > 0) {
+                    showAlert("Attention", "Ce programme a déjà une récompense associée !");
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Erreur lors de la vérification des récompenses !");
+            return;
+        }
+
+        // Si le programme n'a pas de récompense, ouvrir la fenêtre de création
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Recompense.fxml"));
+            Parent root = loader.load();
+
+            // Récupérer le contrôleur de la fenêtre de récompense
+            Controller.Recompense recompenseController = loader.getController();
+
+            // Configurer la récompense avec le programme sélectionné
+            recompenseController.setProgrammeId(selectedProgramme.getIdProgramme());
+
+            // Créer et afficher la fenêtre
+            Stage stage = new Stage();
+            stage.setTitle("Créer une récompense pour " + selectedProgramme.getTitre());
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+            // Recharger la liste des programmes après la création
+            loadProgrammes();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Erreur lors de l'ouverture de la fenêtre de récompense !");
+        }
     }
 
     private void showAlert(String title, String message) {

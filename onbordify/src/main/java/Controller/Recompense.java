@@ -18,7 +18,7 @@ public class Recompense implements Initializable {
     @FXML
     public ComboBox<Models.programmebienetre> cmbProgrammes;  // Ensure type safety with generics
     @FXML
-    private TextField txtType;  // Champ de texte pour le type de récompense
+    private ComboBox<String> cmbRecompenseType;  // ComboBox pour le type de récompense
 
     @FXML
     private DatePicker dateAttribution;  // Sélecteur de date pour la date d'attribution
@@ -41,12 +41,17 @@ public class Recompense implements Initializable {
     private RecompenseService service = new RecompenseService();  // Service pour gérer les récompenses
     private ObservableList<Models.Recompense> recompenseList = FXCollections.observableArrayList();  // Liste observable des récompenses
 
+    private int programmeId;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Initialisation des données
         initializeProgrammes();
         initializeStatut();
         initializeListView();
+        // Initialiser les types de récompense
+        cmbRecompenseType.getItems().clear();
+        cmbRecompenseType.getItems().addAll("Gift Card", "Voucher", "Bonus", "Recognition", "Other");
         // Blocage des dates passées dans le DatePicker
         dateAttribution.setDayCellFactory(picker -> new DateCell() {
             @Override
@@ -90,7 +95,7 @@ public class Recompense implements Initializable {
 
     // Initialiser la ComboBox des statuts
     private void initializeStatut() {
-        cmbStatut.setItems(FXCollections.observableArrayList("Expired", "Received", "Waiting"));
+        cmbStatut.setItems(FXCollections.observableArrayList("Pending", "Approved", "Delivered", "Cancelled"));
     }
 
     // Initialiser la ListView des récompenses
@@ -108,7 +113,7 @@ public class Recompense implements Initializable {
     private void loadSelectedRecompense(String selection) {
         String[] details = selection.split(" - ");
         if (details.length == 3) {
-            txtType.setText(details[0]);
+            cmbRecompenseType.setValue(details[0]);
             dateAttribution.setValue(LocalDate.parse(details[1]));
             cmbStatut.setValue(details[2]);
         }
@@ -132,17 +137,13 @@ public class Recompense implements Initializable {
     // Ajouter une récompense
     @FXML
     private void creer() {
-        String type = txtType.getText();
+        String type = cmbRecompenseType.getValue();
         LocalDate date = dateAttribution.getValue();
         String statusRecompence = cmbStatut.getValue();
 
         // Validation des champs
-        if (type.isEmpty() || date == null || statusRecompence == null) {
+        if (type == null || type.isEmpty() || date == null || statusRecompence == null) {
             showAlert("Attention", "Veuillez remplir tous les champs !");
-            return;
-        }
-        if (!type.matches("^[a-zA-Z]+$")) {
-            showAlert("Erreur de saisie", "Le type ne doit contenir que des lettres (pas de nombres ni d'espaces).");
             return;
         }
 
@@ -205,11 +206,11 @@ public class Recompense implements Initializable {
 
         Models.Recompense selectedRecompense = recompenseList.get(selectedIndex);
 
-        String type = txtType.getText();
+        String type = cmbRecompenseType.getValue();
         LocalDate date = dateAttribution.getValue();
         String statusRecompence = cmbStatut.getValue();
 
-        if (type.isEmpty() || date == null || statusRecompence == null) {
+        if (type == null || type.isEmpty() || date == null || statusRecompence == null) {
             showAlert("Attention", "Veuillez remplir tous les champs !");
             return;
         }
@@ -241,7 +242,7 @@ public class Recompense implements Initializable {
 
     // Effacer les champs du formulaire
     private void clearForm() {
-        txtType.clear();
+        cmbRecompenseType.getSelectionModel().clearSelection();
         dateAttribution.setValue(null);
         cmbStatut.getSelectionModel().clearSelection();
         cmbProgrammes.getSelectionModel().clearSelection();
@@ -254,5 +255,9 @@ public class Recompense implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public void setProgrammeId(int programmeId) {
+        this.programmeId = programmeId;
     }
 }
