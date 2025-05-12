@@ -8,49 +8,39 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.MainPage">
-
+<BorderPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.MainPage" stylesheets="@/fxml/mianPage.css" >
     <!-- Sidebar -->
     <left>
-        <VBox fx:id="sidebar" alignment="CENTER" prefWidth="220" spacing="15" style="-fx-background-color: linear-gradient(to bottom, #bbbcfb, #8fa6ff);                      -fx-padding: 20; -fx-alignment: center;">
-
-            <!-- Logo or Profile Picture -->
+        <VBox fx:id="sidebar" alignment="CENTER" prefWidth="220" spacing="15" styleClass="sidebar">
+            <!-- Logo -->
             <ImageView fx:id="logo" fitHeight="100" fitWidth="100" pickOnBounds="true" preserveRatio="true">
                 <image>
                     <Image url="@../../../../../../../PI/onbordify/src/main/resources/assests/logo.png" />
                 </image>
             </ImageView>
 
-            <Button fx:id="btnPage3" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Gestion Users" />
-
-            <Button fx:id="btnPage2" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Score List" />
-
             <!-- Navigation Buttons -->
-            <Button fx:id="btnPage1" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Profil" />
+            <Button fx:id="btnPage1" styleClass="nav-button" text="Profil" />
+            <Button fx:id="btnPage4" styleClass="nav-button" text="Projet" />
+            <Button fx:id="btnPage5" styleClass="nav-button" text="Program BE" />
+            <Button fx:id="btnPage65" styleClass="nav-button" text="ProgramStat" />
 
-            <Button fx:id="btnPage4" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Projet" />
-
-            <Button fx:id="btnPage5" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Program BE" />
-            <Button fx:id="btnPage65" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Program Stat" />
-
-            <Button fx:id="btnPage7" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Ressources" />
-         <Button fx:id="btnPage61" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Complaint" />
-         <Button fx:id="btnPage62" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Post" />
-
-            <Button fx:id="btnPage6" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Quiz" />
-
-            <!-- Spacer to push logout button down -->
+            <Button fx:id="btnPage7" styleClass="nav-button" text="Ressources" />
+            <Button fx:id="btnPage61" styleClass="nav-button" text="Complaint" />
+            <Button fx:id="btnPage62" styleClass="nav-button" text="Post" />
+            <Button fx:id="btnPage2" styleClass="nav-button" text="Score List" />
+            <Button fx:id="btnPage3" styleClass="nav-button" text="Gestion Users" />
+            <Button fx:id="btnPage6" styleClass="nav-button" text="Quiz" />
+            <!-- Spacer -->
             <Pane VBox.vgrow="ALWAYS" />
 
             <!-- Logout Button -->
-            <Button fx:id="btnLogout" onAction="#logout" style="-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-size: 14px;                            -fx-font-weight: bold; -fx-padding: 10px; -fx-pref-width: 180px;                            -fx-background-radius: 10; -fx-cursor: hand;" text="Logout" />
+            <Button fx:id="btnLogout" onAction="#logout" styleClass="logout-button" text="Logout" />
         </VBox>
     </left>
 
     <!-- Main Content Area -->
     <center>
-        <StackPane fx:id="contentPane" style="-fx-background-color: #E3F2FD;">
-        </StackPane>
+        <StackPane fx:id="contentPane" styleClass="content-pane" />
     </center>
-
 </BorderPane>

@@ -39,12 +39,15 @@ public UserSession session = UserSession.getInstance();
         if (roleSession != null && roleSession.equals(Role.ADMIN)) {
             btnPage2.setVisible(true);
             btnPage3.setVisible(true);
+            btnPage65.setVisible(true);
 
             btnPage2.setOnAction(e -> loadPage("/fxml/Score.fxml"));
             btnPage3.setOnAction(e -> loadPage("/fxml/GestionUser.fxml"));
+
         } else {
             btnPage2.setVisible(false);
             btnPage3.setVisible(false);
+            btnPage65.setVisible(false);
         }
 
         if (roleSession == Role.ADMIN) {
