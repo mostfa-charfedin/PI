@@ -1,0 +1,291 @@
+/* Main Container Styles */
+.custom-tab-pane {
+    -fx-background-color: #f8f9fa;
+}
+
+.custom-tab {
+    -fx-background-color: #e9ecef;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.custom-tab:selected {
+    -fx-background-color: #ffffff;
+}
+
+.transparent-scroll {
+    -fx-background-color: transparent;
+}
+
+/* Section Styles */
+.section-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4154f1;
+    -fx-padding: 0 0 10px 0;
+}
+
+/* Group Titles */
+.form-group-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4154f1;
+    -fx-padding: 15 0 10 0;
+    -fx-border-color: #e9ecef;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-insets: 10 0 10 0;
+}
+
+/* Form Styles */
+.form-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #495057;
+}
+
+.form-label.required {
+    -fx-text-fill: #dc3545;
+}
+
+.form-field {
+    -fx-pref-height: 35px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: #ced4da;
+    -fx-font-size: 14px;
+}
+
+.form-field:hover {
+    -fx-border-color: #adb5bd;
+}
+
+.form-field:focused {
+    -fx-border-color: #4154f1;
+    -fx-effect: dropshadow(gaussian, rgba(65, 84, 241, 0.3), 10, 0, 0, 0);
+}
+
+/* Error Handling */
+.error-container {
+    -fx-min-height: 20px;
+}
+
+.error-message {
+    -fx-text-fill: #dc3545;
+    -fx-font-size: 12px;
+}
+
+/* Button Styles */
+.primary-button {
+    -fx-background-color: #4154f1;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 20px;
+}
+
+.primary-button:hover {
+    -fx-background-color: #3141b1;
+}
+
+.secondary-button {
+    -fx-background-color: #6c757d;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 20px;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #5a6268;
+}
+
+.danger-button {
+    -fx-background-color: #dc3545;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 20px;
+}
+
+.danger-button:hover {
+    -fx-background-color: #bd2130;
+}
+
+/* List View Styles */
+.user-list-view {
+    -fx-background-color: white;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 4px;
+}
+
+.user-list-view .list-cell {
+    -fx-padding: 10px;
+    -fx-border-color: #e9ecef;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.user-list-view .list-cell:filled:hover {
+    -fx-background-color: #f1f3f5;
+}
+
+.user-list-view .list-cell:filled:selected {
+    -fx-background-color: #e2e6ff;
+}
+
+/* Search and Filter */
+.search-filter-container {
+    -fx-padding: 10px;
+    -fx-spacing: 15px;
+}
+
+.search-field {
+    -fx-pref-width: 250px;
+    -fx-pref-height: 35px;
+}
+
+.filter-combo {
+    -fx-pref-width: 200px;
+    -fx-pref-height: 35px;
+}
+
+/* Status Messages */
+.status-message {
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+}
+
+.status-message.success {
+    -fx-text-fill: #28a745;
+}
+
+.status-message.error {
+    -fx-text-fill: #dc3545;
+}
+
+/* Grid alignment */
+GridPane {
+    -fx-padding: 0 20 0 20;
+}
+
+
+/* Edit User Page Specific Styles */
+.section-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4154f1;
+    -fx-padding: 0 0 20px 0;
+}
+
+.form-group-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4154f1;
+    -fx-padding: 15 0 10 0;
+    -fx-border-color: #e9ecef;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.form-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #495057;
+}
+
+.form-label.required {
+    -fx-text-fill: #dc3545;
+}
+
+.form-field {
+    -fx-pref-width: 200px;
+    -fx-pref-height: 35px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: #ced4da;
+    -fx-font-size: 14px;
+}
+
+.error-container {
+    -fx-min-height: 18px;
+    -fx-pref-height: 18px;
+}
+
+.primary-button {
+    -fx-background-color: #4154f1;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 10px 20px;
+    -fx-font-size: 14px;
+}
+
+.status-message {
+    -fx-font-size: 14px;
+    -fx-padding: 5px 0;
+}
+
+
+/* User List Tab Specific Styles */
+.custom-tab {
+    -fx-background-color: #f8f9fa;
+}
+
+.custom-tab:selected {
+    -fx-background-color: white;
+}
+
+.search-filter-container {
+    -fx-padding: 10px;
+    -fx-background-color: #f1f3f5;
+    -fx-background-radius: 5px;
+}
+
+.search-field {
+    -fx-pref-width: 250px;
+    -fx-pref-height: 35px;
+    -fx-background-radius: 4px;
+    -fx-border-color: #ced4da;
+    -fx-border-radius: 4px;
+    -fx-prompt-text-fill: #adb5bd;
+}
+
+.filter-combo {
+    -fx-pref-width: 200px;
+    -fx-pref-height: 35px;
+    -fx-background-radius: 4px;
+}
+
+.user-list-view {
+    -fx-background-color: white;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 4px;
+    -fx-padding: 5px;
+}
+
+.user-list-view .list-cell {
+    -fx-padding: 10px;
+    -fx-border-color: #e9ecef;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.user-list-view .list-cell:filled:hover {
+    -fx-background-color: #f1f3f5;
+}
+
+.user-list-view .list-cell:filled:selected {
+    -fx-background-color: #e2e6ff;
+}
+
+/* Status message (matches other pages) */
+.status-message {
+    -fx-text-fill: #495057;
+    -fx-font-size: 14px;
+    -fx-padding: 5px 0;
+}
+
+.status-message.error {
+    -fx-text-fill: #dc3545;
+}
+
+.status-message.success {
+    -fx-text-fill: #28a745;
+}

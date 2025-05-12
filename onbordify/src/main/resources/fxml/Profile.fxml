@@ -10,42 +10,43 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane styleClass="background" stylesheets="/css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Profile">
+<AnchorPane styleClass="background" stylesheets="/css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Profile">
 
 
     <ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
 
-            <VBox alignment="CENTER" spacing="20" style="-fx-padding: 20;" stylesheets="@../css/style.css">
-                <!-- Titre et rôle -->
-                <HBox alignment="CENTER" spacing="20">
-                    <Label styleClass="welcome-label" text="My Profil">
+        <VBox alignment="CENTER" spacing="20" style="-fx-padding: 20;" stylesheets="@../css/style.css">
+            <!-- Titre et rôle -->
+            <HBox alignment="CENTER" spacing="20">
+                <Label styleClass="welcome-label" text="My Profil">
 
-                    </Label>
-                    <Label fx:id="role" text="Label" />
-                </HBox>
+                </Label>
+                <Label fx:id="role" text="Label" />
+            </HBox>
 
-                <!-- Image de profil (Cliquable pour changer l'image) -->
-                <ImageView fx:id="image" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand; -fx-border-color: gray; -fx-border-width: 2px; -fx-padding: 5px;" />
+            <!-- Image de profil (Cliquable pour changer l'image) -->
+            <ImageView fx:id="image" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand; -fx-border-color: gray; -fx-border-width: 2px; -fx-padding: 5px;" />
 
-                <!-- Champs pour les informations utilisateur -->
-                <TextField fx:id="nomField" disable="true" promptText="Nom" styleClass="text-field" />
-                <TextField fx:id="prenomField" disable="true" promptText="Prénom" styleClass="text-field" />
-                <TextField fx:id="emailField" disable="true" promptText="Email" styleClass="text-field" />
+            <!-- Champs pour les informations utilisateur -->
+            <TextField fx:id="nomField" disable="true" promptText="Nom" styleClass="text-field" />
+            <TextField fx:id="prenomField" disable="true" promptText="Prénom" styleClass="text-field" />
+            <TextField fx:id="emailField" disable="true" promptText="Email" styleClass="text-field" />
 
-                <HBox alignment="CENTER" spacing="20">
-                    <DatePicker fx:id="dateNaissanceField" disable="true" promptText="Date de naissance" styleClass="date-picker" />
-                    <TextField fx:id="cinField" disable="true" promptText="CIN" styleClass="text-field" />
-                </HBox>
+            <HBox alignment="CENTER" spacing="20">
+                <DatePicker fx:id="dateNaissanceField" disable="true" promptText="Date de naissance" styleClass="date-picker" />
+                <TextField fx:id="cinField" disable="true" promptText="CIN" styleClass="text-field" />
+                <TextField fx:id="numField" disable="true" promptText="Numero phone" styleClass="text-field" />
+            </HBox>
 
-                <!-- Boutons -->
-                <HBox alignment="CENTER" spacing="20">
-                    <Button fx:id="saveButton" onAction="#handleSave" styleClass="button" text="Save changes" />
+            <!-- Boutons -->
+            <HBox alignment="CENTER" spacing="20">
+                <Button fx:id="saveButton" onAction="#handleSave" styleClass="button" text="Save changes" />
 
-                </HBox>
+            </HBox>
 
-                <!-- Message d'erreur ou de succès -->
-                <Label fx:id="messageLabel" styleClass="error-message" />
-            </VBox>
+            <!-- Message d'erreur ou de succès -->
+            <Label fx:id="messageLabel" styleClass="error-message" />
+        </VBox>
 
     </ScrollPane>
 </AnchorPane>

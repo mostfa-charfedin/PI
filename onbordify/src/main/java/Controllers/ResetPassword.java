@@ -1,6 +1,7 @@
 package Controllers;
 
 import Services.EmailService;
+import Services.SMSService;
 import Services.UserService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,23 +23,23 @@ public class ResetPassword {
     @FXML
     private Button resetButton;
 
-    
+
 
 
     EmailService emailService = new EmailService();
     UserService userService = new UserService();
-
+    SMSService smsService = new SMSService();
     @FXML
     public void initialize() {
 
-            emailReset.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (!isValidEmail(newValue)) {
-                    messageLabel.setText("Please enter a valid email address.");
-                    messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
-                } else {
-                    this.messageLabel.setText("");
-                }
-            });
+        emailReset.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!isValidEmail(newValue)) {
+                messageLabel.setText("Please enter a valid email address.");
+                messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
+            } else {
+                this.messageLabel.setText("");
+            }
+        });
 
 
     }
@@ -59,17 +60,17 @@ public class ResetPassword {
             return;
         }
         try {
-        boolean emailSent = sendResetEmail(email);
-        if (emailSent) {
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/verifierCode.fxml"));
+            boolean emailSent = sendResetEmail(email);
+            if (emailSent) {
+                smsService.sendSMS("+21652148247", "you are changing your password");
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/verifierCode.fxml"));
                 Parent root = loader.load();
-            messageLabel.getScene().setRoot(root);
+                messageLabel.getScene().setRoot(root);
 
-        } else {
-            messageLabel.setText("Erreur : l'email n'a pas pu être envoyé.");
-            messageLabel.setStyle("-fx-text-fill: #ff0000;"); // Rouge pour les erreurs
-        }
+            } else {
+                messageLabel.setText("Erreur : l'email n'a pas pu être envoyé.");
+                messageLabel.setStyle("-fx-text-fill: #ff0000;"); // Rouge pour les erreurs
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
