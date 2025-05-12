@@ -23,8 +23,6 @@
             <Button fx:id="btnPage1" styleClass="nav-button" text="Profil" />
             <Button fx:id="btnPage4" styleClass="nav-button" text="Projet" />
             <Button fx:id="btnPage5" styleClass="nav-button" text="Program BE" />
-            <Button fx:id="btnPage65" styleClass="nav-button" text="ProgramStat" />
-
             <Button fx:id="btnPage7" styleClass="nav-button" text="Ressources" />
             <Button fx:id="btnPage61" styleClass="nav-button" text="Complaint" />
             <Button fx:id="btnPage62" styleClass="nav-button" text="Post" />
