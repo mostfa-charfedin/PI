@@ -75,7 +75,7 @@ public class UserService implements CrudInterface<User> {
 
     @Override
     public void create(User obj) throws SQLException {
-        String sql = "INSERT INTO user (nom, prenom, email, cin, dateNaissance, role, password, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO user (nom, prenom, email, cin, dateNaissance, role, password, image_url,num_phone) VALUES (?, ?, ?, ?, ?, ?, ?,?, ?)";
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, obj.getNom());
             stmt.setString(2, obj.getPrenom());
@@ -93,7 +93,7 @@ public class UserService implements CrudInterface<User> {
             // Définir l'image par défaut ici
             String defaultImageUrl = "/assets/logo.png"; // Remplace par l'URL de ton image par défaut
             stmt.setString(8, defaultImageUrl);
-
+            stmt.setString(9, String.valueOf( obj.getNum_phone()));
             stmt.executeUpdate();
             String emailBody = "Hello " + obj.getNom() + "\n" + " Account created successfully."
                     + "\n" + "Email : " + obj.getEmail() + "\n"+
@@ -110,7 +110,7 @@ public class UserService implements CrudInterface<User> {
 
     @Override
     public void update(User obj) throws SQLException {
-        String sql = "UPDATE user SET nom = ?, prenom = ?, email = ?, cin = ?, dateNaissance = ?, role = ?, image_url = ? , status = ? WHERE id = ?";
+        String sql = "UPDATE user SET nom = ?, prenom = ?, email = ?, cin = ?, dateNaissance = ?, role = ?, image_url = ? , status = ?, num_phone =? WHERE id = ?";
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, obj.getNom());
             stmt.setString(2, obj.getPrenom());
@@ -128,8 +128,8 @@ public class UserService implements CrudInterface<User> {
             String imageUrl = obj.getImage_url() != null ? obj.getImage_url() : "/assets/logo.png";
             stmt.setString(7, imageUrl);
             stmt.setString(8, obj.getStatus().toString());
-            stmt.setInt(9, obj.getId());
-
+            stmt.setString(9, String.valueOf(obj.getNum_phone()));
+            stmt.setInt(10, obj.getId());
             int rowsUpdated = stmt.executeUpdate();
             System.out.println(obj);
         } catch (SQLException e) {
@@ -173,6 +173,7 @@ public class UserService implements CrudInterface<User> {
             user.setDateNaissance(rs.getDate("dateNaissance"));
             user.setRole(Role.valueOf(rs.getObject("role").toString()));
             user.setStatus(Statut.valueOf(rs.getObject("status").toString()));
+            user.setNum_phone(rs.getInt("num_phone"));
             users.add(user);
         }
         return users;
@@ -211,6 +212,7 @@ public class UserService implements CrudInterface<User> {
             user.setDateNaissance(rs.getDate("dateNaissance"));
             user.setRole(Role.valueOf(rs.getObject("role").toString()));
             user.setStatus(Statut.valueOf(rs.getObject("status").toString()));
+            user.setNum_phone(rs.getInt("num_phone"));
         }
         return user;
     }
@@ -246,6 +248,7 @@ public class UserService implements CrudInterface<User> {
                 user.setRole(Role.valueOf(rs.getObject("role").toString()));
                 user.setImage_url(rs.getString("image_url"));
                 user.setStatus(Statut.valueOf(rs.getObject("status").toString()));
+                user.setNum_phone(rs.getInt("num_phone"));
             }
             return user;
         } catch (SQLException e) {

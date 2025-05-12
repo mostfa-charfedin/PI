@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane stylesheets="@/css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ScoreControl">
+<AnchorPane stylesheets="@/fxml/scoreCss.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ScoreControl">
+
+
     <children>
-        <!-- ListView -->
-        <ListView fx:id="listview" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60" />
-        <Label fx:id="messagelist" layoutX="19.0" layoutY="471.0" prefHeight="26.0" prefWidth="13.0" />
-      <HBox layoutX="26.0" layoutY="21.0" prefHeight="32.0" spacing="34.0">
-         <children>
-              <Label prefHeight="26.0" prefWidth="83.0" text="Search bar" />
-              <!-- Search Field -->
-              <TextField fx:id="rechercheFild" prefHeight="26.0" prefWidth="170.0" />
-              <ComboBox fx:id="quizFilter" onAction="#filterByQuiz" prefHeight="26.0" prefWidth="88.0" />
-              <!-- Delete Button -->
-              <Button fx:id="deleteButton" onAction="#deleteScore" prefHeight="26.0" prefWidth="95.0" text="Delete" />
-         </children>
-      </HBox>
+        <!-- Main Content Container -->
+        <VBox alignment="TOP_CENTER" spacing="20" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
+            <!-- Title Section -->
+            <Label styleClass="section-title" text="Score Management" />
+
+            <!-- Search and Filter Section -->
+            <HBox alignment="CENTER_LEFT" spacing="20" styleClass="search-filter-container">
+                <Label styleClass="form-label" text="Search Scores" />
+                <TextField fx:id="rechercheFild" styleClass="search-field" promptText="Search scores..." />
+                <ComboBox fx:id="quizFilter" styleClass="filter-combo" onAction="#filterByQuiz" promptText="Filter by quiz" />
+                <Button fx:id="deleteButton" styleClass="danger-button" onAction="#deleteScore" text="Delete Selected" />
+            </HBox>
+
+            <!-- Score List -->
+            <ListView fx:id="listview" styleClass="user-list-view" AnchorPane.bottomAnchor="80" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="120" />
+
+            <!-- Status Message -->
+            <Label fx:id="messagelist" styleClass="status-message" />
+        </VBox>
     </children>
 </AnchorPane>

@@ -13,10 +13,24 @@ public class User {
     private Role role ;
     private String image_url;
     private Statut status;
-    private String num_phone;
+    private int num_phone;
     public User(){}
 
-    public User(String nom,String prenom, String email,  int cin, Date dateNaissance, Role role, String image_url, Statut status) {
+    public User(int id, String nom, String prenom, String email, int cin, Date dateNaissance, String password, Role role, String image_url, Statut status, int num_phone) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.cin = cin;
+        this.dateNaissance = dateNaissance;
+        this.password = password;
+        this.role = role;
+        this.image_url = image_url;
+        this.status = status;
+        this.num_phone = num_phone;
+    }
+
+    public User(String nom, String prenom, String email, int cin, Date dateNaissance, Role role, String image_url, Statut status) {
         this.nom = nom;
         this.email = email;
         this.prenom = prenom;
@@ -63,19 +77,27 @@ public class User {
 
     }
 /*sans password car admin ne peut pas changer mot de passe de l'utilisateur*/
-    public User(String nom, String prenom, String email, int cin, Date dateNaissance, Role role) {
+    public User(String nom, String prenom, String email, int cin, Date dateNaissance, Role role, int num_phone) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
         this.cin = cin;
         this.dateNaissance = dateNaissance;
-        this.password = password;
         this.role = role;
+        this.num_phone = num_phone;
     }
 
     public Statut getStatus() {
         return status;
+    }
+
+    public int getNum_phone() {
+        return num_phone;
+    }
+
+    public void setNum_phone(int num_phone) {
+        this.num_phone = num_phone;
     }
 
     public void setStatus(Statut status) {

@@ -40,6 +40,9 @@ public class EditUser {
     private TextField nomMod;
 
     @FXML
+    private TextField num_phoneMod;
+
+    @FXML
     private TextField prenomMod;
 
     @FXML
@@ -47,6 +50,9 @@ public class EditUser {
 
     @FXML
     private VBox cinErrorBox;
+
+    @FXML
+    private VBox numErrorBox;
 
     @FXML
     private VBox nomErrorBox;
@@ -76,11 +82,23 @@ public class EditUser {
         cinMod.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) { // Seuls les chiffres sont autorisés
                 cinMod.setText(oldValue); // Rejeter la nouvelle valeur
-                showError(cinErrorBox, "Le CIn doit contenir uniquement des chiffres.");
+                showError(cinErrorBox, "Le Cin doit contenir uniquement des chiffres.");
             } else {
                 clearError(cinErrorBox);
             }
         });
+
+
+        // Contrôle de saisie pour le CIn (uniquement des nombres)
+        cinMod.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) { // Seuls les chiffres sont autorisés
+                num_phoneMod.setText(oldValue); // Rejeter la nouvelle valeur
+                showError(numErrorBox, "Le numero telephone doit contenir uniquement des chiffres.");
+            } else {
+                clearError(numErrorBox);
+            }
+        });
+
 
         // Contrôle de saisie pour la Date de Naissance
         dateMod.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -159,7 +177,7 @@ public class EditUser {
     @FXML
     void updateUser(ActionEvent event) {
         try {
-            if (cinMod.getText().isEmpty() || nomMod.getText().isEmpty() || prenomMod.getText().isEmpty() || emailMod.getText().isEmpty() || dateMod.getValue() == null || roleMod.getValue() == null) {
+            if (cinMod.getText().isEmpty() || nomMod.getText().isEmpty()|| num_phoneMod.getText().isEmpty() || prenomMod.getText().isEmpty() || emailMod.getText().isEmpty() || dateMod.getValue() == null || roleMod.getValue() == null) {
                 messageMod.setText("Please fill in all fields.");
                 return;
             }
@@ -180,6 +198,7 @@ public class EditUser {
             Newuser.setImage_url(selectedUser.getImage_url());
             Newuser.setId(selectedUser.getId());
             Newuser.setStatus(StatusCompte.getValue());
+            Newuser.setNum_phone(Integer.parseInt( num_phoneMod.getText()));
             this.userservice.update(Newuser);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -231,7 +250,7 @@ public class EditUser {
             StatusCompte.setItems(FXCollections.observableArrayList(Statut.values()));
         }
         roleMod.setValue(user.getRole());
-
+        num_phoneMod.setText(String.valueOf(user.getNum_phone()));
         StatusCompte.setValue(user.getStatus());
     }
 
@@ -249,9 +268,11 @@ public class EditUser {
         this.prenomMod.clear();
         this.emailMod.clear();
         this.cinMod.clear();
+        this.num_phoneMod.clear();
         this.dateMod.setValue(null);
         this.roleMod.setItems(null);
         this.StatusCompte.setItems(null);
         this.selectedUser= null;
+
     }
 }
