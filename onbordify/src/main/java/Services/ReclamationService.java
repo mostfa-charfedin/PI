@@ -8,11 +8,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ReclamationService implements CrudInterface<Reclamation> {
     static Connection conn = MyDb.getMydb().getConnection();
     UserSession session = UserSession.getInstance();
-    // Ajoutez cette classe interne à ReclamationService
+
     public static class Stats {
         public long totalCount;
         public long resolvedCount;
@@ -27,7 +26,6 @@ public class ReclamationService implements CrudInterface<Reclamation> {
         }
     }
 
-    // Ajoutez cette méthode à ReclamationService
     public Stats getComplaintStats() {
         Stats stats = new Stats(0, 0, 0, 0);
 
@@ -55,6 +53,7 @@ public class ReclamationService implements CrudInterface<Reclamation> {
 
         return stats;
     }
+
     public void add(Reclamation reclamation) {
         String query = "INSERT INTO complaint (user_id, subject, content, created_at) VALUES (?, ?, ?, ?)";
         try {
@@ -107,27 +106,12 @@ public class ReclamationService implements CrudInterface<Reclamation> {
     }
 
     public void update(Reclamation reclamation) {
-        String query = "UPDATE complaint SET subject=?, content=?, status=?, response=?, responded_by_id=? WHERE id=?";
+        String query = "UPDATE complaint SET subject=?, content=? WHERE id=?";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, reclamation.getSubject());
             ps.setString(2, reclamation.getContent());
-
-            if (reclamation.getStatus() != null) {
-                ps.setBoolean(3, reclamation.getStatus());
-            } else {
-                ps.setNull(3, Types.BOOLEAN);
-            }
-
-            ps.setString(4, reclamation.getResponse());
-
-            if (reclamation.getRespondedById() != null) {
-                ps.setInt(5, reclamation.getRespondedById());
-            } else {
-                ps.setNull(5, Types.INTEGER);
-            }
-
-            ps.setInt(6, reclamation.getId());
+            ps.setInt(3, reclamation.getId());
 
             int rowsUpdated = ps.executeUpdate();
             if (rowsUpdated == 0) {
@@ -206,6 +190,5 @@ public class ReclamationService implements CrudInterface<Reclamation> {
             System.out.println("Update Status Error: " + e.getMessage());
             throw new RuntimeException("Failed to update complaint status", e);
         }
-
     }
 }

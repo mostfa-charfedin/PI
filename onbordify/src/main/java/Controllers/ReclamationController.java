@@ -110,15 +110,27 @@ public class ReclamationController {
         }
 
         if (!spamService.traiterReclamation(content)) {
-            Reclamation updatedComplaint = reclamationService.getById(selectedComplaintId);
-            if (updatedComplaint != null) {
+            // Récupérer la réclamation existante pour préserver les autres champs
+            Reclamation existingComplaint = reclamationService.getById(selectedComplaintId);
+            if (existingComplaint != null) {
+                // Créer une copie de la réclamation existante
+                Reclamation updatedComplaint = new Reclamation();
+                updatedComplaint.setId(existingComplaint.getId());
+                updatedComplaint.setUserId(existingComplaint.getUserId());
                 updatedComplaint.setSubject(subject);
                 updatedComplaint.setContent(content);
+                updatedComplaint.setStatus(existingComplaint.getStatus());
+                updatedComplaint.setResponse(existingComplaint.getResponse());
+                updatedComplaint.setRespondedById(existingComplaint.getRespondedById());
+                updatedComplaint.setCreatedAt(existingComplaint.getCreatedAt());
+
                 reclamationService.update(updatedComplaint);
                 showAlert("Success", "Complaint updated successfully!");
                 loadComplaints();
                 clearFields();
                 selectedComplaintId = -1;
+            } else {
+                showAlert("Error", "Selected complaint not found.");
             }
         }
     }
