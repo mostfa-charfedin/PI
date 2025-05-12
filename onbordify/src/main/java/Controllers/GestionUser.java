@@ -20,83 +20,57 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-
 public class GestionUser {
     UserService userservice = new UserService();
 
-    @FXML
-    private TextField cin;
+    @FXML private TextField cin;
+    @FXML private Label message;
+    @FXML private Label messagelist;
+    @FXML private DatePicker date;
+    @FXML private TextField email;
+    @FXML private ListView<String> listview;
+    @FXML private TextField nom;
+    @FXML private TextField prenom;
+    @FXML private TextField num_phone;
+    @FXML private TextField rechercheFildMod;
+    @FXML private ComboBox<Role> role;
+    @FXML private ComboBox<Role> roleFilter;
+    @FXML private VBox prenomErrorBox;
+    @FXML private VBox nomErrorBox;
+    @FXML private VBox numErrorBox;
+    @FXML private VBox emailErrorBox;
+    @FXML private VBox cinErrorBox;
+    @FXML private VBox dateNaissanceErrorBox;
 
-    @FXML
-    private Label message;
-
-    @FXML
-    private Label messagelist;
-
-    @FXML
-    private DatePicker date;
-
-    @FXML
-    private TextField email;
-
-    @FXML
-    private ListView<String> listview;
-
-    @FXML
-    private TextField nom;
-
-    @FXML
-    private TextField prenom;
-
-    @FXML
-    private TextField num_phone;
-
-    @FXML
-    private TextField rechercheFildMod;
-
-    @FXML
-    private ComboBox<Role> role;
-
-    @FXML
-    private ComboBox<Role> roleFilter;
-
-    @FXML
-    private VBox prenomErrorBox;
-    @FXML
-    private VBox nomErrorBox;
-    @FXML
-    private VBox numErrorBox;
-    @FXML
-    private VBox emailErrorBox;
-    @FXML
-    private VBox cinErrorBox;
-    @FXML
-    private VBox dateNaissanceErrorBox;
-
-
-
-    //  private final String LOGIN_URL = "http://localhost:8080/users/login";
-
-    private User selectedUser ;
+    private User selectedUser;
     private ObservableList<String> userList;
     private FilteredList<String> filteredList;
 
     @FXML
     public void initialize() {
+        setupRoleComboBoxes();
+        loadUsers(null);
+        setupSearchListener();
+        setupListViewSelection();
+        setupInputValidators();
+    }
 
+    private void setupRoleComboBoxes() {
         role.setItems(FXCollections.observableArrayList(Role.values()));
         ObservableList<Role> roles = FXCollections.observableArrayList(Role.values());
         roleFilter.setItems(roles);
         roleFilter.getItems().add(0, null);
         roleFilter.setValue(null);
-        loadUsers(null);
-
         roleFilter.setOnAction(event -> filterByRole());
-        // Listener pour la recherche en temps réel
+    }
+
+    private void setupSearchListener() {
         rechercheFildMod.textProperty().addListener((observable, oldValue, newValue) -> {
             chercherUser();
         });
+    }
 
+    private void setupListViewSelection() {
         listview.setOnMouseClicked(event -> {
             int selectedIndex = listview.getSelectionModel().getSelectedIndex();
             if (selectedIndex >= 0) {
@@ -107,72 +81,75 @@ public class GestionUser {
                 }
             }
         });
+    }
 
-        // Contrôle de saisie pour le Cin
+    private void setupInputValidators() {
+        // CIN validation (8 digits)
         cin.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 cin.setText(oldValue);
-                showError(cinErrorBox, "The Cin should contain only numbers.");
+                showError(cinErrorBox, "CIN must contain only numbers");
             } else if (newValue.length() > 8) {
                 cin.setText(oldValue);
-                showError(cinErrorBox, "The Cin should not exceed 8 digits.");
+                showError(cinErrorBox, "CIN must be exactly 8 digits");
             } else {
                 clearError(cinErrorBox);
             }
         });
 
-
+        // Phone number validation (8 digits)
         num_phone.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 num_phone.setText(oldValue);
-                showError(numErrorBox, "The Number phone should contain only numbers.");
+                showError(numErrorBox, "Phone must contain only numbers");
             } else if (newValue.length() > 8) {
                 num_phone.setText(oldValue);
-                showError(numErrorBox, "The Number phone should not exceed 8 digits.");
+                showError(numErrorBox, "Phone must be exactly 8 digits");
             } else {
                 clearError(numErrorBox);
             }
         });
 
-        // Contrôle de saisie pour le Nom (uniquement des lettres)
+        // Name validation (letters only)
         nom.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("[a-zA-Z ]*")) { // Seules les lettres et espaces sont autorisés
-                nom.setText(oldValue); // Rejeter la nouvelle valeur
-                showError(nomErrorBox, "The name must contain only letters.");
+            if (!newValue.matches("[a-zA-ZÀ-ÿ\\s]*")) {
+                nom.setText(oldValue);
+                showError(nomErrorBox, "Name must contain only letters");
+            } else if (newValue.length() > 50) {
+                showError(nomErrorBox, "Name too long (max 50 characters)");
             } else {
                 clearError(nomErrorBox);
             }
         });
 
-        // Contrôle de saisie pour le Prénom
+        // First name validation (letters only)
         prenom.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("[a-zA-Z ]*")) { // Seules les lettres et espaces sont autorisés
-                prenom.setText(oldValue); // Rejeter la nouvelle valeur
-                showError(prenomErrorBox, "The first name must contain only letters.");
+            if (!newValue.matches("[a-zA-ZÀ-ÿ\\s]*")) {
+                prenom.setText(oldValue);
+                showError(prenomErrorBox, "First name must contain only letters");
+            } else if (newValue.length() > 50) {
+                showError(prenomErrorBox, "First name too long (max 50 characters)");
             } else {
                 clearError(prenomErrorBox);
             }
         });
 
-        // Contrôle de saisie pour l'Email
+        // Email validation
         email.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!isValidEmail(newValue)) {
-                showError(emailErrorBox, "Please enter a valid email address.");
+                showError(emailErrorBox, "Invalid email format");
             } else {
                 clearError(emailErrorBox);
             }
         });
 
-
-        // Contrôle de saisie pour la Date de Naissance
+        // Birth date validation (minimum age 18)
         date.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                LocalDate today = LocalDate.now();
-                int age = Period.between(newValue, today).getYears();
-
+                int age = Period.between(newValue, LocalDate.now()).getYears();
                 if (age < 18) {
-                    date.setValue(oldValue); // Rétablir l'ancienne valeur
-                    showError(dateNaissanceErrorBox, "The employee must be at least 18 years old.");
+                    date.setValue(oldValue);
+                    showError(dateNaissanceErrorBox, "Minimum age is 18 years");
                 } else {
                     clearError(dateNaissanceErrorBox);
                 }
@@ -180,14 +157,11 @@ public class GestionUser {
         });
     }
 
-    // Méthode pour valider le format de l'email
     private boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        return pattern.matcher(email).matches();
+        return Pattern.compile(emailRegex).matcher(email).matches();
     }
 
-    // Méthode pour afficher un message d'erreur sous un champ
     private void showError(VBox errorBox, String message) {
         errorBox.getChildren().clear();
         Label errorLabel = new Label(message);
@@ -195,7 +169,6 @@ public class GestionUser {
         errorBox.getChildren().add(errorLabel);
     }
 
-    // Méthode pour effacer un message d'erreur
     private void clearError(VBox errorBox) {
         errorBox.getChildren().clear();
     }
@@ -208,13 +181,13 @@ public class GestionUser {
                 userList = FXCollections.observableArrayList();
             }
 
-            // Appliquer un filtre par rôle si nécessaire
             List<User> filteredUsers = users.stream()
                     .filter(user -> roleFilter == null || user.getRole() == roleFilter)
                     .collect(Collectors.toList());
 
             userList.setAll(filteredUsers.stream()
-                    .map(user -> user.getNom() + " | " + user.getPrenom() + " | " + user.getCin() + " | " + user.getEmail())
+                    .map(user -> String.format("%s | %s | %d | %s",
+                            user.getNom(), user.getPrenom(), user.getCin(), user.getEmail()))
                     .collect(Collectors.toList()));
 
             if (filteredList == null) {
@@ -230,108 +203,127 @@ public class GestionUser {
 
     @FXML
     public void filterByRole() {
-        Role selectedRole = roleFilter.getValue();
-        loadUsers(selectedRole);
+        loadUsers(roleFilter.getValue());
     }
-
-
-
-
 
     @FXML
     void addUser(ActionEvent event) {
-        // Vérifier que tous les champs sont remplis
-        if (cin.getText().isEmpty() || nom.getText().isEmpty() || prenom.getText().isEmpty()|| num_phone.getText().isEmpty()
-                || email.getText().isEmpty() || date.getValue() == null || role.getValue() == null) {
-            message.setText("Please fill in all fields.");
-            return; // Arrêter l'exécution si un champ est vide
-        }
-
-        // Vérifier l'email
-        if (!isValidEmail(email.getText())) {
-            showError(emailErrorBox, "Please enter a valid email address.");
+        if (!validateAllFields()) {
+            message.setText("Please correct the errors in the form");
+            message.setStyle("-fx-text-fill: red;");
             return;
         }
 
-        // Vérifier que CIN est un entier valide
-        int cinValue;
         try {
-            cinValue = Integer.parseInt(cin.getText());
-        } catch (NumberFormatException e) {
-            showError(cinErrorBox, "CIN must be a valid number.");
-            return;
-        }
+            User user = new User(
+                    nom.getText().trim(),
+                    prenom.getText().trim(),
+                    email.getText().trim(),
+                    Integer.parseInt(cin.getText().trim()),
+                    java.sql.Date.valueOf(date.getValue()),
+                    role.getValue(),
+                    Integer.parseInt(num_phone.getText().trim())
+            );
 
-        // Création de l'objet utilisateur
-        User user = new User(nom.getText(), prenom.getText(), email.getText(),
-                Integer.parseInt(cin.getText()), java.sql.Date.valueOf(date.getValue()),
-                role.getValue(),Integer.parseInt( num_phone.getText()));
-
-        try {
             userservice.create(user);
             reset();
             initialize();
             message.setText("User created successfully");
             message.setStyle("-fx-text-fill: #4CAF50;");
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText("An error occurred: " + e.getMessage());
-            alert.showAndWait();
-            e.printStackTrace(); // Afficher l'erreur complète dans la console
+            showAlert("Error", "An error occurred: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
+    private boolean validateAllFields() {
+        boolean isValid = true;
 
+        // Check required fields
+        if (cin.getText().trim().isEmpty()) {
+            showError(cinErrorBox, "CIN is required");
+            isValid = false;
+        }
+
+        if (nom.getText().trim().isEmpty()) {
+            showError(nomErrorBox, "Name is required");
+            isValid = false;
+        }
+
+        if (prenom.getText().trim().isEmpty()) {
+            showError(prenomErrorBox, "First name is required");
+            isValid = false;
+        }
+
+        if (email.getText().trim().isEmpty()) {
+            showError(emailErrorBox, "Email is required");
+            isValid = false;
+        } else if (!isValidEmail(email.getText().trim())) {
+            showError(emailErrorBox, "Invalid email format");
+            isValid = false;
+        }
+
+        if (num_phone.getText().trim().isEmpty()) {
+            showError(numErrorBox, "Phone is required");
+            isValid = false;
+        }
+
+        if (date.getValue() == null) {
+            showError(dateNaissanceErrorBox, "Birth date is required");
+            isValid = false;
+        }
+
+        if (role.getValue() == null) {
+            showAlert("Error", "Role is required");
+            isValid = false;
+        }
+
+        return isValid;
+    }
 
     @FXML
     void chercherUser() {
-        // Récupérer le texte saisi dans le champ de recherche
         String searchText = rechercheFildMod.getText().toLowerCase();
-
-        // Appliquer le filtre sur la liste des utilisateurs
-        filteredList.setPredicate(userString -> {
-            if (searchText == null || searchText.isEmpty()) {
-                return true; // Afficher tous les utilisateurs si le champ de recherche est vide
-            }
-
-            // Vérifier si le nom, le prénom ou le CIN correspond au texte de recherche
-            return userString.toLowerCase().contains(searchText);
-        });
+        filteredList.setPredicate(userString ->
+                searchText == null || searchText.isEmpty() ||
+                        userString.toLowerCase().contains(searchText)
+        );
     }
 
     @FXML
     void deleteUser(ActionEvent event) {
         if (selectedUser == null) {
-            messagelist.setText("Please Select a user");
+            messagelist.setText("Please select a user first");
             return;
         }
+
         try {
             userservice.delete(selectedUser.getId());
             loadUsers(roleFilter.getValue());
-            messagelist.setText("User deleted.");
+            messagelist.setText("User deleted successfully");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            showAlert("Error", "Failed to delete user: " + e.getMessage());
+            e.printStackTrace();
         }
-
     }
 
     @FXML
     void updateUser(ActionEvent event) {
         if (selectedUser == null) {
-            messagelist.setText("Select a user to edit.");
+            messagelist.setText("Please select a user to edit");
             return;
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/EditUser.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editUser.fxml"));
             Parent root = loader.load();
 
             EditUser editUserController = loader.getController();
             editUserController.setUserData(selectedUser);
-            editUserController.setGestionUserController(this); // Pass GestionUser instance
+            editUserController.setGestionUserController(this);
             nom.getScene().setRoot(root);
         } catch (IOException e) {
+            showAlert("Error", "Failed to load edit form: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -343,17 +335,31 @@ public class GestionUser {
         messagelist.getScene().setRoot(root);
     }
 
-
-
     void reset() {
-        this.nom.clear();
-        this.prenom.clear();
-        this.email.clear();
-        this.cin.clear();
-        this.num_phone.clear();
-        this.date.setValue(null);
-        this.role.setItems(null);
-        this.selectedUser= null;
+        nom.clear();
+        prenom.clear();
+        email.clear();
+        cin.clear();
+        num_phone.clear();
+        date.setValue(null);
+        role.setValue(null);
+        selectedUser = null;
+        clearAllErrors();
+    }
+
+    private void clearAllErrors() {
+        clearError(cinErrorBox);
+        clearError(nomErrorBox);
+        clearError(prenomErrorBox);
+        clearError(emailErrorBox);
+        clearError(numErrorBox);
+        clearError(dateNaissanceErrorBox);
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
-

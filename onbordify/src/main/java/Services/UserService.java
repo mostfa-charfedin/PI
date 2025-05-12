@@ -140,30 +140,14 @@ public class UserService implements CrudInterface<User> {
 
 
     public Boolean updatePassword(String code, String newPassword) throws SQLException {
-        // Trouver l'utilisateur à partir du code
-        User user = findUserByCode(code);
-        if (user == null) {
-            return false; // Aucun utilisateur associé au code
-        }
 
-        // 1. Mettre à jour le mot de passe
-        String sqlUpdate = "UPDATE user SET password = ? WHERE id = ?";
-        PreparedStatement stmtUpdate = con.prepareStatement(sqlUpdate);
-        stmtUpdate.setString(1, passwordEncoder.encode(newPassword));
-        stmtUpdate.setInt(2, user.getId());
-        stmtUpdate.executeUpdate();
-
-        // 2. Supprimer le code de la table code
-        String sqlDelete = "DELETE FROM code WHERE code = ?";
-        PreparedStatement stmtDelete = con.prepareStatement(sqlDelete);
-        stmtDelete.setString(1, code);
-        stmtDelete.executeUpdate();
-
+        String sql = "update user set password = ? where id = ?";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setString(1, passwordEncoder.encode(newPassword));
+        stmt.setInt(2, findUserByCode(code).getId());
+        stmt.executeUpdate();
         return true;
     }
-
-
-
 
     @Override
     public void delete(int id) throws Exception {

@@ -1,0 +1,57 @@
+/* style.css */
+.root {
+    -fx-background-color: #f5f7fa;
+}
+
+/* Titres */
+.title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #7f8c8d;
+}
+
+/* Image Responsive */
+.image-container {
+    -fx-padding: 20px;
+}
+
+/* Grille Adaptative */
+.grid-pane {
+    -fx-padding: 0 20px;
+}
+
+/* Boutons Modernes */
+.primary-btn {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-min-width: 100px;
+}
+
+.success-btn {
+    -fx-background-color: #2ecc71;
+}
+
+.danger-btn {
+    -fx-background-color: #e74c3c;
+}
+
+/* Media Queries JavaFX */
+.stack-pane {
+    -fx-alignment: center;
+}
+
+@media (max-width: 600px) {
+    .grid-pane {
+        -fx-hgap: 10px;
+        -fx-vgap: 10px;
+    }
+
+    .text-field {
+        -fx-pref-width: 150px;
+    }
+}

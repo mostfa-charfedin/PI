@@ -40,6 +40,9 @@ public class EditUser {
     private TextField nomMod;
 
     @FXML
+    private TextField num_phoneMod;
+
+    @FXML
     private TextField prenomMod;
 
     @FXML
@@ -47,6 +50,9 @@ public class EditUser {
 
     @FXML
     private VBox cinErrorBox;
+
+    @FXML
+    private VBox numErrorBox;
 
     @FXML
     private VBox nomErrorBox;
@@ -76,11 +82,33 @@ public class EditUser {
         cinMod.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) { // Seuls les chiffres sont autorisés
                 cinMod.setText(oldValue); // Rejeter la nouvelle valeur
-                showError(cinErrorBox, "Le CIn doit contenir uniquement des chiffres.");
-            } else {
+                showError(cinErrorBox, "The Cin should contain only numbers..");
+            }
+            else if (newValue.length() > 8) {
+                cinMod.setText(oldValue);
+                showError(cinErrorBox, "The Cin should not exceed 8 digits.");
+            }
+            else {
                 clearError(cinErrorBox);
             }
         });
+
+
+        // Contrôle de saisie pour le CIn (uniquement des nombres)
+        num_phoneMod.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) { // Seuls les chiffres sont autorisés
+                num_phoneMod.setText(oldValue); // Rejeter la nouvelle valeur
+                showError(numErrorBox, "The Number phone should contain only numbers.");
+            }
+            else if (newValue.length() > 8) {
+                num_phoneMod.setText(oldValue);
+                showError(numErrorBox, "The Number phone should not exceed 8 digits.");
+            }
+            else {
+                clearError(numErrorBox);
+            }
+        });
+
 
         // Contrôle de saisie pour la Date de Naissance
         dateMod.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -101,7 +129,7 @@ public class EditUser {
         nomMod.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("[a-zA-Z ]*")) { // Seules les lettres et espaces sont autorisés
                 nomMod.setText(oldValue); // Rejeter la nouvelle valeur
-                showError(nomErrorBox, "Le nom ne doit contenir que des lettres.");
+                showError(nomErrorBox, "The name must contain only letters.");
             } else {
                 clearError(nomErrorBox);
             }
@@ -111,7 +139,7 @@ public class EditUser {
         prenomMod.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("[a-zA-Z ]*")) { // Seules les lettres et espaces sont autorisés
                 prenomMod.setText(oldValue); // Rejeter la nouvelle valeur
-                showError(prenomErrorBox, "Le prénom ne doit contenir que des lettres.");
+                showError(prenomErrorBox, "The first name must contain only letters.");
             } else {
                 clearError(prenomErrorBox);
             }
@@ -120,7 +148,7 @@ public class EditUser {
         // Contrôle de saisie pour l'Email (format valide)
         emailMod.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!isValidEmail(newValue)) { // Vérifier le format de l'email
-                showError(emailErrorBox, "Veuillez entrer une adresse email valide.");
+                showError(emailErrorBox, "Please enter a valid email address.");
             } else {
                 clearError(emailErrorBox);
             }
@@ -159,7 +187,7 @@ public class EditUser {
     @FXML
     void updateUser(ActionEvent event) {
         try {
-            if (cinMod.getText().isEmpty() || nomMod.getText().isEmpty() || prenomMod.getText().isEmpty() || emailMod.getText().isEmpty() || dateMod.getValue() == null || roleMod.getValue() == null) {
+            if (cinMod.getText().isEmpty() || nomMod.getText().isEmpty()|| num_phoneMod.getText().isEmpty() || prenomMod.getText().isEmpty() || emailMod.getText().isEmpty() || dateMod.getValue() == null || roleMod.getValue() == null) {
                 messageMod.setText("Please fill in all fields.");
                 return;
             }
@@ -180,6 +208,7 @@ public class EditUser {
             Newuser.setImage_url(selectedUser.getImage_url());
             Newuser.setId(selectedUser.getId());
             Newuser.setStatus(StatusCompte.getValue());
+            Newuser.setNum_phone(Integer.parseInt( num_phoneMod.getText()));
             this.userservice.update(Newuser);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -231,7 +260,7 @@ public class EditUser {
             StatusCompte.setItems(FXCollections.observableArrayList(Statut.values()));
         }
         roleMod.setValue(user.getRole());
-
+        num_phoneMod.setText(String.valueOf(user.getNum_phone()));
         StatusCompte.setValue(user.getStatus());
     }
 
@@ -249,9 +278,11 @@ public class EditUser {
         this.prenomMod.clear();
         this.emailMod.clear();
         this.cinMod.clear();
+        this.num_phoneMod.clear();
         this.dateMod.setValue(null);
         this.roleMod.setItems(null);
         this.StatusCompte.setItems(null);
         this.selectedUser= null;
+
     }
 }

@@ -1,153 +1,76 @@
-package Controllers;
+<?xml version="1.0" encoding="UTF-8"?>
 
-        import Services.UserService;
-        import javafx.fxml.FXML;
-        import javafx.fxml.FXMLLoader;
-        import javafx.scene.Parent;
-        import javafx.scene.control.*;
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-        import java.io.IOException;
-        import java.sql.SQLException;
-
-        public class verifierCode {
-
-        @FXML
-        private TextField codeField;
-
-        @FXML
-        private PasswordField confirmPasswordField;
-
-        @FXML
-        private Label messageLabel;
-
-        @FXML
-        private PasswordField newPasswordField;
-
-        @FXML
-        private Button resetButton;
-
-        UserService userService = new UserService();
-
-        @FXML
-        public void initialize() {
-
-        resetButton.setDisable(true);
-
-        codeField.textProperty().addListener((observable, oldValue, newValue) -> validateCode(newValue));
-        newPasswordField.textProperty().addListener((observable, oldValue, newValue) -> validatePassword(newValue));
-        confirmPasswordField.textProperty().addListener((observable, oldValue, newValue) -> validateConfirmPassword(newValue));
-        }
+<AnchorPane prefHeight="500.0" prefWidth="900.0"  stylesheets="@../fxml/userManagement.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.EditUser">
 
 
-        private void validateCode(String code) {
-        if (code.isEmpty()) {
-        messageLabel.setText("Veuillez entrer le code reçu par email.");
-        messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
+    <children>
+        <!-- Main Content Container -->
+        <VBox alignment="TOP_CENTER" spacing="20" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="80">
+            <!-- Title Section -->
+            <Label styleClass="section-title" text="Edit User Profile" />
 
-        } else {
-        messageLabel.setText("");
-        resetButton.setDisable(newPasswordField.getText().isEmpty() || confirmPasswordField.getText().isEmpty());
-        }
-        }
+            <!-- 3-Column Form Layout -->
+            <GridPane alignment="CENTER" hgap="30" vgap="15">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="33" />
+                    <ColumnConstraints percentWidth="33" />
+                    <ColumnConstraints percentWidth="33" />
+                </columnConstraints>
 
-        // Méthode pour valider le nouveau mot de passe
-        private void validatePassword(String password) {
-        if (password.isEmpty()) {
-        messageLabel.setText("Veuillez entrer un nouveau mot de passe.");
-        messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
-        resetButton.setDisable(true);
-        } else if (!isPasswordStrong(password)) {
-        messageLabel.setText("Le mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre.");
-        messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
-        resetButton.setDisable(true);
-        } else {
-        messageLabel.setText("");
-        resetButton.setDisable(codeField.getText().isEmpty() || confirmPasswordField.getText().isEmpty());
-        }
-        }
+                <!-- Personal Information -->
+                <Label text="Personal Information" styleClass="form-group-title" GridPane.columnSpan="3" />
 
-        // Méthode pour valider la confirmation du mot de passe
-        private void validateConfirmPassword(String confirmPassword) {
-        String newPassword = newPasswordField.getText();
+                <!-- Row 1 -->
+                <Label text="First Name *" styleClass="form-label required" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                <TextField fx:id="nomMod" styleClass="form-field" promptText="Enter first name" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                <VBox fx:id="nomErrorBox" styleClass="error-container" GridPane.rowIndex="3" GridPane.columnIndex="0" />
 
-        if (confirmPassword.isEmpty()) {
-        messageLabel.setText("Veuillez confirmer votre nouveau mot de passe.");
-        messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
-        resetButton.setDisable(true);
-        } else if (!confirmPassword.equals(newPassword)) {
-        messageLabel.setText("Les mots de passe ne correspondent pas.");
-        messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
-        resetButton.setDisable(true);
-        } else {
-        messageLabel.setText("");
-        resetButton.setDisable(codeField.getText().isEmpty() || newPasswordField.getText().isEmpty());
-        }
-        }
+                <Label text="Last Name *" styleClass="form-label required" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                <TextField fx:id="prenomMod" styleClass="form-field" promptText="Enter last name" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                <VBox fx:id="prenomErrorBox" styleClass="error-container" GridPane.rowIndex="3" GridPane.columnIndex="1" />
 
-        // Méthode pour vérifier la force du mot de passe
-        private boolean isPasswordStrong(String password) {
-        // Vérifier que le mot de passe a au moins 8 caractères
-        if (password.length() < 8) {
-        return false;
-        }
-        // Vérifier que le mot de passe contient au moins une majuscule
-        if (!password.matches(".*[A-Z].*")) {
-        return false;
-        }
-        // Vérifier que le mot de passe contient au moins un chiffre
-        if (!password.matches(".*\\d.*")) {
-        return false;
-        }
-        return true;
-        }
+                <Label text="Birth Date *" styleClass="form-label required" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+                <DatePicker fx:id="dateMod" styleClass="form-field" promptText="Select birth date" GridPane.rowIndex="2" GridPane.columnIndex="2" />
+                <VBox fx:id="dateNaissanceErrorBox" styleClass="error-container" GridPane.rowIndex="3" GridPane.columnIndex="2" />
 
-        @FXML
-        void handleResetPassword() {
-        String code = codeField.getText();
-        String newPassword = newPasswordField.getText();
-        String confirmPassword = confirmPasswordField.getText();
+                <!-- Contact Information -->
+                <Label text="Contact Information" styleClass="form-group-title" GridPane.rowIndex="4" GridPane.columnSpan="3" />
 
-        // Vérifier si les champs sont vides (au cas où le bouton est activé autrement)
-        if (code.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
-        messageLabel.setText("Veuillez remplir tous les champs.");
-        messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
-        return;
-        }
+                <!-- Row 5 -->
+                <Label text="Email *" styleClass="form-label required" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+                <TextField fx:id="emailMod" styleClass="form-field" promptText="Enter email" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+                <VBox fx:id="emailErrorBox" styleClass="error-container" GridPane.rowIndex="7" GridPane.columnIndex="0" />
 
-        // Vérifier si le nouveau mot de passe et la confirmation correspondent
-        if (!newPassword.equals(confirmPassword)) {
-        messageLabel.setText("Les mots de passe ne correspondent pas.");
-        messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
-        return;
-        }
+                <Label text="Phone *" styleClass="form-label required" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+                <TextField fx:id="num_phoneMod" styleClass="form-field" promptText="Enter phone" GridPane.rowIndex="6" GridPane.columnIndex="1" />
+                <VBox fx:id="numErrorBox" styleClass="error-container" GridPane.rowIndex="7" GridPane.columnIndex="1" />
 
+                <Label text="CIN *" styleClass="form-label required" GridPane.rowIndex="5" GridPane.columnIndex="2" />
+                <TextField fx:id="cinMod" styleClass="form-field" promptText="Enter CIN" GridPane.rowIndex="6" GridPane.columnIndex="2" />
+                <VBox fx:id="cinErrorBox" styleClass="error-container" GridPane.rowIndex="7" GridPane.columnIndex="2" />
 
-        try {
-        userService.updatePassword(code, newPassword);
-        showAlert("Success", "Mot de passe réinitialisé avec succès.");
+                <!-- Account Information -->
+                <Label text="Account Information" styleClass="form-group-title" GridPane.rowIndex="8" GridPane.columnSpan="3" />
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
-        Parent root = loader.load();
-        messageLabel.getScene().setRoot(root);
-        } catch (SQLException e) {
+                <!-- Row 9 -->
+                <Label text="Role *" styleClass="form-label required" GridPane.rowIndex="9" GridPane.columnIndex="0" />
+                <ComboBox fx:id="roleMod" styleClass="form-field" promptText="Select role" GridPane.rowIndex="10" GridPane.columnIndex="0" />
 
-        messageLabel.setText("code invalide ou problème lors de la réinitialisation.");
-        messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
-        throw new RuntimeException(e);
+                <Label text="Account Status *" styleClass="form-label required" GridPane.rowIndex="9" GridPane.columnIndex="1" />
+                <ComboBox fx:id="StatusCompte" styleClass="form-field" promptText="Select status" GridPane.rowIndex="10" GridPane.columnIndex="1" />
+            </GridPane>
+        </VBox>
 
+        <!-- Status Message -->
+        <Label fx:id="messageMod" styleClass="status-message" AnchorPane.bottomAnchor="60" AnchorPane.leftAnchor="30" />
 
-        } catch (IOException e) {
-        throw new RuntimeException(e);
-        }
-        }
-
-        private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-
-        }
-
-        }
+        <!-- Update Button -->
+        <Button fx:id="updateButton" styleClass="primary-button" onAction="#updateUser" text="Update Profile"
+                AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" />
+    </children>
+</AnchorPane>
