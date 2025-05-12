@@ -62,7 +62,7 @@ SMSService smsService = new SMSService();
         try {
         boolean emailSent = sendResetEmail(email);
         if (emailSent) {
-            smsService.sendSMS("+21652148247", "test service sms");
+            smsService.sendSMS("+21652148247", "you are changing your password");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/verifierCode.fxml"));
                 Parent root = loader.load();
             messageLabel.getScene().setRoot(root);
